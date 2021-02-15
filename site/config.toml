@@ -1,4 +1,4 @@
-title = "XXXX Musings"
+title = "COMP3211 Musings"
 
 theme = "hugo-theme-even"
 
@@ -44,7 +44,7 @@ copyright = "Andrew Wong (z5206677)"
   name = "GitHub"
   weight = 20
   identifier = "code"
-  url = "https://github.com/featherbear/UNSW-XXXX"
+  url = "https://github.com/featherbear/UNSW-COMP3211"
 [[menu.main]]
   name = "Categories"
   weight = 40
@@ -55,12 +55,12 @@ copyright = "Andrew Wong (z5206677)"
   version = "4.x"           # Used to give a friendly message when you have an incompatible update
   debug = false             # If true, load `eruda.min.js`. See https://github.com/liriliri/eruda
 
-  since = "YYYY"
+  since = "2021"
 
   # site info (optional)                                  # 站点信息（可选，不需要的可以直接注释掉）
-  logoTitle = "XXXX Musings"
-  keywords = ["featherbear", "XXXX", "UNSW"]
-  description = "Musings of a XXXX student"
+  logoTitle = "COMP3211 Musings"
+  keywords = ["featherbear", "COMP3211", "UNSW"]
+  description = "Musings of a COMP3211 student"
 
   # paginate of archives, tags and categories             # 归档、标签、分类每页显示的文章数目，建议修改为一个较大的值
   archivePaginate = 10
