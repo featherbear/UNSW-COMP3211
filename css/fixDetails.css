@@ -1,0 +1,8 @@
+/* Puts the expand arrow back into <detail> blocks */
+
+details {
+    display: initial;
+}
+details > summary {
+    display: list-item;
+}
