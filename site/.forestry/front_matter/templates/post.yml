@@ -5,9 +5,14 @@ fields:
 - type: text
   name: title
   label: title
+  config:
+    required: true
 - type: datetime
   name: date
   label: date
+  default: now
+  config:
+    required: true
 - type: boolean
   name: hiddenFromHomePage
   label: hiddenFromHomePage
