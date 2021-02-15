@@ -1,0 +1,36 @@
+---
+label: Post
+hide_body: true
+fields:
+- type: text
+  name: title
+  label: title
+- type: datetime
+  name: date
+  label: date
+- type: boolean
+  name: hiddenFromHomePage
+  label: hiddenFromHomePage
+- type: boolean
+  name: postMetaInFooter
+  label: postMetaInFooter
+- type: field_group
+  name: flowchartDiagrams
+  label: flowchartDiagrams
+  fields:
+  - type: boolean
+    name: enable
+    label: enable
+  - type: text
+    name: options
+    label: options
+- type: field_group
+  name: sequenceDiagrams
+  label: sequenceDiagrams
+  fields:
+  - type: boolean
+    name: enable
+    label: enable
+  - type: text
+    name: options
+    label: options
