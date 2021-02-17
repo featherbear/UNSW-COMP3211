@@ -1,6 +1,5 @@
 +++
 date = 2021-02-15T11:35:36Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Introduction to ISA"
@@ -12,6 +11,10 @@ enable = false
 options = ""
 
 +++
+> **This course uses the MIPS ISA**
+
+***
+
 # Overview of a Computer System
 
 A computer system is a combination of both hardware and software components
@@ -84,3 +87,52 @@ Alignment - Words fall on addresses that are multiples of their size
 idk analyse and profile them (but actually)
 
 ![](/uploads/snipaste_2021-02-18_02-58-44.png)
+
+## Instruction Format
+
+* Varied - each instruction uses its own required width
+* Fixed - all instructions have the same width
+* Hybrid - instructions are divided into groups which each require a different fixed width
+
+### Design Choices
+
+* If code size is most important, use variable width instructions.
+* If performance is most important, use fixed width instructions
+
+***
+
+**This course uses the MIPS ISA**
+
+***
+
+# MIPS
+
+* RISC ISA
+* All instructions are of 32 bits
+* 3 instruction format types
+* Arithmetic and logic operations are always performed on registers
+* 32x 32-bit integer registers
+* 32x 32-bit floating point registers
+* Single address mode when accessing data in memory (base + displacement)
+* Simple branch conditions (eq, ne)
+
+## Registers
+
+### R-Type (Register)
+
+![](/uploads/snipaste_2021-02-18_03-40-55.png)  
+e.g. `add $1, $2, $3`
+
+### I-Type (Immediate)
+
+![](/uploads/snipaste_2021-02-18_03-40-58.png)  
+e.g. `addi $1, $2, 100`
+
+### J-Type (Jump)
+
+![](/uploads/snipaste_2021-02-18_03-41-01.png)  
+e.g. `j 1000`
+
+***
+
+![](/uploads/snipaste_2021-02-18_03-43-49.png)
