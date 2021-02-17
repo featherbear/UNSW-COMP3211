@@ -22,6 +22,10 @@ A computer system is a combination of both hardware and software components
 
 **Hardware** such as the processor, memory modules and I/O controllers interact with the software to carry out tasks
 
+# Execution Cycle
+
+![](/uploads/snipaste_2021-02-18_02-26-40.png)
+
 # What is "Computer Architecture"
 
 > "Computer architecture, like other architecture, is the art of determining the needs of the user of a structure and then designing to meet those needs as effectively as possible within economic and technological constraints." - Frederick P. Brooks
@@ -42,3 +46,41 @@ Modern ISAs
 Machine organisation refers to how the ISA is actually implemented.
 
 i.e. is there an actual multiplier unit for a multiply instruction; is it implemented with combinational or sequential method? (or other?)
+
+# Instruction Set Architecture
+
+![](/uploads/snipaste_2021-02-18_02-27-30.png)
+
+Goal: The instruction set should be easy to implement, good for performance, and possibly more
+
+Design Principles:
+
+* Simplicity favours regularity
+* Smaller is faster
+* Good design demands a compromise
+* Make the common case fast
+
+## An Example - MIPS
+
+![](/uploads/snipaste_2021-02-18_02-30-12.png)
+
+## General Purposes Registers
+
+Registers are data storage locations that have **faster performance** than memory, and **require less bits** to target its address (compared to a memory address)
+
+## Addresses
+
+Big Endian - Most significant byte stored at the end - most modern systems use this  
+Little Endian - Least significant byte stored at the end
+
+Alignment - Words fall on addresses that are multiples of their size
+
+### Addressing Modes
+
+![](/uploads/snipaste_2021-02-18_02-54-14.png)
+
+### Which Mode Should I Implement
+
+idk analyse and profile them (but actually)
+
+![](/uploads/snipaste_2021-02-18_02-58-44.png)
