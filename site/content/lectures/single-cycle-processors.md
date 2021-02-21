@@ -1,6 +1,5 @@
 +++
 date = 2021-02-21T14:46:04Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Single Cycle Processors"
@@ -124,3 +123,30 @@ The second input to the ALU is switched by a multiplexer between BUS B and a 16-
 ![](/uploads/snipaste_2021-02-22_04-17-53.png)
 
 ![](/uploads/snipaste_2021-02-22_04-19-30.png)
+
+***
+
+## Analyse implementation of each instruction to determine control points
+
+Instructions are encoded using binary code.  
+In a single cycle datapath, each instruction must be completed in one clock cycle.
+
+Find the control signals (i.e. signal to the multiplexer)
+
+## Assemble the control logic
+
+A control unit takes in the instruction (op, funct) and datapath eq, to output control signals on the control datapaths.
+
+i.e. 
+
+![](/uploads/snipaste_2021-02-22_04-29-59.png) 
+
+### Multi-level Control Logic
+
+A single level of control logic may be costly (have to factor in many cases). Instead it may be beneficial to have a second stage/level of instruction control handling.
+
+Local decoding of instruction categories can make the design smaller, simpler and faster.
+
+e.g a control unit that only handles ALU controls
+
+![](/uploads/snipaste_2021-02-22_04-32-24.png)
