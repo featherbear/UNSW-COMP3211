@@ -41,3 +41,4 @@ fields:
     label: options
 pages:
 - site/content/lectures/introduction-to-isa.md
+- site/content/lectures/single-cycle-processors.md
