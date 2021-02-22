@@ -1,6 +1,7 @@
 +++
-categories = "Quiz"
+categories = []
 date = 2021-02-22T08:06:06Z
+draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Quiz 1"
