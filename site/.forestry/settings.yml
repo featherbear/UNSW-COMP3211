@@ -6,9 +6,9 @@ webhook_url:
 sections:
 - type: directory
   path: site/content
-  label: Pages
+  label: All
   create: all
-  match: "*"
+  match: "**/*"
 - type: directory
   path: site/content/lectures
   label: Lectures
