@@ -1,0 +1,15 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Tue Feb 23 00:49:27 2021
+| Host         : FEATHERNET-PC running 64-bit major release  (build 9200)
+| Command      : report_bus_skew -warn_on_violation -file add3_bus_skew_routed.rpt -pb add3_bus_skew_routed.pb -rpx add3_bus_skew_routed.rpx
+| Design       : add3
+| Device       : 7a100t-ftg256
+| Speed File   : -3  PRODUCTION 1.23 2018-06-13
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Bus Skew Report
+
+No bus skew constraints
+
