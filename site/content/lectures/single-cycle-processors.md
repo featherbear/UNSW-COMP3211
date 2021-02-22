@@ -1,4 +1,5 @@
 +++
+categories = ["Lectures"]
 date = 2021-02-21T14:46:04Z
 hiddenFromHomePage = false
 postMetaInFooter = false
