@@ -32,24 +32,14 @@ use IEEE.STD_LOGIC_1164.ALL;
 --use UNISIM.VComponents.all;
 
 entity rls is
-    Generic ( N : INTEGER );
+    Generic ( N : INTEGER := 0);
     Port ( I : in STD_LOGIC_VECTOR (15 downto 0);
            O : out STD_LOGIC_VECTOR (15 downto 0));
 end rls;
 
 architecture Behavioral of rls is
-    SIGNAL temp : STD_LOGIC_VECTOR (15 downto 0);
 begin
 
-process (I)
-    begin
-    rot: for x in 1 to N loop
-        temp(16-x) <= I(16-x-1);
-        temp(x-1) <= I(16 - x); 
-    end loop;
-
-end process;
-
-O <= temp;
+O <= I(15-N DOWNTO 0) & I(15 DOWNTO 15-N+1);
 
 end Behavioral;
