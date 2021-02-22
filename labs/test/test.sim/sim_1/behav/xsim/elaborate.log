@@ -1,9 +1,0 @@
-Vivado Simulator 2020.2
-Copyright 1986-1999, 2001-2020 Xilinx, Inc. All Rights Reserved.
-Running: D:/Xilinx/Vivado/2020.2/bin/unwrapped/win64.o/xelab.exe -wto ba20dfc103774872ab7a315686559b71 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot add3_TB_behav xil_defaultlib.add3_TB -log elaborate.log 
-Using 2 slave threads.
-Starting static elaboration
-WARNING: [VRFC 10-1537] value 0 is out of target constraint range 1 to 2147483647 [D:/Projects/UNSW-COMP3211/labs/test/add3_TB.vhd:52]
-WARNING: [VRFC 10-1537] value 0 is out of target constraint range 1 to 2147483647 [D:/Projects/UNSW-COMP3211/labs/test/add3_TB.vhd:53]
-Completed static elaboration
-INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
