@@ -21,7 +21,7 @@ sections:
   match: "**/*"
 - type: directory
   path: site/content/quiz
-  label: Quizzes
+  label: Quiz
   create: all
   match: "**/*"
 upload_dir: site/static/uploads
