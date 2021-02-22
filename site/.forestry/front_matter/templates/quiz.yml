@@ -1,0 +1,39 @@
+---
+label: Quiz
+hide_body: false
+fields:
+- type: datetime
+  name: date
+  label: date
+- type: text
+  name: title
+  label: title
+- type: list
+  name: categories
+  label: categories
+- type: boolean
+  name: hiddenFromHomePage
+  label: hiddenFromHomePage
+- type: boolean
+  name: postMetaInFooter
+  label: postMetaInFooter
+- type: field_group
+  name: flowchartDiagrams
+  label: flowchartDiagrams
+  fields:
+  - type: boolean
+    name: enable
+    label: enable
+  - type: text
+    name: options
+    label: options
+- type: field_group
+  name: sequenceDiagrams
+  label: sequenceDiagrams
+  fields:
+  - type: boolean
+    name: enable
+    label: enable
+  - type: text
+    name: options
+    label: options
