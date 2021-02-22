@@ -42,3 +42,4 @@ fields:
 pages:
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/single-cycle-processors.md
+- site/content/quiz/quiz-1.md
