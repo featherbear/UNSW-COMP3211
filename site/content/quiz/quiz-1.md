@@ -1,4 +1,5 @@
 +++
+categories = "Quiz"
 date = 2021-02-22T08:06:06Z
 hiddenFromHomePage = false
 postMetaInFooter = false
