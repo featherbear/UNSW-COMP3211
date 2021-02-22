@@ -33,9 +33,9 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 --use UNISIM.VComponents.all;
 
 entity add3 is
-    Port ( A : in STD_LOGIC_VECTOR (0 downto 0);
-           B : in STD_LOGIC_VECTOR (0 downto 0);
-           C : in STD_LOGIC_VECTOR (0 downto 0);
+    Port ( A : in STD_LOGIC_VECTOR (7 downto 0);
+           B : in STD_LOGIC_VECTOR (7 downto 0);
+           C : in STD_LOGIC_VECTOR (7 downto 0);
            S : out STD_LOGIC_VECTOR (7 downto 0));
 end add3;
 
