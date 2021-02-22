@@ -1,0 +1,12 @@
+
+{ 
+    crc :  6126820658379134480  , 
+    ccp_crc :  0  , 
+    cmdline : " -wto ba20dfc103774872ab7a315686559b71 --incr --debug typical --relax --mt 2 -L xil_defaultlib -L secureip --snapshot add3_TB_behav xil_defaultlib.add3_TB" , 
+    buildDate : "Nov 18 2020" , 
+    buildTime : "09:47:47" , 
+    linkCmd : "D:\\Xilinx\\Vivado\\2020.2\\data\\..\\tps\\mingw\\6.2.0\\win64.o\\nt\\bin\\gcc.exe -Wa,-W  -O -Wl,--stack,104857600 -o \"xsim.dir/add3_TB_behav/xsimk.exe\"   \"xsim.dir/add3_TB_behav/obj/xsim_0.win64.obj\" \"xsim.dir/add3_TB_behav/obj/xsim_1.win64.obj\" -L\"D:\\Xilinx\\Vivado\\2020.2\\lib\\win64.o\" -lrdi_simulator_kernel   -lrdi_simbridge_kernel" , 
+    aggregate_nets : 
+    [ 
+    ] 
+} 
