@@ -54,27 +54,37 @@ or $t1, $t1, $v0
 
 (Are we meant to answer with instructions not taught from the course?)
 
-* What is _loop_??? 
+* What is _loop_???
 * Is PC=PC+4+BranchAddr part of the conditional block?
 
-Badly worded question. Responding assuming that this question is asking to translate 
+Badly worded question. Responding assuming that this question is asking to translate
 
-```
-if (R\[rs\] > 0) {  
-  R\[rs\] = R\[rs\] - 1  
-  goto loop  
-}
-```
-
-```
-bltz rs, done  
-addi rs, rs, -1  
-j loop  
-done:
-```
+    if (R\[rs\] > 0) {  
+      R\[rs\] = R\[rs\] - 1  
+      goto loop  
+    }
+    
+    bltz rs, done  
+    addi rs, rs, -1  
+    j loop  
+    done:
 
 # Assume stack is used in a processor design, where all ALU operations are performed on stack.
 
-With this design, what operation order should follow for the following calculation? (A_B) – (C_D) + (E*F)
+(For example, instruction ADD takes (pops) two data items from the stack top and saves (pushes) the result to the stack.)
 
-For example, instruction ADD takes (pops) two data items from the stack top and saves (pushes) the result to the stack.
+With this design, what operation order should follow for the following calculation?
+
+> `A*B - C*D + E*F`
+
+```
+* Multiply A*B to have stack order (A*B, C, D, E, F)
+* Move A*B off the stack to have order (C, D, E, F)
+* Multiply C*D to have stack order (C*D, E, F)
+* Move C*D off the stack to have order (E, F)
+* Multiply E*F to have stack order (E*F)
+* Push C*D onto the stack to have order (C*D, E*F)
+* Subtract C*D - E*F to have stack order (C*D-E*F)
+* Push A*B onto the stack to have order (A*B, C*D-E*F)
+* Subtract A*B - (C*D-E*F) to have result (A*B - C*D + E*F)
+```
