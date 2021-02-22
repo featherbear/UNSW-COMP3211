@@ -1,7 +1,6 @@
 +++
 categories = ["Labs"]
 date = 2021-02-22T13:19:36Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Vivado - Quick Start Notes"
@@ -43,3 +42,17 @@ Using `Vivado 2020.2`
 
 * **\[Flow Navigator\] \[Project Manager\] Add Sources**
 * **Add or create simulation sources**
+
+## Synthesis
+
+Synthesising obtains us the estimated area cost and time.
+
+When we run the synthesis we can see which LUTs are used
+
+![](/uploads/snipaste_2021-02-23_00-49-26.png)
+
+In the Flow Navigator, we can select **\[Synthesis\] \[Open Synthesized Design\] Report Timing Summary** to generate a timing report.
+
+The **delay** of the combinational logic can be found in **\[Timing\] \[Unconstrained Paths\] \[NONE to NONE\] \[Setup\]**
+
+![](/uploads/snipaste_2021-02-23_00-52-19.png)
