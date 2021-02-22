@@ -7,27 +7,25 @@ fields:
   label: title
   config:
     required: true
+- name: categories
+  type: list
+  config:
+    use_select: true
+    min: 
+    max: 
+    source:
+      type: simple
+    options:
+    - Quiz
+    - Labs
+    - Lectures
+  label: categories
 - type: datetime
   name: date
   label: date
   default: now
   config:
     required: true
-- name: categories
-  type: select
-  default: ''
-  config:
-    required: false
-    options:
-    - Labs
-    - Quiz
-    - Lecture
-    source:
-      type: simple
-      section: 
-      file: 
-      path: 
-  label: Categories
 - type: boolean
   name: hiddenFromHomePage
   label: hiddenFromHomePage
