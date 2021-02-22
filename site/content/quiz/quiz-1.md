@@ -1,6 +1,5 @@
 +++
 date = 2021-02-22T08:06:06Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Quiz 1"
@@ -14,7 +13,7 @@ options = ""
 +++
 # Which of the following statements is/are NOT True?
 
-**a. MISP is a CISC machine.**  
+**a. MIPS is a CISC machine.**  
 b. In MIPS, assume an integer is stored in memory at a location labeled as A, you can use the label to access the data.  
 **c. Instruction ADD r0, r1, r2 can be used to add any two integer values.**  
 d. In MIPS, all arithmetic and logic operations are performed on registers.
@@ -77,14 +76,12 @@ With this design, what operation order should follow for the following calculati
 
 > `A*B - C*D + E*F`
 
-```
-* Multiply A*B to have stack order (A*B, C, D, E, F)
-* Move A*B off the stack to have order (C, D, E, F)
-* Multiply C*D to have stack order (C*D, E, F)
-* Move C*D off the stack to have order (E, F)
-* Multiply E*F to have stack order (E*F)
-* Push C*D onto the stack to have order (C*D, E*F)
-* Subtract C*D - E*F to have stack order (C*D-E*F)
-* Push A*B onto the stack to have order (A*B, C*D-E*F)
-* Subtract A*B - (C*D-E*F) to have result (A*B - C*D + E*F)
-```
+    * Multiply A*B to have stack order (A*B, C, D, E, F)
+    * Move A*B off the stack to have order (C, D, E, F)
+    * Multiply C*D to have stack order (C*D, E, F)
+    * Move C*D off the stack to have order (E, F)
+    * Multiply E*F to have stack order (E*F)
+    * Push C*D onto the stack to have order (C*D, E*F)
+    * Subtract C*D - E*F to have stack order (C*D-E*F)
+    * Push A*B onto the stack to have order (A*B, C*D-E*F)
+    * Subtract A*B - (C*D-E*F) to have result (A*B - C*D + E*F)
