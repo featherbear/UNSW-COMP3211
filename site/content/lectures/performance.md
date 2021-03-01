@@ -42,7 +42,7 @@ Ideally we want low latency and high throughput, however in reality this can be 
 When comparing the performance of two designs for a given task, we often compare their **execution time**.
 
 > Given two designs X and Y, if X is `n` times faster than Y, then `exec(Y)/exec(X) = n`  
-> Where `n > 1` 
+> Where `n > 1`
 
 ## Processor Performance
 
@@ -61,11 +61,23 @@ _(To do so, we group instructions by the number of cycles needed, etc)_
 Answer: **D**
 
 ![](/uploads/snipaste_2021-03-02_01-50-52.png)  
-Answer: A, by 1.2x  
-  
+Answer: A, by 1.2x
+
 Execution time = instruction count * CPI * cycle time  
 Given the same instruction count, machine A is faster than machine B by 1.2x
 
 ***
 
 ### Impact on Processor Performance
+
+![](/uploads/snipaste_2021-03-02_01-56-38.png)
+
+![](/uploads/snipaste_2021-03-02_02-00-44.png)
+
+# Improving Performance
+
+There are many ways to improve performance!
+
+* Enhance processor organisation to lower CPI and clock cycle time
+* Enhance the compilation to reduce instruction count and CPU
+* 
