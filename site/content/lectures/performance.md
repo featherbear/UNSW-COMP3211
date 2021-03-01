@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-03-01T14:26:44Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Performance"
@@ -72,7 +71,20 @@ Given the same instruction count, machine A is faster than machine B by 1.2x
 
 ![](/uploads/snipaste_2021-03-02_01-56-38.png)
 
-![](/uploads/snipaste_2021-03-02_02-00-44.png)
+![](/uploads/snipaste_2021-03-02_02-00-44.png) 
+
+# Benchmarkgs
+
+A computer's performance can be best determined by running real applications.
+
+i.e. running compilers, scientific applications, graphing, simulations
+
+## SPEC (System Performance Evaluation Cooperative)
+
+* A set of real programs and inputs used by industry
+* It is a valuable indicator of performance
+
+![](/uploads/snipaste_2021-03-02_02-25-33.png)
 
 # Improving Performance
 
@@ -80,4 +92,24 @@ There are many ways to improve performance!
 
 * Enhance processor organisation to lower CPI and clock cycle time
 * Enhance the compilation to reduce instruction count and CPU
-* 
+
+## "Speedup" Metric
+
+> to measure the effectiveness of a design enhancement
+
+![](/uploads/snipaste_2021-03-02_02-13-35.png)
+
+## Amdahl's Law
+
+![](/uploads/snipaste_2021-03-02_02-14-31.png)
+
+... So `(1-F) + F/S = performance(orig) / performance(E)` !!!
+
+***
+
+![](/uploads/snipaste_2021-03-02_02-17-33.png)  
+For the new design to take only 20 seconds (100 / 5 = 20)...
+
+![](/uploads/snipaste_2021-03-02_02-19-34.png)
+
+But this is impossible, `x -> infinity`
