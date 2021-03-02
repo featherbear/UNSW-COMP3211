@@ -57,6 +57,7 @@ pages:
 - site/content/labs/vivado-quick-start-notes.md
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/introduction-to-isa.md
+- site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/performance.md
 - site/content/lectures/single-cycle-processors.md
 - site/content/lectures/single-cycle-processors.md
