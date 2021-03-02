@@ -13,3 +13,6 @@ enable = false
 options = ""
 
 +++
+For a small set of instructions, it is relatively simple to design a single-cycle processor to implement the functionality for the instructions..
+
+We may want to assume that control signals will be ready when data flows to a component
