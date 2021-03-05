@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-03-02T14:29:09Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Multi Cycle Processors"
@@ -62,3 +61,11 @@ The time spent in each section should be balanced, as the clock cycle time is de
 
 As instructions are no longer single-cycled, we can no longer use combinational logic to determine the control signals. Instead we need to use a FSM (and deal with it in steps).  
 (Each horizontal level related to one clock cycle)
+
+***
+
+![](/uploads/snipaste_2021-03-06_01-11-25.png)
+
+nPC_sel, ALUSrc, ALUctr, ExtOp is needed for BEQ instruction.
+
+![](/uploads/snipaste_2021-03-06_01-15-48.png)
