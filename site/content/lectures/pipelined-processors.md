@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-03-07T11:37:17Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Pipelined Processors"
