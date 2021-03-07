@@ -84,3 +84,89 @@ Pipeline processes need to be controlled
 ![](/uploads/snipaste_2021-03-08_02-18-58.png)
 
 ![](/uploads/snipaste_2021-03-08_02-30-23.png)
+
+![](/uploads/snipaste_2021-03-08_02-57-09.png)
+
+***
+
+# Hazards
+
+Situations where the instruction execution cannot proceed in the pipeline
+
+## Structural Hazard
+
+> The required resource is busy
+
+![](/uploads/snipaste_2021-03-08_03-01-34.png)
+
+## Data Hazard
+
+> Need to wait for the previous instruction to update its data
+
+![](/uploads/snipaste_2021-03-08_03-02-25.png)
+
+### Data Dependency types
+
+* RAR - Read after Read
+* WAW - Write after Write
+* WAR - Write after Read
+* RAW - Read after Write
+
+## Control Hazard
+
+> The control decision cannot be made until the condition check by the previous instruction is completed
+
+![](/uploads/snipaste_2021-03-08_03-04-57.png)
+
+# Mitigating Hazards
+
+## Mitigating Structural Hazards
+
+> Never access a resource more than once per cycle
+
+* Allocate each resource to a single pipeline stage
+  * Duplicate resources if necessary (_e.g. IMEM, DMEM_)
+* Every instruction must follow the same sequence of cycles/stages
+  * _Skipping a stage can introduce structural hazards_
+  * However, some trailing cycles/stages can be dropped
+    * i.e. `BRA` / `JMP` -  don't need WB or MEM
+
+![](/uploads/snipaste_2021-03-08_03-19-19.png)  
+In an ideal case, CPI = 1 (given a constant stream of instructions, each cycle a new instruction starts, but another instruction finishes)
+
+In a one-memory case, the CPI increases to 1.2 as DM and IM stages can't occur concurrently
+
+## Mitigating Data Hazards
+
+> Properly schedule / partition tasks in the pipeline
+
+To detect data hazards, we check for data dependencies between instructions and its preceding instructions
+
+* Eliminate WAR (write after read) by always fetching operands early in the pipeline
+  * ID stage
+* Eliminate WAW (write after write) by doing all WBs in order
+  * Single stage for writing
+
+> Mitigating RAW (read after write)
+
+![](/uploads/snipaste_2021-03-08_03-44-21.png)
+
+If instructions depend on the result of a previous instruction, we need to delay that instruction from occurring...
+
+### Stalling - stall the instruction execution
+
+Load Use Hazard (LUH) - When a load instruction is followed by an instruction dependent on the memory data (i.e. "not yet")
+
+Set the EX, MEM and WB control fields of the ID/EX register to 0 to perform a `no-op`
+
+![](/uploads/snipaste_2021-03-08_04-27-01.png)
+
+### Forwarding - if the correct data is available, forward the data to where it is required
+
+Update a pipeline register to contain the correct value, so that it can be used
+
+***
+
+![](/uploads/snipaste_2021-03-08_04-14-12.png)
+
+![](/uploads/snipaste_2021-03-08_04-18-12.png)
