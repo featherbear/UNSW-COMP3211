@@ -42,6 +42,8 @@ The time spent in each section should be balanced, as the clock cycle time is de
 
 ***
 
+> **Most instructions take up 4 cycles**
+
 **R-Type Instructions** - Takes 4 cycles  
 ![](/uploads/snipaste_2021-03-04_02-17-25.png)
 
@@ -72,4 +74,5 @@ As instructions are no longer single-cycled, we can no longer use combinational 
 
 nPC_sel, ALUSrc, ALUctr, ExtOp is needed for BEQ instruction.
 
-![](/uploads/snipaste_2021-03-06_01-15-48.png)
+![](/uploads/snipaste_2021-03-06_01-15-48.png)  
+![](/uploads/snipaste_2021-03-07_22-48-01.png)
