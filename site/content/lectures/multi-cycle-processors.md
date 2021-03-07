@@ -12,6 +12,10 @@ enable = false
 options = ""
 
 +++
+The clock cycle speed is originally limited by the longest instruction time. In multi-cycle processors, instructions are split into several cycles, therefore the clock cycle time can be reduced. Each instruction is laid out to use the smallest number of clock cycles possible
+
+***
+
 For a small set of instructions, it is relatively simple to design a single-cycle processor to implement the functionality for the instructions..
 
 We may want to assume that control signals will be ready when data flows to a component
