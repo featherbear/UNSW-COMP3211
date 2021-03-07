@@ -26,11 +26,11 @@ Compared to the [example in multicycle processors](multi-cycle-processors), a pi
 
 ## Stages
 
-1) IF - **I**nstruction **F**etch from memory  
-2) ID - **I**nstruction **D**ecode and register read  
-3) EX - **EX**ecute operation or calculate address  
-4) MEM - access **MEM**ory operand  
-5) WB - **W**rite result **B**ack to register
+1. IF - **I**nstruction **F**etch from memory
+2. ID - **I**nstruction **D**ecode and register read
+3. EX - **EX**ecute operation or calculate address
+4. MEM - access **MEM**ory operand
+5. WB - **W**rite result **B**ack to register
 
 ## MIPS Design
 
@@ -40,7 +40,7 @@ Compared to the [example in multicycle processors](multi-cycle-processors), a pi
 * Alignment of memory operands - allows memory access to take "one cycle"
 * Most resources are available
 
-![](/uploads/snipaste_2021-03-07_22-56-29.png) 
+![](/uploads/snipaste_2021-03-07_22-56-29.png)
 
 ***
 
@@ -64,3 +64,23 @@ Find the shaded part of the component, that's the data direction
 To retain the values of an instruction to be used in other stages, the values are saved in **pipeline registers**. They are named by combining the two stages using that register.
 
 e.g. IF/ID register
+
+Each logical component (i.e. instruction memory, register read ports can only be used in a single pipeline stage.
+
+***
+
+# Pipeline Control
+
+Pipeline processes need to be controlled
+
+* Label control points
+* Determine control settings
+* Design control logic
+
+![](/uploads/snipaste_2021-03-08_02-16-29.png)
+
+***
+
+![](/uploads/snipaste_2021-03-08_02-18-58.png)
+
+![](/uploads/snipaste_2021-03-08_02-30-23.png)
