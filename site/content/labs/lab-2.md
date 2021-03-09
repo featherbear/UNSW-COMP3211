@@ -16,9 +16,9 @@ options = ""
 
 ## Implementation Overview
 
-| Original | SLL | BNE |
-| :---: | :---: | :---: |
-|  |  |  |
+|Original|SLL|BNE|
+|:---:|:---:|:---:|
+|![](/uploads/base.png)|![](/uploads/sll.png)|![](/uploads/beq.png)|
 
 * Added a bit-shifter and comparator into the ALU. The ALU switches the result and miscellaneous flag bit depending on an introduced **ALUOperation** control signal.
 * Added a multiplexer that switches between the next "standard" PC address, and the 4-bit address in the instruction, controlled by an introduced **EnableJumpPC** control signal that is AND gated with the ALU output flag
