@@ -64,10 +64,11 @@ begin
                src_b => src_b,
                res   => comparator_result );
 
-
-    process (operation) begin -- sensitive to all changes
-        result <= add_result WHEN operation = '0' ELSE sll_result;
+    result <= add_result WHEN operation = '0' ELSE sll_result;
         flag <= add_flag WHEN operation = '0' ELSE comparator_result;
-    end process;
+--    process (operation, src_a, src_b) begin -- sensitive to all changes
+  --      result <= add_result WHEN operation = '0' ELSE sll_result;
+    --    flag <= add_flag WHEN operation = '0' ELSE comparator_result;
+    --end process;
     
 end Behavioral;
