@@ -59,27 +59,28 @@ begin
             var_insn_mem(5)  := X"3043"; --  insn_5 : store $4, $0, 3   - store data $4 into 3($0)
             
             -- sll $5, $1, $3 ($5 = 5 << 5)
-            ---- toHex(['1100', '0001', '0011', '1001'])
-            var_insn_mem(6)  := X"C139";
+            ---- toHex(['1100', '0001', '0011', '0101'])
+            var_insn_mem(6)  := X"C135";
             
-            -- sll $6, $1, $2 ($5 = 5 << 8)
-            ---- toHex(['1100', '0001', '0011', '1010'])    
-            var_insn_mem(7)  := X"C13A";
+            -- sll $6, $1, $2 ($6 = 5 << 8)
+            ---- toHex(['1100', '0001', '0010', '0110'])    
+            var_insn_mem(7)  := X"C126";
             
-            -- bne $2, $2, 14
-            ---- toHex(['1101', '0010', '0010', '1110'])
+            -- bne $2, $2, 0
+            ---- toHex(['1101', '0010', '0010', '0000'])
             ---- shouldn't jump
-            var_insn_mem(8)  := X"D22E";
+            var_insn_mem(8)  := X"D220";
             
-            -- bne $1, $3, 14
-            ---- toHex(['1101', '0001', '0011', '1110'])
+            -- bne $1, $3, 0
+            ---- toHex(['1101', '0001', '0011', '0000'])
             ---- shouldn't jump
-            var_insn_mem(9)  := X"D13E";
+            var_insn_mem(9)  := X"D130";
             
-            -- bne $2, $3, 14
-            ---- toHex(['1101', '0010', '0011', '1110'])
-            ---- shoul jump to instruction 14
-            var_insn_mem(10) := X"D23E";
+            -- bne $2, $3, 0
+            ---- toHex(['1101', '0010', '0011', '0000'])
+            ---- should jump to instruction 0
+            var_insn_mem(10) := X"D230";
+            
             var_insn_mem(11) := X"0000";
             var_insn_mem(12) := X"0000";
             var_insn_mem(13) := X"0000";
