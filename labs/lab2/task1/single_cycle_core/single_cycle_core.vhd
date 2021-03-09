@@ -25,6 +25,9 @@
 --        # rd <- rs + rt
 --        # format:  | opcode = 8 |  rs  |  rt  |   rd   |
 --
+--     sll   rd, rs, rt
+--        # rd <- rs << rt
+--        # format:  | opcode = 12 |  rs  |  rt  |  rd  | 
 --
 -- Copyright (C) 2006 by Lih Wen Koh (lwkoh@cse.unsw.edu.au)
 -- All Rights Reserved. 
@@ -87,15 +90,6 @@ component mux_2to1_16b is
            data_out   : out std_logic_vector(15 downto 0) );
 end component;
 
-component control_unit is
-    port ( opcode     : in  std_logic_vector(3 downto 0);
-           reg_dst    : out std_logic;
-           reg_write  : out std_logic;
-           alu_src    : out std_logic;
-           mem_write  : out std_logic;
-           mem_to_reg : out std_logic );
-end component;
-
 component register_file is
     port ( reset           : in  std_logic;
            clk             : in  std_logic;
@@ -151,6 +145,10 @@ signal sig_alu_result           : std_logic_vector(15 downto 0);
 signal sig_alu_carry_out        : std_logic;
 signal sig_data_mem_out         : std_logic_vector(15 downto 0);
 
+--
+signal sig_alu_operation        : std_logic;
+--
+
 begin
 
     sig_one_4b <= "0001";
@@ -177,13 +175,17 @@ begin
     port map ( data_in  => sig_insn(3 downto 0),
                data_out => sig_sign_extended_offset );
 
-    ctrl_unit : control_unit 
+    ctrl_unit : entity work.control_unit 
     port map ( opcode     => sig_insn(15 downto 12),
                reg_dst    => sig_reg_dst,
                reg_write  => sig_reg_write,
                alu_src    => sig_alu_src,
                mem_write  => sig_mem_write,
-               mem_to_reg => sig_mem_to_reg );
+               mem_to_reg => sig_mem_to_reg,
+               --
+               alu_operation => sig_alu_operation
+               --
+               );
 
     mux_reg_dst : mux_2to1_4b 
     port map ( mux_select => sig_reg_dst,
@@ -208,11 +210,13 @@ begin
                data_b     => sig_sign_extended_offset,
                data_out   => sig_alu_src_b );
 
-    alu : adder_16b 
-    port map ( src_a     => sig_read_data_a,
+    alu : entity work.alu_device 
+    port map ( 
+               src_a     => sig_read_data_a,
                src_b     => sig_alu_src_b,
-               sum       => sig_alu_result,
-               carry_out => sig_alu_carry_out );
+               result    => sig_alu_result,
+               flag      => sig_alu_carry_out,
+               operation => sig_alu_operation );
 
     data_mem : data_memory 
     port map ( reset        => reset,
