@@ -59,6 +59,7 @@ begin
 
     process (operation) begin
         result <= add_result WHEN operation = '0' ELSE sll_result;
+        flag <= add_flag WHEN operation = '0' ELSE '0';
     end process;
     
 end Behavioral;
