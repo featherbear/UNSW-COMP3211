@@ -21,7 +21,7 @@
 --                  data memory.
 --     alu_operation : asserted for SLL instructions, so that the ALU will use
 --                     the results of the SLL unit instead of the ADD unit
---         
+--     enable_jump_pc : asserted for BEQ instructions, allows possible PC rewrite    
 --
 --
 --
@@ -53,7 +53,8 @@ entity control_unit is
            mem_write  : out std_logic;
            mem_to_reg : out std_logic;
            --
-           alu_operation : out std_logic
+           alu_operation : out std_logic;
+           enable_jump_pc : out std_logic
            --
            );
 end control_unit;
@@ -64,7 +65,7 @@ constant OP_LOAD  : std_logic_vector(3 downto 0) := "0001";
 constant OP_STORE : std_logic_vector(3 downto 0) := "0011";
 constant OP_ADD   : std_logic_vector(3 downto 0) := "1000";
 constant OP_SLL   : std_logic_vector(3 downto 0) := "1100";
-constant OP_BEQ   : std_logic_vector(3 downto 0) := "1101";
+constant OP_BNE   : std_logic_vector(3 downto 0) := "1101";
 
 begin
 
@@ -73,7 +74,11 @@ begin
                   '0';
                   
     --
-    alu_operation <= '1' when (opcode = OP_SLL) else '0';
+    alu_operation <= '1' when (opcode = OP_SLL
+                               or opcode = OP_BNE -- Switches ALU carry/flag
+                              ) else '0';
+    
+    enable_jump_pc <= '1' when (opcode = OP_BNE) else '0';
     --
     
     reg_write  <= '1' when (opcode = OP_ADD 
