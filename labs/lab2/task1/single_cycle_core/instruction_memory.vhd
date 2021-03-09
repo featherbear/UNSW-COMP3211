@@ -45,22 +45,14 @@ begin
   
     begin
         if (reset = '1') then
-            -- initial values of the instruction memory :
-            --  insn_0 : load  $1, $0, 0   - load data 0($0) into $1
-            --  insn_1 : load  $2, $0, 1   - load data 1($0) into $2
-            --  insn_2 : add   $3, $0, $1  - $3 <- $0 + $1
-            --  insn_3 : add   $4, $1, $2  - $4 <- $1 + $2
-            --  insn_4 : store $3, $0, 2   - store data $3 into 2($0)
-            --  insn_5 : store $4, $0, 3   - store data $4 into 3($0)
-            --  insn_6 - insn_15 : noop    - end of program
 
-            var_insn_mem(0)  := X"1010";
-            var_insn_mem(1)  := X"1021";
-            var_insn_mem(2)  := X"8013";
-            var_insn_mem(3)  := X"8124";
-            var_insn_mem(4)  := X"3032";
-            var_insn_mem(5)  := X"3043";
-            var_insn_mem(6)  := X"0000";
+            var_insn_mem(0)  := X"1010"; --  insn_0 : load  $1, $0, 0   - load data 0($0) into $1
+            var_insn_mem(1)  := X"1021"; --  insn_1 : load  $2, $0, 1   - load data 1($0) into $2
+            var_insn_mem(2)  := X"8013"; --  insn_2 : add   $3, $0, $1  - $3 <- $0 + $1
+            var_insn_mem(3)  := X"8124"; --  insn_3 : add   $4, $1, $2  - $4 <- $1 + $2
+            var_insn_mem(4)  := X"3032"; --  insn_4 : store $3, $0, 2   - store data $3 into 2($0)
+            var_insn_mem(5)  := X"3043"; --  insn_5 : store $4, $0, 3   - store data $4 into 3($0)
+            var_insn_mem(6)  := X"0000"; --  
             var_insn_mem(7)  := X"0000";
             var_insn_mem(8)  := X"0000";
             var_insn_mem(9)  := X"0000";
