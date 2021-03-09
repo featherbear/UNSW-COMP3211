@@ -44,6 +44,8 @@ architecture Behavioral of alu_device is
     SIGNAL add_result : std_logic_vector(15 downto 0);
     SIGNAL add_flag : std_logic;
     SIGNAL sll_result : std_logic_vector(15 downto 0);
+    
+    SIGNAL comparator_result : std_logic;
 begin
 
     add_device: entity work.adder_16b 
@@ -56,10 +58,16 @@ begin
     port map ( val => src_a,
                amt => src_b,
                res => sll_result );
+    
+    comparator: entity work.comparator
+    port map ( src_a => src_a,
+               src_b => src_b,
+               res   => comparator_result );
 
-    process (operation) begin
+
+    process begin -- sensitive to all changes
         result <= add_result WHEN operation = '0' ELSE sll_result;
-        flag <= add_flag WHEN operation = '0' ELSE '0';
+        flag <= add_flag WHEN operation = '0' ELSE comparator_result;
     end process;
     
 end Behavioral;
