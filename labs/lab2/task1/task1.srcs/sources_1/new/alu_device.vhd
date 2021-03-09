@@ -65,7 +65,7 @@ begin
                res   => comparator_result );
 
 
-    process begin -- sensitive to all changes
+    process (operation) begin -- sensitive to all changes
         result <= add_result WHEN operation = '0' ELSE sll_result;
         flag <= add_flag WHEN operation = '0' ELSE comparator_result;
     end process;
