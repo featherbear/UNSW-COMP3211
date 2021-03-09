@@ -29,8 +29,8 @@
 --        # rd <- rs << rt
 --        # format:  | opcode = 12 |  rs  |  rt  |  rd  | 
 --
---     beq   rs, rt, imm
---        # if rs = rt, PC <- imm
+--     bne   rs, rt, imm
+--        # if rs != rt, PC <- imm
 --        # format:  | opcode = 13 |  rs  |  rt  |  imm  | 
 --
 -- Copyright (C) 2006 by Lih Wen Koh (lwkoh@cse.unsw.edu.au)
