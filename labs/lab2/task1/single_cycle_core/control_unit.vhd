@@ -19,6 +19,10 @@
 --     mem_to_reg : asserted for LOAD instructions, so that the value fed
 --                  to the register 'write_data' input comes from the
 --                  data memory.
+--     alu_operation : asserted for SLL instructions, so that the ALU will use
+--                     the results of the SLL unit instead of the ADD unit
+--         
+--
 --
 --
 -- Copyright (C) 2006 by Lih Wen Koh (lwkoh@cse.unsw.edu.au)
@@ -60,6 +64,7 @@ constant OP_LOAD  : std_logic_vector(3 downto 0) := "0001";
 constant OP_STORE : std_logic_vector(3 downto 0) := "0011";
 constant OP_ADD   : std_logic_vector(3 downto 0) := "1000";
 constant OP_SLL   : std_logic_vector(3 downto 0) := "1100";
+constant OP_BEQ   : std_logic_vector(3 downto 0) := "1101";
 
 begin
 
