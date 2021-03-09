@@ -39,5 +39,5 @@ end comparator;
 
 architecture Behavioral of comparator is
 begin
-    res <= '1' WHEN src_a = src_b ELSE '0';
+    res <= '0' WHEN src_a = src_b ELSE '1';
 end Behavioral;
