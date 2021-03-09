@@ -25,6 +25,13 @@
 --        # rd <- rs + rt
 --        # format:  | opcode = 8 |  rs  |  rt  |   rd   |
 --
+--     sll   rd, rs, rt
+--        # rd <- rs << rt
+--        # format:  | opcode = 12 |  rs  |  rt  |  rd  | 
+--
+--     bne   rs, rt, imm
+--        # if rs != rt, PC <- imm
+--        # format:  | opcode = 13 |  rs  |  rt  |  imm  | 
 --
 -- Copyright (C) 2006 by Lih Wen Koh (lwkoh@cse.unsw.edu.au)
 -- All Rights Reserved. 
@@ -87,15 +94,6 @@ component mux_2to1_16b is
            data_out   : out std_logic_vector(15 downto 0) );
 end component;
 
-component control_unit is
-    port ( opcode     : in  std_logic_vector(3 downto 0);
-           reg_dst    : out std_logic;
-           reg_write  : out std_logic;
-           alu_src    : out std_logic;
-           mem_write  : out std_logic;
-           mem_to_reg : out std_logic );
-end component;
-
 component register_file is
     port ( reset           : in  std_logic;
            clk             : in  std_logic;
@@ -151,9 +149,19 @@ signal sig_alu_result           : std_logic_vector(15 downto 0);
 signal sig_alu_carry_out        : std_logic;
 signal sig_data_mem_out         : std_logic_vector(15 downto 0);
 
+--
+signal sig_alu_operation        : std_logic;
+
+signal sig_enable_jump_pc       : std_logic;
+signal sig_use_jump_pc          : std_logic;
+signal sig_next_pc_standard     : std_logic_vector(3 downto 0);
+
+--
+
 begin
 
     sig_one_4b <= "0001";
+    sig_use_jump_pc <= sig_enable_jump_pc and sig_alu_carry_out;
 
     pc : program_counter
     port map ( reset    => reset,
@@ -161,11 +169,19 @@ begin
                addr_in  => sig_next_pc,
                addr_out => sig_curr_pc ); 
 
-    next_pc : adder_4b 
+    next_pc_standard : adder_4b 
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
-               sum       => sig_next_pc,   
+               sum       => sig_next_pc_standard,   
                carry_out => sig_pc_carry_out );
+    
+    next_pc : entity work.mux_2to1_4b
+    port map (
+        mux_select => sig_use_jump_pc,
+        data_a => sig_next_pc_standard,
+        data_b => sig_insn(3 downto 0),
+        data_out => sig_next_pc   
+    );
     
     insn_mem : instruction_memory 
     port map ( reset    => reset,
@@ -177,13 +193,18 @@ begin
     port map ( data_in  => sig_insn(3 downto 0),
                data_out => sig_sign_extended_offset );
 
-    ctrl_unit : control_unit 
+    ctrl_unit : entity work.control_unit 
     port map ( opcode     => sig_insn(15 downto 12),
                reg_dst    => sig_reg_dst,
                reg_write  => sig_reg_write,
                alu_src    => sig_alu_src,
                mem_write  => sig_mem_write,
-               mem_to_reg => sig_mem_to_reg );
+               mem_to_reg => sig_mem_to_reg,
+               --
+               alu_operation => sig_alu_operation,
+               enable_jump_pc => sig_enable_jump_pc
+               --
+               );
 
     mux_reg_dst : mux_2to1_4b 
     port map ( mux_select => sig_reg_dst,
@@ -208,11 +229,16 @@ begin
                data_b     => sig_sign_extended_offset,
                data_out   => sig_alu_src_b );
 
-    alu : adder_16b 
-    port map ( src_a     => sig_read_data_a,
+    alu : entity work.alu_device 
+    port map ( 
+               src_a     => sig_read_data_a,
                src_b     => sig_alu_src_b,
-               sum       => sig_alu_result,
-               carry_out => sig_alu_carry_out );
+               result    => sig_alu_result,
+               flag      => sig_alu_carry_out,
+               ---
+               operation => sig_alu_operation
+               ---
+                );
 
     data_mem : data_memory 
     port map ( reset        => reset,

@@ -7,7 +7,7 @@
 --     reg_dst    : asserted for ADD instructions, so that the register
 --                  destination number for the 'write_register' comes from
 --                  the rd field (bits 3-0). 
---     reg_write  : asserted for ADD and LOAD instructions, so that the
+--     reg_write  : asserted for ADD and LOAD and SLL instructions, so that the
 --                  register on the 'write_register' input is written with
 --                  the value on the 'write_data' port.
 --     alu_src    : asserted for LOAD and STORE instructions, so that the
@@ -19,6 +19,10 @@
 --     mem_to_reg : asserted for LOAD instructions, so that the value fed
 --                  to the register 'write_data' input comes from the
 --                  data memory.
+--     alu_operation : asserted for SLL instructions, so that the ALU will use
+--                     the results of the SLL unit instead of the ADD unit
+--     enable_jump_pc : asserted for BEQ instructions, allows possible PC rewrite    
+--
 --
 --
 -- Copyright (C) 2006 by Lih Wen Koh (lwkoh@cse.unsw.edu.au)
@@ -47,7 +51,12 @@ entity control_unit is
            reg_write  : out std_logic;
            alu_src    : out std_logic;
            mem_write  : out std_logic;
-           mem_to_reg : out std_logic );
+           mem_to_reg : out std_logic;
+           --
+           alu_operation : out std_logic;
+           enable_jump_pc : out std_logic
+           --
+           );
 end control_unit;
 
 architecture behavioural of control_unit is
@@ -55,14 +64,26 @@ architecture behavioural of control_unit is
 constant OP_LOAD  : std_logic_vector(3 downto 0) := "0001";
 constant OP_STORE : std_logic_vector(3 downto 0) := "0011";
 constant OP_ADD   : std_logic_vector(3 downto 0) := "1000";
+constant OP_SLL   : std_logic_vector(3 downto 0) := "1100";
+constant OP_BNE   : std_logic_vector(3 downto 0) := "1101";
 
 begin
 
-    reg_dst    <= '1' when opcode = OP_ADD else
+    reg_dst    <= '1' when (opcode = OP_ADD
+                            or opcode = OP_SLL) else
                   '0';
-
+                  
+    --
+    alu_operation <= '1' when (opcode = OP_SLL
+                               or opcode = OP_BNE -- Switches ALU carry/flag
+                              ) else '0';
+    
+    enable_jump_pc <= '1' when (opcode = OP_BNE) else '0';
+    --
+    
     reg_write  <= '1' when (opcode = OP_ADD 
-                            or opcode = OP_LOAD) else
+                            or opcode = OP_LOAD
+                            or opcode = OP_SLL) else
                   '0';
     
     alu_src    <= '1' when (opcode = OP_LOAD 
