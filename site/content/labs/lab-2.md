@@ -24,6 +24,26 @@ options = ""
 * Added a multiplexer that switches between the next "standard" PC address, and the 4-bit address in the instruction, controlled by an introduced **EnableJumpPC** control signal that is AND gated with the ALU output flag
 * Highly opinionated design (i.e. ALU flag defaults to comparator output for all instructions except for ADD)
 
+### Introduced Instructions
+
+```vhdl
+--     sll   rd, rs, rt
+--        # rd <- rs << rt
+--        # format:  | opcode = 12 |  rs  |  rt  |  rd  | 
+--
+--     bne   rs, rt, imm
+--        # if rs != rt, PC <- imm
+--        # format:  | opcode = 13 |  rs  |  rt  |  imm  | 
+```
+
+### Introduced Control Signals
+
+```vhdl
+--     alu_operation : asserted for SLL instructions, so that the ALU will use
+--                     the results of the SLL unit instead of the ADD unit
+--     enable_jump_pc : asserted for BEQ instructions, allows possible PC rewrite    
+```
+
 ## Step 0 (Original)
 
 ![](/uploads/base.png)
