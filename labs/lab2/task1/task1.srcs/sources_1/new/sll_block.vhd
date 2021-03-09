@@ -33,7 +33,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity sll_block is
     Port ( val : in STD_LOGIC_VECTOR (15 downto 0);
-           amt : in STD_LOGIC_VECTOR (3 downto 0);
+           amt : in STD_LOGIC_VECTOR (15 downto 0); -- realistically will only use at most 4 bits
            res : out STD_LOGIC_VECTOR (15 downto 0) );
 end sll_block;
 

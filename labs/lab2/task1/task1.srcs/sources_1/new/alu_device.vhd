@@ -33,8 +33,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity alu_device is
     port (
-        src_a : in std_logic_vector(3 downto 0);
-        src_b : in std_logic_vector(3 downto 0);
+        src_a : in std_logic_vector(15 downto 0);
+        src_b : in std_logic_vector(15 downto 0);
         result : out std_logic_vector(15 downto 0);
         flag  : out std_logic;
         operation: in std_logic );
