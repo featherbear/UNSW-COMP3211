@@ -45,7 +45,7 @@ a. If pipelined, the processor can run at a clock frequency of 5 GHz.
 \**c. If the processor is pipelined, the minimum latency for a load instruction is 1250ps.  
 **d. If the processor is pipelined, the minimum latency for the ALU instruction is 1750ps.**
 
-Rationale for NOT (c) - Each cycle is constrained to the slowest stage (i.e. MEM) - 350 x 5 = 1750  
+Rationale for NOT (c) - **Each cycle is constrained to the slowest stage** (i.e. MEM) - 350 x 5 = 1750  
 Rationale for (d) - Even if the instruction finishes early (i.e. doesn't need to write back), the result isn't used until the end of the pipeline cycle
 
 ***
@@ -85,12 +85,14 @@ add $13, $14, $15
 
 * IF/ID - 2x32 = 64 bits
 * ID/EX - 4x32 = 128 bits
-* EX/MEM - 3x32 = 96 bits (ALU results either zero or ALU result - max(0,32) = 32)
+* EX/MEM - 3x32 = <s>96</s> 97 bits (ALU results a zero flag, plus the ALU result)
 * MEM/WB - 2x32 = 64 bits
 
 On the fifth cycle...  
 Read - $10, $11  
-Write - $6
+Write - <s>$6</s>   <s>$1</s>   $10
+
+* What is the zero bit used for???
 
 ***
 
@@ -102,6 +104,4 @@ The clock frequency is bounded by the slowest pipeline stage, and is the recipro
 
 i.e if the slowest stage is 0.5s, then the clock frequency will be 1/0.5s = 2 Hz
 
-Given the delay of each component, to determine the clock frequency; one would sum all of the component delays within each
-
-stage, and use that total delay to calculate the clock frequency.
+Given the delay of each component, to determine the clock frequency; one would find the longest path delay within each stage, and use that delay to calculate the clock frequency (1/time).
