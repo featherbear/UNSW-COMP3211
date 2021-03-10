@@ -40,8 +40,8 @@ Rationale for NOT (c) - Not _always_ true as pipelined/multicycle processors req
 > Which of the following statements is/are true?
 
 a. If pipelined, the processor can run at a clock frequency of 5 GHz.  
-\**b. If not pipelined and with a multi-cycle processor design, the processor can run at a clock frequency of 1 GHz.  
-\**c. If the processor is pipelined, the minimum latency for a load instruction is 1250ps.  
+**b. If not pipelined and with a multi-cycle processor design, the processor can run at a clock frequency of 1 GHz.**  
+c. If the processor is pipelined, the minimum latency for a load instruction is 1250ps.  
 **d. If the processor is pipelined, the minimum latency for the ALU instruction is 1750ps.**
 
 Rationale for NOT (c) - **Each cycle is constrained to the slowest stage** (i.e. MEM) - 350 x 5 = 1750  
