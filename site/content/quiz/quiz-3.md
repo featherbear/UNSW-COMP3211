@@ -81,20 +81,27 @@ add $10, $11, $12
 add $13, $14, $15
 ```
 
-(Assuming 32-bit addressing)  
+(Assuming 32-bit addressing)
 
 * IF/ID - 2x32 = 64 bits
 * ID/EX - 4x32 = 128 bits
 * EX/MEM - 3x32 = 96 bits (ALU results either zero or ALU result - max(0,32) = 32)
 * MEM/WB - 2x32 = 64 bits
 
-
 On the fifth cycle...  
 Read - $10, $11  
 Write - $6
 
----
+***
 
-> Given the delay of each component in the pipeline shown below, how to determine the clock frequency for the pipeline?
-> 
-> 
+> Given the delay of each component in the pipeline shown below, how to determine the clock frequency for the pipeline?  
+>   
+> ![](/uploads/snipaste_2021-03-10_12-37-49.png)
+
+The clock frequency is bounded by the slowest pipeline stage, and is the reciprocal of the slowest pipeline stage.
+
+i.e if the slowest stage is 0.5s, then the clock frequency will be 1/0.5s = 2 Hz
+
+Given the delay of each component, to determine the clock frequency; one would sum all of the component delays within each
+
+stage, and use that total delay to calculate the clock frequency.
