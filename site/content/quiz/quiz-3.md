@@ -92,3 +92,9 @@ add $13, $14, $15
 On the fifth cycle...  
 Read - $10, $11  
 Write - $6
+
+---
+
+> Given the delay of each component in the pipeline shown below, how to determine the clock frequency for the pipeline?
+> 
+> 
