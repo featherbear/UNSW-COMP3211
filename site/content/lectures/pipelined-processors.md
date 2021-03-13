@@ -180,4 +180,35 @@ Ooooh smart!
 
 ***
 
- 
+# Static Predictions
+
+Predicts that all branch instructions have the same behaviour - either never, or always taken
+
+* When the prediction (never taken\[?\]) is correct, the pipeline continues processing
+* When the prediction is wrong, the instruction(s?) after the branch instruction are discarded 
+
+> Load each instruction every clock cycle, but discard the latter instructions if a branch occurs
+
+## Pipeline Flush
+
+![](/uploads/screenshot-from-2021-03-13-15-45-25.png)
+
+If the prediction is wrong, 3 instructions need to be flushed.
+
+To mitigate the performance penalty from flushing, there are several improvement methods.
+
+* Make the decision for branching earlier
+  * Calculate the target address in the ID stage
+  * Compare register contents in the ID stage (using bitwise XOR)
+  * Require forwarding to ID stage and hazard detection
+    * (Only if the branch is dependent upon the result of an R-type or LOAD instruction that is still in the pipeline)  
+* Flush only one instruction
+  * `IF.Flush` control signal sets the instruction field of the IF/ID register to 0
+
+![](/uploads/screenshot-from-2021-03-13-15-52-18.png)
+
+***
+
+![](/uploads/screenshot-from-2021-03-13-15-40-29.png)  
+4N / (xN * 1 + (1-x)N * 4)  
+4/(4-3x)
