@@ -156,7 +156,11 @@ If instructions depend on the result of a previous instruction, we need to delay
 
 Load Use Hazard (LUH) - When a load instruction is followed by an instruction dependent on the memory data (i.e. "not yet")
 
+Prevent PC and IF/ID registers from changing
+
 Set the EX, MEM and WB control fields of the ID/EX register to 0 to perform a `no-op`
+
+This is performed by a Hazard Detection Unit, which reads the states of the different pipeline registers, and controls the writeability of the IF/ID register
 
 ![](/uploads/snipaste_2021-03-08_04-27-01.png)
 
@@ -169,3 +173,11 @@ Update a pipeline register to contain the correct value, so that it can be used
 ![](/uploads/snipaste_2021-03-08_04-14-12.png)
 
 ![](/uploads/snipaste_2021-03-08_04-18-12.png)
+
+### Stall AND Forward
+
+Ooooh smart!
+
+***
+
+ 
