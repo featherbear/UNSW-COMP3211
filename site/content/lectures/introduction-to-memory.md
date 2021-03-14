@@ -1,6 +1,6 @@
 +++
 categories = ["Lectures"]
-date = 2021-03-15T14:46:04Z
+date = 2021-03-14T14:46:04Z
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Introduction to Memory"
