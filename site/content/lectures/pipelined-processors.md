@@ -255,3 +255,10 @@ i.e in a loop, the final case will exit the loop. If that loop is re-executed, t
 A compiler-oriented approach that will always execute the instruction after the branch
 
 ![](/uploads/snipaste_2021-03-15_02-31-03.png)
+
+***
+
+![](/uploads/snipaste_2021-03-15_02-34-07.png)  
+![](/uploads/snipaste_2021-03-15_02-34-37.png)  
+![](/uploads/snipaste_2021-03-15_02-34-55.png)  
+![](/uploads/snipaste_2021-03-15_02-35-23.png)
