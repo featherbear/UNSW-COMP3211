@@ -185,7 +185,7 @@ Ooooh smart!
 Predicts that all branch instructions have the same behaviour - either never, or always taken
 
 * When the prediction (never taken\[?\]) is correct, the pipeline continues processing
-* When the prediction is wrong, the instruction(s?) after the branch instruction are discarded 
+* When the prediction is wrong, the instruction(s?) after the branch instruction are discarded
 
 > Load each instruction every clock cycle, but discard the latter instructions if a branch occurs
 
@@ -193,7 +193,7 @@ Predicts that all branch instructions have the same behaviour - either never, or
 
 ![](/uploads/screenshot-from-2021-03-13-15-45-25.png)
 
-If the prediction is wrong, 3 instructions need to be flushed.
+If the prediction is wrong, 3 instructions may need to be flushed. (Can be improved!)
 
 To mitigate the performance penalty from flushing, there are several improvement methods.
 
@@ -201,7 +201,7 @@ To mitigate the performance penalty from flushing, there are several improvement
   * Calculate the target address in the ID stage
   * Compare register contents in the ID stage (using bitwise XOR)
   * Require forwarding to ID stage and hazard detection
-    * (Only if the branch is dependent upon the result of an R-type or LOAD instruction that is still in the pipeline)  
+    * (Only if the branch is dependent upon the result of an R-type or LOAD instruction that is still in the pipeline)
 * Flush only one instruction
   * `IF.Flush` control signal sets the instruction field of the IF/ID register to 0
 
@@ -212,3 +212,31 @@ To mitigate the performance penalty from flushing, there are several improvement
 ![](/uploads/screenshot-from-2021-03-13-15-40-29.png)  
 4N / (xN * 1 + (1-x)N * 4)  
 4/(4-3x)
+
+# Dynamic Prediction
+
+Prediction is made on the fly, depending on the history of the branch behaviour.  
+This history is stored in a **branch history table** / **branch prediction table.**
+
+![](/uploads/snipaste_2021-03-15_01-37-12.png)
+
+## 1-bit Prediction Scheme
+
+> The history bit (1-bit wide), contains the result of the branch - either taken or not taken
+
+Simple, however it has limited prediction accuracy.  
+i.e in a loop, the final case will exit the loop. If that loop is re-executed, the exit check history will be incorrect for the future iterations
+
+* T -> T
+* N -> N
+
+## 2-bit Prediction Scheme
+
+> The history bit is now 2 bits wide. A prediction must be wrong twice before it is changed
+
+![](/uploads/snipaste_2021-03-15_01-44-16.png)
+
+* TT -> T
+* NN ->
+* TN -> T
+* NT -> N
