@@ -240,3 +240,18 @@ i.e in a loop, the final case will exit the loop. If that loop is re-executed, t
 * NN ->
 * TN -> T
 * NT -> N
+
+![](/uploads/snipaste_2021-03-15_01-48-13.png)
+
+## `n`-bit Prediction Scheme
+
+* Frequency based - (majority -> prediction) - no correlations are taken into account
+* Pattern based (more accurate and efficient)
+  * Branch history shift buffer - correlation oriented
+  * Pattern prediction history table - frequency oriented
+
+## Delay Branch
+
+A compiler-oriented approach that will always execute the instruction after the branch
+
+![](/uploads/snipaste_2021-03-15_02-31-03.png)
