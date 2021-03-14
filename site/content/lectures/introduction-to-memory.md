@@ -13,39 +13,39 @@ options = ""
 
 +++
 
-![](Snipaste_2021-03-15_04-14-49.png)
+![](/uploads/Snipaste_2021-03-15_04-14-49.png)
 
 ## SRAM
 
-![](Snipaste_2021-03-15_03-26-21.png)
+![](/uploads/Snipaste_2021-03-15_03-26-21.png)
 
 **16-word 4-bit SRAM structure**
 
-![](Snipaste_2021-03-15_03-31-04.png)
+![](/uploads/Snipaste_2021-03-15_03-31-04.png)
 
-![](Snipaste_2021-03-15_03-32-44.png)
+![](/uploads/Snipaste_2021-03-15_03-32-44.png)
 
 * Precharge required to get the electrical components to their required voltage/energy
 
 ## DRAM
 
-![](Snipaste_2021-03-15_03-37-05.png)
+![](/uploads/Snipaste_2021-03-15_03-37-05.png)
 
-![](Snipaste_2021-03-15_03-37-33.png)
+![](/uploads/Snipaste_2021-03-15_03-37-33.png)
 
 **Typical DRAM bank**
 
-![](Snipaste_2021-03-15_03-38-34.png)
+![](/uploads/Snipaste_2021-03-15_03-38-34.png)
 
 Only half the number of address bits is required, as we can switch usage of the input as a row or column selector
 
 **1-transistor DRAM cell**
 
-![](Snipaste_2021-03-15_03-41-02.png)
+![](/uploads/Snipaste_2021-03-15_03-41-02.png)
 
 As a result of the circuit configuration, the voltage/current in the capacitor can drain over time. Therefore a refresh is required (i.e. doing a dummy read/write to every cell in a row) - which is often performed by special hardware refresh control components. This operation is power hungry and sacrifices performance.
 
-![](Snipaste_2021-03-15_03-45-29.png)
+![](/uploads/Snipaste_2021-03-15_03-45-29.png)
 
 **DRAM Access Cycle**
 
@@ -57,20 +57,20 @@ As a result of the circuit configuration, the voltage/current in the capacitor c
 
 **Performance**
 
-![](Snipaste_2021-03-15_03-47-29.png)
+![](/uploads/Snipaste_2021-03-15_03-47-29.png)
 
 ### Increasing Data Throughput
 
 **Burst Mode** - Consecutive accesses without the need to send the address of each word in the row.  
 Saves T\_rac (row access delay), by only sending the other required column (word) addressess  
-![](Snipaste_2021-03-15_03-53-17.png)  
+![](/uploads/Snipaste_2021-03-15_03-53-17.png)  
 
 **Multi-bank Interleaved Access** - Access different banks at the same time.  
-![](Snipaste_2021-03-15_03-55-20.png)
+![](/uploads/Snipaste_2021-03-15_03-55-20.png)
 
 **Wide memory data bus** - Transfer multiple words at the same time along the data bus line  
-![](Snipaste_2021-03-15_03-56-13.png)  
-![](Snipaste_2021-03-15_03-58-47.png)
+![](/uploads/Snipaste_2021-03-15_03-56-13.png)  
+![](/uploads/Snipaste_2021-03-15_03-58-47.png)
 
 ### Increasing Data Rate
 
@@ -98,15 +98,15 @@ The controller handles the read/write mechanism, motor operation, etc.
 * The floating gate 'links' to the word line throug the control gate with a small threshold
   * When linked, the cell has a value of `1`, else `0`
   * When unlinked (through negative electrons acting as a barrier), there is a large threshold; preventing current from flowing
-![](Snipaste_2021-03-15_04-09-16.png)
-![](Snipaste_2021-03-15_04-08-11.png)
+![](/uploads/Snipaste_2021-03-15_04-09-16.png)
+![](/uploads/Snipaste_2021-03-15_04-08-11.png)
 
 ---
 
 ## Trends | CPU vs Memory improvements
 
-![](Snipaste_2021-03-15_04-10-49.png)
+![](/uploads/Snipaste_2021-03-15_04-10-49.png)
 
 ---
 
-![](Snipaste_2021-03-15_04-12-25.png)
+![](/uploads/Snipaste_2021-03-15_04-12-25.png)
