@@ -107,8 +107,23 @@ var_insn_mem(15) := X"0000";
 
 # Task 2
 
-## Design Choices
+Hi Kenny / Brian :)
+
+I don't have time to actually implement and test it, but I reckon explaining what I _would_ do to the design would suffice some marks :)
+
+## Stack Management
+
+* We could create an entity that internally keeps track of its stack pointer (`INTEGER RANGE 0 TO 15`).
+* When the `enable` bit is asserted and `direction` is set to `0` (for POP), the 16-bit `value` bus is set to the internal stack memory array at position SP, and SP is increased by 1 (towards the bottom of the stack, `15`). 
+* When the `enable` bit is asserted and `direction` is set to `1` (for PUSH), the internal stack memory at position SP is set to the `value` bus, and SP is decreased by 1
+* When the `reset` bit is asserted, the stack will be reset
+
+### Design Choices
 
 * When resetting the stack, the data will not be cleared; only the pointer will be reset
 * No protections against stack overflows/underflows will be implemented
 * Stack direction: 15 (bottom) -> 0 (top)
+
+### Considerations
+
+In the previous single cycle core design, the value of two registers were read simultaneously. While unconventional, the stack design could return the value at SP, _as well as SP+1 (value before the top)_ - which would allow for two values to be read during the same cycle
