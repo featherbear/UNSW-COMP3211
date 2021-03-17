@@ -102,3 +102,13 @@ var_insn_mem(13) := X"0000";
 var_insn_mem(14) := X"0000";
 var_insn_mem(15) := X"0000";
 ```
+
+--- 
+
+# Task 2
+
+## Design Choices
+
+* When resetting the stack, the data will not be cleared; only the pointer will be reset
+* No protections against stack overflows/underflows will be implemented
+* Stack direction: 15 (bottom) -> 0 (top)
