@@ -128,7 +128,7 @@ This design incorporates a stack entity that co-exists with the RegFile since th
 
 ### Considerations
 
-In the previous single cycle core design, the value of two registers were read simultaneously. While unconventional, the stack design could return the value at SP, _as well as SP+1 (value before the top)_ - which would allow for two values to be read during the same cycle
+In the previous single cycle core design, the value of two registers were read simultaneously. While unconventional, the stack design could return the value at SP, **as well as SP+1 (value before the top)** - which would allow for two values to be read during the same cycle
 
 For the writeback (i.e. a `push` instruction, or the result of `add` / `sll` / etc), this can occur during the falling edge of the clock signal, similar to the other memory entities.
 
