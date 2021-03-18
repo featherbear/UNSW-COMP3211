@@ -170,7 +170,7 @@ Update a pipeline register to contain the correct value, so that it can be used
 
 ***
 
-![](/uploads/snipaste_2021-03-08_04-14-12.png)
+![](/uploads/snipaste_2021-03-19_01-21-54.png)
 
 ![](/uploads/snipaste_2021-03-08_04-18-12.png)
 
