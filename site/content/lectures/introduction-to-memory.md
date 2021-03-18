@@ -12,10 +12,11 @@ enable = false
 options = ""
 
 +++
-
 ![](/uploads/Snipaste_2021-03-15_04-14-49.png)
 
-## SRAM
+![](/uploads/snipaste_2021-03-19_01-23-56.png)
+
+## SRAM (Volatile)
 
 ![](/uploads/Snipaste_2021-03-15_03-26-21.png)
 
@@ -27,7 +28,7 @@ options = ""
 
 * Precharge required to get the electrical components to their required voltage/energy
 
-## DRAM
+## DRAM (Volatile)
 
 ![](/uploads/Snipaste_2021-03-15_03-37-05.png)
 
@@ -62,8 +63,8 @@ As a result of the circuit configuration, the voltage/current in the capacitor c
 ### Increasing Data Throughput
 
 **Burst Mode** - Consecutive accesses without the need to send the address of each word in the row.  
-Saves T\_rac (row access delay), by only sending the other required column (word) addressess  
-![](/uploads/Snipaste_2021-03-15_03-53-17.png)  
+Saves T_rac (row access delay), by only sending the other required column (word) addressess  
+![](/uploads/Snipaste_2021-03-15_03-53-17.png)
 
 **Multi-bank Interleaved Access** - Access different banks at the same time.  
 ![](/uploads/Snipaste_2021-03-15_03-55-20.png)
@@ -77,18 +78,18 @@ Saves T\_rac (row access delay), by only sending the other required column (word
 **DDR DRAM** (Double Data Rate) - Transfer on both rising and falling clock edges  
 **QDR DRAM** (Quad Data Rate) - DDR functionality on separate input and output port
 
-## Hard Disk Drives (HDD)
+## Hard Disk Drives (HDD) - Non-Volatile
 
 Disks contains magnetically-coated platters, which contain tracks that are split into sectors.  
-The magnetic orientation of the field represents a bit.  
+The magnetic orientation of the field represents a bit.
 
 The controller handles the read/write mechanism, motor operation, etc.
 
 **Performance / Delays**
 
-* Seek time - time between file request and when the first byte is received (~10-20ms)
-* Rotational latency - time required for the first bit of the data sector to pass through the read/write head (~2-4ms)
-* Data rate - bytes per second that the drive can deliver to the CPU 
+* Seek time - time between file request and when the first byte is received (\~10-20ms)
+* Rotational latency - time required for the first bit of the data sector to pass through the read/write head (\~2-4ms)
+* Data rate - bytes per second that the drive can deliver to the CPU
 
 ## Solid State Disks (SSD) and Flash
 
@@ -98,15 +99,62 @@ The controller handles the read/write mechanism, motor operation, etc.
 * The floating gate 'links' to the word line throug the control gate with a small threshold
   * When linked, the cell has a value of `1`, else `0`
   * When unlinked (through negative electrons acting as a barrier), there is a large threshold; preventing current from flowing
-![](/uploads/Snipaste_2021-03-15_04-09-16.png)
-![](/uploads/Snipaste_2021-03-15_04-08-11.png)
+    ![](/uploads/Snipaste_2021-03-15_04-09-16.png)
+    ![](/uploads/Snipaste_2021-03-15_04-08-11.png)
 
----
+***
 
 ## Trends | CPU vs Memory improvements
 
 ![](/uploads/Snipaste_2021-03-15_04-10-49.png)
 
----
+***
 
-![](/uploads/Snipaste_2021-03-15_04-12-25.png)
+![](/uploads/Snipaste_2021-03-15_04-12-25.png)  
+Slow memory affects speed by quite a lot!
+
+***
+
+## Memory Hierarchy
+
+Changing the external representation of memory so that it appears, fast, cheap and large.
+
+* Store everything on the disk
+* Copy recent required data from the disk to the smaller DRAM ("main memory")
+* Copy more recently accessed and nearby items from the DRAM to an even smaller SRAM ("cache")
+
+## Typical two-level memory hierarchy
+
+![](/uploads/snipaste_2021-03-19_01-32-44.png)  
+The processor accesses cache for data
+
+***
+
+Cache Hit - The accessed data is present in the cache  
+Cache Miss - The required data is not in the cache; copy the data from the memory to the cache
+
+* Cache Hit Rate = `Hits / Accesses`
+* Hit Time - Time taken to access the cache
+* Cache Miss Rate = `Misses / Accesses` = `1 - hit rate`
+* Miss Penalty - The time taken to copy the data block from the memory to the cache
+
+***
+
+### Principle Of Locality
+
+Programs tends to access a relatively small portion of the address space over a small period of time.
+
+* Temporal Locality (Time) - Will tend to be referenced again
+  * i.e. leave items in the cache
+* Spatial Locality (Space) - Nearby addresses will likely to be accessed
+  * i.e. move a bunch of data to the cache
+
+### Average Access Time
+
+Average memory access time (AMAT) = Hit time + Miss rate * Miss penalty  
+  
+![](/uploads/snipaste_2021-03-19_01-50-06.png)
+
+* Register <-> Memory operation is implemented by the compiler / programmer
+* Cache <-> Memory operation is implemented by hardware
+* Memory <-> Disk operation is implemented by the hardware, OS (virtual memory), and the programmer
