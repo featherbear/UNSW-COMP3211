@@ -19,9 +19,16 @@ A hardware component in the processor that is small, but fast!
 
 To achieve a high cache hit rate, data blocks need to be dynamically transferred between the cache and main memory (i.e. _principle of locality_)
 
-![](/uploads/snipaste_2021-03-19_17-55-52.png)  
+![](/uploads/snipaste_2021-03-19_17-55-52.png)
+
+## Blocks
+
 ![](/uploads/snipaste_2021-03-19_18-01-46.png)  
 \--> The tag is often the rest of the bits that weren't used to select the cache index
+
+![](/uploads/snipaste_2021-03-19_18-12-41.png)
+
+**If the cache is too small / block size is too big** - we may run into a 'thrashing' issue- where the contents in the cache constantly change -> negative impact as there will be a \~100% conflict miss
 
 ## Cache Structures
 
