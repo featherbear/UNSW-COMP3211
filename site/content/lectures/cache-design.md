@@ -67,6 +67,9 @@ There are 4 sets of 2-block caches, so 12 % 4 = 0 -> Set 0 will be used
 
 ![](/uploads/snipaste_2021-03-19_19-53-26.png)
 
+* `2` -> Block size is 4 byte = 2^2
+* `3` -> 64 byte cache / (2 * 4 byte blocks) = 8 sets of 2 blocks; 8 = 2^3
+
 ### Fully Associative Cache
 
 A memory block can be mapped to any location in the cache; however this increases the cache search time, as the full cache needs to be searched for a memory block
