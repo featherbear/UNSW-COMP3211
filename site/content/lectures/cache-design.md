@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-03-19T06:42:12Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Cache Design"
@@ -28,7 +27,14 @@ To achieve a high cache hit rate, data blocks need to be dynamically transferred
 
 ![](/uploads/snipaste_2021-03-19_18-12-41.png)
 
-**If the cache is too small / block size is too big** - we may run into a 'thrashing' issue- where the contents in the cache constantly change -> negative impact as there will be a \~100% conflict miss
+### Cache Too Small?
+
+**If the cache is too small / block size is too big** - we may run into a 'thrashing' issue- where the contents in the cache may start to constantly change -> negative impact as there will be a \~100% conflict miss.
+
+i.e. if there are 4 cache blocks, but 5 items that need to be accessed. After the first four cache items populate, the fifth block will replace the first item; but then the first block will need to be read from the cache
+
+* Solution 1 - Increase the cache size
+* Solution 2 - Multiple entries for a memory block (a memory block can map to multiple cache blocks) -> refer to associative cache
 
 ## Cache Structures
 
@@ -47,7 +53,27 @@ For a cache of 2^m blocks, a memory block with address X maps to the cache locat
 
 ### Set Associative Cache
 
+> n-way set associative cache
+
+The cache is divided into sets, each that contains `n` blocks. A memory block is mapped to a set, and can be stored in any location in the set.
+
+* `n` comparators are required to search a block in a set
+
+![](/uploads/snipaste_2021-03-19_19-44-30.png)
+
+> Given an 8-block cache, how is the memory block 12 placed in the cache using a 2-way set associative cache?
+
+There are 4 sets of 2-block caches, so 12 % 4 = 0 -> Set 0 will be used
+
+![](/uploads/snipaste_2021-03-19_19-53-26.png)
+
 ### Fully Associative Cache
+
+A memory block can be mapped to any location in the cache; however this increases the cache search time, as the full cache needs to be searched for a memory block
+
+![](/uploads/snipaste_2021-03-19_19-13-19.png)
+
+***
 
 ## Cache Concerns
 
