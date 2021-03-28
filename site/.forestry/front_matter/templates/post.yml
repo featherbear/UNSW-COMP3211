@@ -57,6 +57,7 @@ pages:
 - site/content/labs/lab-2.md
 - site/content/labs/vivado-quick-start-notes.md
 - site/content/lectures/cache-design.md
+- site/content/lectures/cache-design.md
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/multi-cycle-processors.md
@@ -70,3 +71,4 @@ pages:
 - site/content/quiz/quiz-1.md
 - site/content/quiz/quiz-3.md
 - site/content/quiz/quiz-4.md
+- site/content/quiz/quiz-5.md
