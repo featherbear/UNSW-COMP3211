@@ -81,4 +81,33 @@ As each set has two 2-byte blocks, for a 16-byte cache - there are four cache se
 Assumption: Cache replacement is decided by a fictitious 'optimal' strategy that will clear the most desired entry for the highest hit rate.  
 (i.e. when accessing \[20\], we clear out \[8\] instead of \[4\] since \[4\] will be read again later)
 
+## Hits and Misses
+
+1 - miss  
+4 - miss  
+8 - miss  
+5 - miss  
+20 - miss - replace \[8\]  
+17 - miss - replace \[1\]  
+19 - miss  
+9 - miss - replace \[17\]  
+11 - miss  
+4 - hit  
+5 - hit  
+6 - miss
+
+## Animation
+
 ![](/uploads/quiz5-q4.gif)
+
+## Final State
+
+            +--------------+--------------+
+     Set 0  | Cache for 4  | Cache for 20 |
+            |--------------|--------------+
+     Set 1  | Cache for 9  | Cache for 5  |
+            |--------------|--------------+
+     Set 2  | Cache for 6  |              |
+            |--------------|--------------+
+     Set 3  | Cache for 19 | Cache for 11 |
+            +--------------+--------------+
