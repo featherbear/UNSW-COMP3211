@@ -14,11 +14,14 @@ options = ""
 +++
 > Which of the following statements is/are not true?
 
-\*_a. Given a single cycle processor, if the datapath can be pipelined into 8 stages or 5 stages, the 8-stage pipeline always provides a higher throughput than the 5-stage pipeline.  
-\*"always" is probably not true_  
-\**b. If the latency of switching to different memory bank can be ignored, the interleaved memory operation has a throughput no less than that of the non-interleaved operation.  
-**_throughput can be increased, as we do not need to wait for the precharge delay_**  
-\**c. Burst mode memory operation is beneficial to accessing an array of data items.  
+**a. Given a single cycle processor, if the datapath can be pipelined into 8 stages or 5 stages, the 8-stage pipeline always provides a higher throughput than the 5-stage pipeline.**  
+_"always" is probably not true_  
+  
+**b. If the latency of switching to different memory bank can be ignored, the interleaved memory operation has a throughput no less than that of the non-interleaved operation.**  
+_throughput can be increased, as we do not need to wait for the precharge delay_  
+  
+c. Burst mode memory operation is beneficial to accessing an array of data items.  
+  
 d. The reason that disk is much slower than DRAM is mainly because of the mechanical operations it involves.
 
 ***
