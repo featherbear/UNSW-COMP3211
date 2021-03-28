@@ -1,7 +1,6 @@
 +++
 categories = ["Quiz"]
 date = 2021-03-28T15:30:28Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Quiz 5"
@@ -15,25 +14,27 @@ options = ""
 +++
 > Which of the following statements is/are not true?
 
-**a. Given a single cycle processor, if the datapath can be pipelined into 8 stages or 5 stages, the 8-stage pipeline always provides a higher throughput than the 5-stage pipeline.  
-**_"always" is probably not true_  
-**b. If the latency of switching to different memory bank can be ignored, the interleaved memory operation has a throughput no less than that of the non-interleaved operation.  
+\*_a. Given a single cycle processor, if the datapath can be pipelined into 8 stages or 5 stages, the 8-stage pipeline always provides a higher throughput than the 5-stage pipeline.  
+\*"always" is probably not true_  
+\**b. If the latency of switching to different memory bank can be ignored, the interleaved memory operation has a throughput no less than that of the non-interleaved operation.  
 **_throughput can be increased, as we do not need to wait for the precharge delay_**  
-**c. Burst mode memory operation is beneficial to accessing an array of data items.   
+\**c. Burst mode memory operation is beneficial to accessing an array of data items.  
 d. The reason that disk is much slower than DRAM is mainly because of the mechanical operations it involves.
 
 ***
 
 > Figure below shows a pipelined processor. When both instruction and data memories are implemented using SRAMs, the processor can achieve a CPI of 1.2 for a given program. The program consists of 50% arithmetic/logic instructions, 30% load/store instructions, and 20% branch instructions. The SRAM has the same speed as the processor (namely, assessing SRAM takes one clock cycle).
 >
-> If each SRAM is replaced by a DRAM and accessing the DRAM takes extra 50 clock cylces, what is the CPI for the program now?
+> If each SRAM is replaced by a DRAM and accessing the DRAM takes extra 50 clock cycles, what is the CPI for the program now?
 
 ![](/uploads/pipe5.png)
 
 a. 16.2  
 b. 56.2  
-c. 66.2  
+**c. 66.2**  
 d. none of the above
+
+`50 + (.5*1 + 0.3*(51) + 0.2*1) * 1 ~= 66`
 
 ***
 
@@ -48,6 +49,21 @@ d. none of the above
     a  31-10    9-4     3-0
     b  31-12   11-5     4-0
 
+* A
+  * Tag - 22 bits
+  * Index - 6 bits
+  * Offset - 4 bits
+  * Cache line: 2^4 / 4 = 4 words
+  * Entries: 2^6 = 64 entries
+* B
+  * Tag - 20 bits
+  * Index - 7 bits
+  * Offset - 5 bits
+  * Cache line: 2^5 / 4 = 8 words
+  * Entries: 2^7 = 128 entries
+
+_(divide by 4 because a word is 32-bits = 4 bytes)_
+
 ***
 
 > Assume a sequence of byte addresses (written in the decimal format):  
@@ -56,3 +72,13 @@ d. none of the above
 > The cache size is 16 bytes.
 >
 > State any assumptions you need to make.
+
+As each set has two 2-byte blocks, for a 16-byte cache - there are four cache sets (4 * 2*2 = 16)  
+\[Cache size is 16 bytes, so there are 16 / (2-byte blocks) = 8 blocks.\]  
+\[For a 2-way set-associative cache, there are 8/2 = 4 sets\]  
+\[1 bit for byte select, 2 bits for cache set index\]
+
+Assumption: Cache replacement is decided by a fictitious 'optimal' strategy that will clear the most desired entry for the highest hit rate.  
+(i.e. when accessing \[20\], we clear out \[8\] instead of \[4\] since \[4\] will be read again later)
+
+![](/uploads/quiz5-q4.gif)
