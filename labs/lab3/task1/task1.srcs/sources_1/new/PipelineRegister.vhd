@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity PipelineRegister is
-    Generic ( s : INTEGER );
+    Generic ( n : INTEGER );
     Port ( clk : in STD_LOGIC;
            dIn : in STD_LOGIC_VECTOR(s-1 DOWNTO 0);
            dOut : out STD_LOGIC_VECTOR(s-1 DOWNTO 0)
