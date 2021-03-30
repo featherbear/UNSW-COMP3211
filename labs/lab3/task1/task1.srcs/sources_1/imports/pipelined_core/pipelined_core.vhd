@@ -135,6 +135,7 @@ signal sig_potential_pc_ex_mem : std_logic_vector(3 downto 0);
 signal sig_freeze : std_logic;
 signal sig_next_pc_standard_staging              : std_logic_vector(3 downto 0);
 
+signal reset_ex_mem  : std_logic;
 --
 
 begin
@@ -267,6 +268,7 @@ begin
     pipeline_if_id: entity work.PipelineReg_IF_ID
         port map (
           clk => clk,
+          rst => sig_use_jump_pc,
           instrIn => sig_insn_src,
           instr => sig_insn,
           writeDisable => sig_freeze
@@ -275,6 +277,7 @@ begin
     pipeline_id_ex: entity work.PipelineReg_ID_EX
         port map (
           clk => clk,
+          rst => sig_use_jump_pc,
           WBAddrIn => sig_write_register_src,
           WBAddr => sig_write_register_src_ex_mem,
           ctrl_MemToRegIN => sig_mem_to_reg_src,
@@ -299,10 +302,14 @@ begin
           PotentialPC => sig_potential_pc_id_ex
         );
         
+
+    -- >:(        
+    reset_ex_mem <= sig_freeze or sig_use_jump_pc;
+
     pipeline_ex_mem: entity work.PipelineReg_EX_MEM
         port map (
           clk => clk,
-          rst => sig_freeze,
+          rst => reset_ex_mem,
           WBAddrIn => sig_write_register_src_ex_mem,
           WBAddr => sig_write_register_src_mem_wb,
           ctrl_MemToRegIN => sig_mem_to_reg_src_ex_mem,
