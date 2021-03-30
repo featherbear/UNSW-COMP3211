@@ -3,108 +3,114 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="Single_cycle_core_TB_VHDL_behav.wdb" id="1">
+      <db_ref path="pipelined_core_TB_VHDL_behav.wdb" id="1">
          <top_modules>
-            <top_module name="Single_cycle_core_TB_VHDL" />
+            <top_module name="pipelined_core_TB_VHDL" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="27601fs"></ZoomEndTime>
+      <ZoomEndTime time="77201fs"></ZoomEndTime>
       <Cursor1Time time="0fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="156"></NameColumnWidth>
-      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+      <ValueColumnWidth column_width="71"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="7" />
+   <WVObjectSize size="8" />
    <wave_markers>
       <marker time="8000" label="" />
    </wave_markers>
-   <wvobject fp_name="/Single_cycle_core_TB_VHDL/c_CLOCK_PERIOD" type="other">
-      <obj_property name="ElementShortName">c_CLOCK_PERIOD</obj_property>
-      <obj_property name="ObjectShortName">c_CLOCK_PERIOD</obj_property>
-   </wvobject>
-   <wvobject fp_name="/Single_cycle_core_TB_VHDL/r_reset" type="logic">
+   <wvobject fp_name="/pipelined_core_TB_VHDL/r_reset" type="logic">
       <obj_property name="ElementShortName">r_reset</obj_property>
       <obj_property name="ObjectShortName">r_reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/Single_cycle_core_TB_VHDL/r_CLOCK" type="logic">
-      <obj_property name="ElementShortName">r_CLOCK</obj_property>
-      <obj_property name="ObjectShortName">r_CLOCK</obj_property>
+   <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="group71" type="group">
+   <wvobject fp_name="group55" type="group">
       <obj_property name="label">PC</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/pc/addr_out" type="array">
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pc/addr_out" type="array">
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="ElementShortName">addr_out[3:0]</obj_property>
          <obj_property name="ObjectShortName">addr_out[3:0]</obj_property>
          <obj_property name="label">Current PC</obj_property>
-         <obj_property name="Radix">HEXRADIX</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/next_pc/data_a" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">data_a[3:0]</obj_property>
-         <obj_property name="ObjectShortName">data_a[3:0]</obj_property>
-         <obj_property name="label">PC+4</obj_property>
-      </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/next_pc/data_b" type="array">
-         <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="ElementShortName">data_b[3:0]</obj_property>
-         <obj_property name="ObjectShortName">data_b[3:0]</obj_property>
-         <obj_property name="label">PC Jump</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/reg_file/sig_regfile" type="array">
+   <wvobject type="divider" fp_name="divider63">
+      <obj_property name="label">--------------------------</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">sig_regfile[0:15][15:0]</obj_property>
-      <obj_property name="ObjectShortName">sig_regfile[0:15][15:0]</obj_property>
-      <obj_property name="label">Registers</obj_property>
-      <obj_property name="CustomSignalColor">#FFD700</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
-   <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/data_mem/sig_data_mem" type="array">
+   <wvobject fp_name="group67" type="group">
+      <obj_property name="label">IF.ID</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">sig_data_mem[0:15][15:0]</obj_property>
-      <obj_property name="ObjectShortName">sig_data_mem[0:15][15:0]</obj_property>
-      <obj_property name="label">Memory</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_if_id/instr" type="array">
+         <obj_property name="ElementShortName">instr[15:0]</obj_property>
+         <obj_property name="ObjectShortName">instr[15:0]</obj_property>
+      </wvobject>
    </wvobject>
-   <wvobject fp_name="group62" type="group">
-      <obj_property name="label">Control Signals</obj_property>
+   <wvobject fp_name="group66" type="group">
+      <obj_property name="label">ID.EX</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/reg_dst" type="logic">
-         <obj_property name="ElementShortName">reg_dst</obj_property>
-         <obj_property name="ObjectShortName">reg_dst</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_id_ex/WBAddr" type="array">
+         <obj_property name="ElementShortName">WBAddr[3:0]</obj_property>
+         <obj_property name="ObjectShortName">WBAddr[3:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/reg_write" type="logic">
-         <obj_property name="ElementShortName">reg_write</obj_property>
-         <obj_property name="ObjectShortName">reg_write</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_id_ex/ctrl_MemToReg" type="logic">
+         <obj_property name="ElementShortName">ctrl_MemToReg</obj_property>
+         <obj_property name="ObjectShortName">ctrl_MemToReg</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/alu_src" type="logic">
-         <obj_property name="ElementShortName">alu_src</obj_property>
-         <obj_property name="ObjectShortName">alu_src</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_id_ex/ctrl_RegWrite" type="logic">
+         <obj_property name="ElementShortName">ctrl_RegWrite</obj_property>
+         <obj_property name="ObjectShortName">ctrl_RegWrite</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/mem_write" type="logic">
-         <obj_property name="ElementShortName">mem_write</obj_property>
-         <obj_property name="ObjectShortName">mem_write</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_id_ex/ctrl_EnableJumpPC" type="logic">
+         <obj_property name="ElementShortName">ctrl_EnableJumpPC</obj_property>
+         <obj_property name="ObjectShortName">ctrl_EnableJumpPC</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/mem_to_reg" type="logic">
-         <obj_property name="ElementShortName">mem_to_reg</obj_property>
-         <obj_property name="ObjectShortName">mem_to_reg</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_id_ex/ctrl_MemWrite" type="logic">
+         <obj_property name="ElementShortName">ctrl_MemWrite</obj_property>
+         <obj_property name="ObjectShortName">ctrl_MemWrite</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/alu_operation" type="logic">
-         <obj_property name="ElementShortName">alu_operation</obj_property>
-         <obj_property name="ObjectShortName">alu_operation</obj_property>
+   </wvobject>
+   <wvobject fp_name="group65" type="group">
+      <obj_property name="label">EX.MEM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_ex_mem/WBAddr" type="array">
+         <obj_property name="ElementShortName">WBAddr[3:0]</obj_property>
+         <obj_property name="ObjectShortName">WBAddr[3:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/Single_cycle_core_TB_VHDL/UUT/ctrl_unit/enable_jump_pc" type="logic">
-         <obj_property name="ElementShortName">enable_jump_pc</obj_property>
-         <obj_property name="ObjectShortName">enable_jump_pc</obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_ex_mem/ctrl_MemToReg" type="logic">
+         <obj_property name="ElementShortName">ctrl_MemToReg</obj_property>
+         <obj_property name="ObjectShortName">ctrl_MemToReg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_ex_mem/ctrl_RegWrite" type="logic">
+         <obj_property name="ElementShortName">ctrl_RegWrite</obj_property>
+         <obj_property name="ObjectShortName">ctrl_RegWrite</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group64" type="group">
+      <obj_property name="label">MEM.WB</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_mem_wb/WBAddr" type="array">
+         <obj_property name="ElementShortName">WBAddr[3:0]</obj_property>
+         <obj_property name="ObjectShortName">WBAddr[3:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_mem_wb/ctrl_MemToReg" type="logic">
+         <obj_property name="ElementShortName">ctrl_MemToReg</obj_property>
+         <obj_property name="ObjectShortName">ctrl_MemToReg</obj_property>
+      </wvobject>
+      <wvobject fp_name="/pipelined_core_TB_VHDL/UUT/pipeline_mem_wb/ctrl_RegWrite" type="logic">
+         <obj_property name="ElementShortName">ctrl_RegWrite</obj_property>
+         <obj_property name="ObjectShortName">ctrl_RegWrite</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>
