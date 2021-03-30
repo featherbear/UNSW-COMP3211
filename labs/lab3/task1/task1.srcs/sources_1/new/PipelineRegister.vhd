@@ -16,8 +16,10 @@ begin
     process (rst, clk) begin
         if (rst = '1') then
             dOut <= (others => '0');
-        elsif (clk'event and falling_edge(clk) and writeDisable = '0') then
-            dOut <= dIn;
+        elsif (clk'event and falling_edge(clk)) then
+            if (writeDisable = '0') then
+               dOut <= dIn;
+            end if;
         end if;
     end process;
 end Behavioural;
