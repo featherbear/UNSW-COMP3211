@@ -45,7 +45,21 @@ entity PipelineReg_EX_MEM is
            ctrl_EnableJumpPC   : out STD_LOGIC;
                          
            ctrl_MemWriteIN  : in STD_LOGIC;
-           ctrl_MemWrite    : out STD_LOGIC
+           ctrl_MemWrite    : out STD_LOGIC;
+           
+           ctrl_ALUFlagIN : in  STD_LOGIC;
+           ctrl_ALUFlag   : out STD_LOGIC;
+           
+           -- BEGIN passthrough data
+           WBAddrIN : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           WBAddr   : out STD_LOGIC_VECTOR(3 DOWNTO 0);    
+           -- END passthrough data
+           
+           ALUResultIN : in STD_LOGIC_VECTOR(15 DOWNTO 0);
+           ALUResult   : out STD_LOGIC_VECTOR(15 DOWNTO 0);
+           
+           dataMemoryWriteIN : in  STD_LOGIC_VECTOR(15 DOWNTO 0);
+           dataMemoryWrite   : out STD_LOGIC_VECTOR(15 DOWNTO 0)
    );
 end PipelineReg_EX_MEM;
 

@@ -17,7 +17,16 @@ entity PipelineReg_MEM_WB is
            ctrl_MemToReg    : out STD_LOGIC;
            
            ctrl_RegWriteIN  : in STD_LOGIC;
-           ctrl_RegWrite    : out STD_LOGIC           
+           ctrl_RegWrite    : out STD_LOGIC;
+           
+           ALUResultIN : in STD_LOGIC_VECTOR(15 DOWNTO 0);
+           ALUResult   : out STD_LOGIC_VECTOR(15 DOWNTO 0);
+
+           WBAddrIN : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           WBAddr   : out STD_LOGIC_VECTOR(3 DOWNTO 0);    
+                  
+           dataMemoryIN : in  STD_LOGIC_VECTOR(15 DOWNTO 0);
+           dataMemory   : out STD_LOGIC_VECTOR(15 DOWNTO 0)
          );
 end PipelineReg_MEM_WB;
 

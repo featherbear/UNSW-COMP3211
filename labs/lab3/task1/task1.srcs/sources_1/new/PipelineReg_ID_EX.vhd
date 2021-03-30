@@ -49,7 +49,21 @@ entity PipelineReg_ID_EX is
            ctrl_ALUSrc    : out STD_LOGIC;
 
            ctrl_ALUOperationIN  : in STD_LOGIC;
-           ctrl_ALUOperation    : out STD_LOGIC
+           ctrl_ALUOperation    : out STD_LOGIC;
+           
+           -- BEGIN passthrough data
+           WBAddrIN : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           WBAddr   : out STD_LOGIC_VECTOR(3 DOWNTO 0);    
+           -- END passthrough data
+
+           RegData1IN : in  STD_LOGIC_VECTOR(15 DOWNTO 0);
+           RegData1   : out STD_LOGIC_VECTOR(15 DOWNTO 0);
+           
+           RegData2IN : in  STD_LOGIC_VECTOR(15 DOWNTO 0);
+           RegData2   : out STD_LOGIC_VECTOR(15 DOWNTO 0);
+           
+           SignExtendDataIN : in  STD_LOGIC_VECTOR(15 DOWNTO 0);
+           SignExtendData   : out STD_LOGIC_VECTOR(15 DOWNTO 0) 
        );
 end PipelineReg_ID_EX;
 
