@@ -1,35 +1,5 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 30.03.2021 23:28:06
--- Design Name: 
--- Module Name: PipelineReg_EX_MEM - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity PipelineReg_EX_MEM is
     Port ( clk : in STD_LOGIC;
@@ -66,6 +36,28 @@ end PipelineReg_EX_MEM;
 architecture Behavioral of PipelineReg_EX_MEM is
 
 begin
+ reg: entity work.PipelineRegister
+        GENERIC MAP (n => 5 + 36)
+        PORT MAP (
+          clk => clk,
+          
+          dIn(40)  => ctrl_MemToRegIN,
+          dIn(39)  => ctrl_RegWriteIN,
+          dIn(38) => ctrl_EnableJumpPCIN,
+          dIn(37) => ctrl_MemWriteIN,
+          dIn(36) => ctrl_ALUFlagIN,
+          dOut(40)  => ctrl_MemToReg,
+          dOut(39)  => ctrl_RegWrite,
+          dOut(38) => ctrl_EnableJumpPC,
+          dOut(37) => ctrl_MemWrite,
+          dOut(36) => ctrl_ALUFlag,
 
+          dIn(35 DOWNTO 32) => WBAddrIN,
+          dIn(31 DOWNTO 16) => ALUResultIN,
+          dIn(15 DOWNTO 0) => dataMemoryWriteIN,
+          dOut(35 DOWNTO 32) => WBAddr,
+          dOut(31 DOWNTO 16) => ALUResult,
+          dOut(15 DOWNTO 0) => dataMemoryWrite
+        );
 
 end Behavioral;
