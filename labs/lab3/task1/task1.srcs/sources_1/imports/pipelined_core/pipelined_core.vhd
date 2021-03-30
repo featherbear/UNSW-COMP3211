@@ -132,8 +132,8 @@ signal sig_data_mem_out_src         : std_logic_vector(15 downto 0);
 signal sig_potential_pc_id_ex : std_logic_vector(3 downto 0);
 signal sig_potential_pc_ex_mem : std_logic_vector(3 downto 0);
 
-signal sig_next_pc_final              : std_logic_vector(3 downto 0);
 signal sig_freeze : std_logic;
+signal sig_next_pc_standard_staging              : std_logic_vector(3 downto 0);
 
 --
 
@@ -159,15 +159,23 @@ begin
     pc : entity work.program_counter
     port map ( reset    => reset,
                clk      => clk,
-               addr_in  => sig_next_pc_final,
+               addr_in  => sig_next_pc,
                addr_out => sig_curr_pc ); 
 
     next_pc_standard : entity work.adder_4b 
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
-               sum       => sig_next_pc_standard,   
+               sum       => sig_next_pc_standard_staging,   
                carry_out => sig_pc_carry_out );
     
+    next_pc_hold : entity work.mux_2to1_4b
+        port map (
+            mux_select => sig_freeze,
+            data_a => sig_next_pc_standard_staging,
+            data_b => sig_curr_pc,
+            data_out => sig_next_pc_standard
+        );
+
     next_pc : entity work.mux_2to1_4b
     port map (
         mux_select => sig_use_jump_pc,
@@ -181,7 +189,7 @@ begin
         mux_select => sig_freeze,
         data_a => sig_next_pc,
         data_b => sig_curr_pc,
-        data_out => sig_next_pc_final
+        data_out => sig_next_pc
     );
     
     insn_mem : entity work.instruction_memory 
