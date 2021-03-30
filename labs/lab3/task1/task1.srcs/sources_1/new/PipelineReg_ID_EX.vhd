@@ -33,6 +33,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity PipelineReg_ID_EX is
     Port ( clk : in STD_LOGIC;
+           rst : in STD_LOGIC;
 
            -- BEGIN passthrough registers
            ctrl_MemToRegIN  : in STD_LOGIC;
@@ -76,6 +77,8 @@ begin
         GENERIC MAP (n => 6 + 56)
         PORT MAP (
           clk => clk,
+          rst => rst,
+          writeDisable => '0',
 
           dIn(61) => ctrl_MemToRegIN,
           dIn(60) => ctrl_RegWriteIN,

@@ -132,12 +132,31 @@ signal sig_data_mem_out_src         : std_logic_vector(15 downto 0);
 signal sig_potential_pc_id_ex : std_logic_vector(3 downto 0);
 signal sig_potential_pc_ex_mem : std_logic_vector(3 downto 0);
 
+signal sig_freeze : std_logic;
+signal sig_next_pc_standard_staging              : std_logic_vector(3 downto 0);
+
+signal resetReg  : std_logic;
+signal reset_ex_mem  : std_logic;
 --
 
 begin
 
     sig_one_4b <= "0001";
     sig_use_jump_pc <= sig_enable_jump_pc and sig_alu_carry_out;
+    
+    holdUnit: entity work.holdUnit
+        port map (
+            src_a => sig_insn(11 downto 8),
+            src_b => sig_insn(7 downto 4),
+            check_1_a => sig_reg_write_src_ex_mem,
+            check_1_b => sig_write_register_src_ex_mem,
+            check_2_a => sig_reg_write_src_mem_wb,
+            check_2_b => sig_write_register_src_mem_wb,
+            check_3_a => sig_reg_write,
+            check_3_b => sig_write_register,
+            
+            res => sig_freeze
+        );
 
     pc : entity work.program_counter
     port map ( reset    => reset,
@@ -148,9 +167,17 @@ begin
     next_pc_standard : entity work.adder_4b 
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
-               sum       => sig_next_pc_standard,   
+               sum       => sig_next_pc_standard_staging,   
                carry_out => sig_pc_carry_out );
     
+    next_pc_hold : entity work.mux_2to1_4b
+        port map (
+            mux_select => sig_freeze,
+            data_a => sig_next_pc_standard_staging,
+            data_b => sig_curr_pc,
+            data_out => sig_next_pc_standard
+        );
+
     next_pc : entity work.mux_2to1_4b
     port map (
         mux_select => sig_use_jump_pc,
@@ -159,6 +186,7 @@ begin
         data_out => sig_next_pc  
     );
     
+   
     insn_mem : entity work.instruction_memory 
     port map ( reset    => reset,
                clk      => clk,
@@ -231,16 +259,20 @@ begin
                data_out   => sig_write_data );
 
     
+    resetReg <= reset or sig_use_jump_pc;
     pipeline_if_id: entity work.PipelineReg_IF_ID
         port map (
           clk => clk,
+          rst => resetReg,
           instrIn => sig_insn_src,
-          instr => sig_insn
+          instr => sig_insn,
+          writeDisable => sig_freeze
         );
         
     pipeline_id_ex: entity work.PipelineReg_ID_EX
         port map (
           clk => clk,
+          rst => resetReg,
           WBAddrIn => sig_write_register_src,
           WBAddr => sig_write_register_src_ex_mem,
           ctrl_MemToRegIN => sig_mem_to_reg_src,
@@ -265,9 +297,14 @@ begin
           PotentialPC => sig_potential_pc_id_ex
         );
         
+
+    -- >:(        
+    reset_ex_mem <= sig_freeze or resetReg;
+
     pipeline_ex_mem: entity work.PipelineReg_EX_MEM
         port map (
           clk => clk,
+          rst => reset_ex_mem,
           WBAddrIn => sig_write_register_src_ex_mem,
           WBAddr => sig_write_register_src_mem_wb,
           ctrl_MemToRegIN => sig_mem_to_reg_src_ex_mem,
@@ -296,7 +333,7 @@ begin
           ctrl_MemToRegIN => sig_mem_to_reg_src_mem_wb,
           ctrl_MemToReg => sig_mem_to_reg,
           ctrl_RegWriteIN => sig_reg_write_src_mem_wb,
-          ctrl_RegWrite => sig_reg_write_src,
+          ctrl_RegWrite => sig_reg_write,
           ALUResultIN => sig_alu_result,
           ALUResult => sig_alu_result_mem_wb,
           dataMemoryIN => sig_data_mem_out_src,
