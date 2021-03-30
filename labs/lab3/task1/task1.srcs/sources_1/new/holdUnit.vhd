@@ -34,7 +34,11 @@ end holdUnit;
 architecture Behavioral of holdUnit is
 
 begin
-    process begin
+    process (
+        check_1_a, check_2_a, check_3_a,
+        check_1_b, check_2_b, check_3_b, 
+        src_a, src_b
+    ) begin
       res <= '0';
       if (check_1_a = '1' and (check_1_b = src_a or check_1_b = src_b))
       or (check_2_a = '1' and (check_2_b = src_a or check_2_b = src_b))
