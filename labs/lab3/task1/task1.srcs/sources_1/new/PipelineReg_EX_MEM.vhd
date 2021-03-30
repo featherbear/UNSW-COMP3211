@@ -43,6 +43,7 @@ begin
         GENERIC MAP (n => 5 + 40)
         PORT MAP (
           clk => clk,
+          rst => '0',
           
           dIn(44)  => ctrl_MemToRegIN,
           dIn(43)  => ctrl_RegWriteIN,

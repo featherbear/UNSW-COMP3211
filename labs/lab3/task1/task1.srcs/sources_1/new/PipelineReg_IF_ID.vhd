@@ -16,7 +16,8 @@ begin
         GENERIC MAP (n => 16)
         PORT MAP (
             clk => clk,
-
+            rst => '0',
+            
             dIn(15 DOWNTO 0) => instrIn,
             dOut(15 DOWNTO 0) => instr
         );

@@ -76,6 +76,7 @@ begin
         GENERIC MAP (n => 6 + 56)
         PORT MAP (
           clk => clk,
+          rst => '0',
 
           dIn(61) => ctrl_MemToRegIN,
           dIn(60) => ctrl_RegWriteIN,

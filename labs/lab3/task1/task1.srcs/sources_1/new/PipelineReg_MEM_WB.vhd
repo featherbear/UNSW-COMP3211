@@ -28,6 +28,7 @@ begin
         GENERIC MAP (n => 2 + 36)
         PORT MAP (
           clk => clk,
+          rst => '0',
          
           dIn(37) => ctrl_MemToRegIN,
           dIn(36) => ctrl_RegWriteIN,
