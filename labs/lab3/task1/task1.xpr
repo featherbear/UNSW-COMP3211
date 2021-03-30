@@ -174,13 +174,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/pipelined_core.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/program_counter.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/program_counter.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/sign_extend_4to16.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -192,7 +192,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/sign_extend_4to16.vhd">
+      <File Path="$PSRCDIR/sources_1/imports/pipelined_core/pipelined_core.vhd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>

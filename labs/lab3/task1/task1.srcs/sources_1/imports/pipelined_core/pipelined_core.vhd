@@ -61,74 +61,6 @@ end pipelined_core;
 
 architecture structural of pipelined_core is
 
-component program_counter is
-    port ( reset    : in  std_logic;
-           clk      : in  std_logic;
-           addr_in  : in  std_logic_vector(3 downto 0);
-           addr_out : out std_logic_vector(3 downto 0) );
-end component;
-
-component instruction_memory is
-    port ( reset    : in  std_logic;
-           clk      : in  std_logic;
-           addr_in  : in  std_logic_vector(3 downto 0);
-           insn_out : out std_logic_vector(15 downto 0) );
-end component;
-
-component sign_extend_4to16 is
-    port ( data_in  : in  std_logic_vector(3 downto 0);
-           data_out : out std_logic_vector(15 downto 0) );
-end component;
-
-component mux_2to1_4b is
-    port ( mux_select : in  std_logic;
-           data_a     : in  std_logic_vector(3 downto 0);
-           data_b     : in  std_logic_vector(3 downto 0);
-           data_out   : out std_logic_vector(3 downto 0) );
-end component;
-
-component mux_2to1_16b is
-    port ( mux_select : in  std_logic;
-           data_a     : in  std_logic_vector(15 downto 0);
-           data_b     : in  std_logic_vector(15 downto 0);
-           data_out   : out std_logic_vector(15 downto 0) );
-end component;
-
-component register_file is
-    port ( reset           : in  std_logic;
-           clk             : in  std_logic;
-           read_register_a : in  std_logic_vector(3 downto 0);
-           read_register_b : in  std_logic_vector(3 downto 0);
-           write_enable    : in  std_logic;
-           write_register  : in  std_logic_vector(3 downto 0);
-           write_data      : in  std_logic_vector(15 downto 0);
-           read_data_a     : out std_logic_vector(15 downto 0);
-           read_data_b     : out std_logic_vector(15 downto 0) );
-end component;
-
-component adder_4b is
-    port ( src_a     : in  std_logic_vector(3 downto 0);
-           src_b     : in  std_logic_vector(3 downto 0);
-           sum       : out std_logic_vector(3 downto 0);
-           carry_out : out std_logic );
-end component;
-
-component adder_16b is
-    port ( src_a     : in  std_logic_vector(15 downto 0);
-           src_b     : in  std_logic_vector(15 downto 0);
-           sum       : out std_logic_vector(15 downto 0);
-           carry_out : out std_logic );
-end component;
-
-component data_memory is
-    port ( reset        : in  std_logic;
-           clk          : in  std_logic;
-           write_enable : in  std_logic;
-           write_data   : in  std_logic_vector(15 downto 0);
-           addr_in      : in  std_logic_vector(3 downto 0);
-           data_out     : out std_logic_vector(15 downto 0) );
-end component;
-
 signal sig_next_pc              : std_logic_vector(3 downto 0);
 signal sig_curr_pc              : std_logic_vector(3 downto 0);
 signal sig_one_4b               : std_logic_vector(3 downto 0);
@@ -207,13 +139,13 @@ begin
     sig_one_4b <= "0001";
     sig_use_jump_pc <= sig_enable_jump_pc and sig_alu_carry_out;
 
-    pc : program_counter
+    pc : entity work.program_counter
     port map ( reset    => reset,
                clk      => clk,
                addr_in  => sig_next_pc,
                addr_out => sig_curr_pc ); 
 
-    next_pc_standard : adder_4b 
+    next_pc_standard : entity work.adder_4b 
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
                sum       => sig_next_pc_standard,   
@@ -227,13 +159,13 @@ begin
         data_out => sig_next_pc  
     );
     
-    insn_mem : instruction_memory 
+    insn_mem : entity work.instruction_memory 
     port map ( reset    => reset,
                clk      => clk,
                addr_in  => sig_curr_pc,
                insn_out => sig_insn_src );
 
-    sign_extend : sign_extend_4to16 
+    sign_extend : entity work.sign_extend_4to16 
     port map ( data_in  => sig_insn(3 downto 0),
                data_out => sig_sign_extended_offset_src );
 
@@ -250,13 +182,13 @@ begin
                --
                );
 
-    mux_reg_dst : mux_2to1_4b 
+    mux_reg_dst : entity work.mux_2to1_4b 
     port map ( mux_select => sig_reg_dst,
                data_a     => sig_insn(7 downto 4),
                data_b     => sig_insn(3 downto 0),
                data_out   => sig_write_register_src );
 
-    reg_file : register_file 
+    reg_file : entity work.register_file 
     port map ( reset           => reset, 
                clk             => clk,
                read_register_a => sig_insn(11 downto 8),
@@ -267,7 +199,7 @@ begin
                read_data_a     => sig_read_data_a_src,
                read_data_b     => sig_read_data_b_src );
     
-    mux_alu_src : mux_2to1_16b 
+    mux_alu_src : entity work.mux_2to1_16b 
     port map ( mux_select => sig_alu_src,
                data_a     => sig_read_data_b,
                data_b     => sig_sign_extended_offset,
@@ -284,7 +216,7 @@ begin
                ---
                 );
 
-    data_mem : data_memory 
+    data_mem : entity work.data_memory 
     port map ( reset        => reset,
                clk          => clk,
                write_enable => sig_mem_write,
@@ -292,7 +224,7 @@ begin
                addr_in      => sig_alu_result(3 downto 0),
                data_out     => sig_data_mem_out_src );
                
-    mux_mem_to_reg : mux_2to1_16b 
+    mux_mem_to_reg : entity work.mux_2to1_16b 
     port map ( mux_select => sig_mem_to_reg,
                data_a     => sig_alu_result_mem_wb,
                data_b     => sig_data_mem_out,
