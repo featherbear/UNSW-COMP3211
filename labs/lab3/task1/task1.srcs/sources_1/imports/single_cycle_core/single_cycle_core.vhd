@@ -197,6 +197,9 @@ signal sig_alu_result_mem_wb           : std_logic_vector(15 downto 0);
 
 signal sig_data_mem_out_src         : std_logic_vector(15 downto 0);
 
+signal sig_potential_pc_id_ex : std_logic_vector(3 downto 0);
+signal sig_potential_pc_ex_mem : std_logic_vector(3 downto 0);
+
 --
 
 begin
@@ -220,7 +223,7 @@ begin
     port map (
         mux_select => sig_use_jump_pc,
         data_a => sig_next_pc_standard,
-        data_b => sig_insn_src(3 downto 0), --------------------------------- TODO: TEST if use _src or not, or some other value we haven't forwarded
+        data_b => sig_potential_pc_ex_mem,
         data_out => sig_next_pc  
     );
     
@@ -325,7 +328,9 @@ begin
           RegData2IN => sig_read_data_b_src,
           RegData2 =>  sig_read_data_b,
           SignExtendDataIN => sig_sign_extended_offset_src,
-          SignExtendData => sig_sign_extended_offset
+          SignExtendData => sig_sign_extended_offset,
+          PotentialPCIN => sig_insn(3 downto 0),
+          PotentialPC => sig_potential_pc_id_ex
         );
         
     pipeline_ex_mem: entity work.PipelineReg_EX_MEM
@@ -346,7 +351,9 @@ begin
           ALUResultIN => sig_alu_result_src,
           ALUResult => sig_alu_result,
           dataMemoryWriteIN => sig_read_data_b,
-          dataMemoryWrite => sig_read_data_b_ex_mem
+          dataMemoryWrite => sig_read_data_b_ex_mem,
+          PotentialPCIN => sig_potential_pc_id_ex,
+          PotentialPC => sig_potential_pc_ex_mem
         );
         
     pipeline_mem_wb: entity work.PipelineReg_MEM_WB

@@ -25,6 +25,9 @@ entity PipelineReg_EX_MEM is
            WBAddr   : out STD_LOGIC_VECTOR(3 DOWNTO 0);    
            -- END passthrough data
            
+           PotentialPCIN : in STD_LOGIC_VECTOR(3 DOWNTO 0);
+           PotentialPC : out STD_LOGIC_VECTOR(3 DOWNTO 0);
+           
            ALUResultIN : in STD_LOGIC_VECTOR(15 DOWNTO 0);
            ALUResult   : out STD_LOGIC_VECTOR(15 DOWNTO 0);
            
@@ -37,25 +40,27 @@ architecture Behavioral of PipelineReg_EX_MEM is
 
 begin
  reg: entity work.PipelineRegister
-        GENERIC MAP (n => 5 + 36)
+        GENERIC MAP (n => 5 + 40)
         PORT MAP (
           clk => clk,
           
-          dIn(40)  => ctrl_MemToRegIN,
-          dIn(39)  => ctrl_RegWriteIN,
-          dIn(38) => ctrl_EnableJumpPCIN,
-          dIn(37) => ctrl_MemWriteIN,
-          dIn(36) => ctrl_ALUFlagIN,
-          dOut(40)  => ctrl_MemToReg,
-          dOut(39)  => ctrl_RegWrite,
-          dOut(38) => ctrl_EnableJumpPC,
-          dOut(37) => ctrl_MemWrite,
-          dOut(36) => ctrl_ALUFlag,
+          dIn(44)  => ctrl_MemToRegIN,
+          dIn(43)  => ctrl_RegWriteIN,
+          dIn(42) => ctrl_EnableJumpPCIN,
+          dIn(41) => ctrl_MemWriteIN,
+          dIn(40) => ctrl_ALUFlagIN,
+          dOut(44)  => ctrl_MemToReg,
+          dOut(43)  => ctrl_RegWrite,
+          dOut(42) => ctrl_EnableJumpPC,
+          dOut(41) => ctrl_MemWrite,
+          dOut(40) => ctrl_ALUFlag,
 
-          dIn(35 DOWNTO 32) => WBAddrIN,
+          dIn(39 DOWNTO 36) => WBAddrIN,
+          dIn(35 DOWNTO 32) => PotentialPCIN,
           dIn(31 DOWNTO 16) => ALUResultIN,
           dIn(15 DOWNTO 0) => dataMemoryWriteIN,
-          dOut(35 DOWNTO 32) => WBAddr,
+          dOut(39 DOWNTO 36) => WBAddr,
+          dOut(35 DOWNTO 32) => PotentialPC,
           dOut(31 DOWNTO 16) => ALUResult,
           dOut(15 DOWNTO 0) => dataMemoryWrite
         );
