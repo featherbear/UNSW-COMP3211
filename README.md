@@ -15,6 +15,8 @@ The ASIP sits between a processor system and the network to make sure that
 1) the data sent out to the network is soft-error free, and 
 2) the data received from the network and to be used by the destination processor is not tampered.
 
+![figure1](./images/figure1.jpg)
+
 ## Layer 1: Software Error detection
 Since soft error is not induced by malicious action and the probability of multi-bit error is
 very low, we use a parity-based design for 1-bit soft error detection, as shown in Figure
