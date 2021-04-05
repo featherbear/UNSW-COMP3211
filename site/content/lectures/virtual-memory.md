@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-04-05T15:28:51Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "Virtual Memory"
@@ -43,6 +42,24 @@ Of the requested address, the first 12 bits are the page index, and the last 12 
 PTR + first 12 bits of the virtual address = PA frame
 
 PA frame || 0x20 = 0x45020 ---> 0x6676
+
+## Multi-level Page Tables
+
+![](/uploads/snipaste_2021-04-06_02-27-55.png)
+
+* Better if memory availability is sparse / not contiguous
+* n'th level tables can be left un-initialised if not needed
+
+## TLB (Translation Lookaside Buffer)
+
+Small cache for the page table lookups.  
+As the cache is small, cache design can be full aassociative.  
+For mid-range machines, a small n-way set associative architecture may be used instead
+
+![](/uploads/snipaste_2021-04-06_02-33-22.png)  
+![](/uploads/snipaste_2021-04-06_02-33-45.png)  
+![](/uploads/snipaste_2021-04-06_02-34-05.png)  
+![](/uploads/snipaste_2021-04-06_02-34-51.png)
 
 # Hardware Address Translation
 
