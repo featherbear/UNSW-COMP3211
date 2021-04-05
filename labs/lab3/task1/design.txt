@@ -1,0 +1,9 @@
+IF/ID
+ID/EX
+EX/MEM
+MEM/WB
+
+Decode and Writeback are really fast (use less than half the time!).
+In fact the writeback could write, then read in the same cycle 
+
+PipelineRegister has a GENERIC number of bits that will allow mapping

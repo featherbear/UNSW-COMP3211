@@ -4,11 +4,11 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 
-entity Single_cycle_core_TB_VHDL is
-end Single_cycle_core_TB_VHDL;
+entity pipelined_core_TB_VHDL is
+end pipelined_core_TB_VHDL;
 
 
-architecture behave of Single_cycle_core_TB_VHDL is
+architecture behave of pipelined_core_TB_VHDL is
  
   -- 1 GHz = 2 nanoseconds period
   constant c_CLOCK_PERIOD : time := 2 ns; 
@@ -19,7 +19,7 @@ architecture behave of Single_cycle_core_TB_VHDL is
  
 
 -- Component declaration for the Unit Under Test (UUT)
-component single_cycle_core is
+component pipelined_core is
     port ( reset  : in  std_logic;
        clk    : in  std_logic 
        );
@@ -29,7 +29,7 @@ component single_cycle_core is
       begin
        
         -- Instantiate the Unit Under Test (UUT)
-        UUT : single_cycle_core
+        UUT : pipelined_core
           port map (
             reset    => r_reset,
             clk     => r_CLOCK
