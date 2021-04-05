@@ -68,6 +68,7 @@ pages:
 - site/content/lectures/pipelined-processors.md
 - site/content/lectures/single-cycle-processors.md
 - site/content/lectures/single-cycle-processors.md
+- site/content/lectures/virtual-memory.md
 - site/content/quiz/quiz-1.md
 - site/content/quiz/quiz-3.md
 - site/content/quiz/quiz-4.md
