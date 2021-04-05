@@ -154,6 +154,8 @@ For associative caches, occurs when blocks must evict another block in a set
 
 Fully associative cache is filled completely
 
+![](/uploads/snipaste_2021-04-06_01-16-21.png)
+
 # Write Buffer
 
 To reduce the impact of slow memory access, a write buffer (FIFO) can be used.
@@ -168,3 +170,15 @@ To reduce the impact of slow memory access, a write buffer (FIFO) can be used.
 If `write frequency > 1 / DRAM write cycle` then a buffer overflow may occur (the write buffer is filled up and more data comes in)
 
 A solution is to implement a second cache (L2)
+
+***
+
+# Cache Design
+
+![](/uploads/snipaste_2021-04-06_01-17-02.png)  
+![](/uploads/snipaste_2021-04-06_01-18-28.png)  
+![](/uploads/snipaste_2021-04-06_01-19-22.png)
+
+Note: The Compare Tag stage might take time - could split it into smaller stages, so that the clock cycle time can be reduced
+
+![](/uploads/snipaste_2021-04-06_01-24-20.png)
