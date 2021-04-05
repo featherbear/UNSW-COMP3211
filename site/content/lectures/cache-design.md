@@ -46,7 +46,7 @@ For a cache of 2^m blocks, a memory block with address X maps to the cache locat
 
 ![](/uploads/snipaste_2021-03-19_17-49-48.png)
 
- Multiple addresses will map to the same cache block (and compete for use)
+Multiple addresses will map to the same cache block (and compete for use)
 
 ![](/uploads/snipaste_2021-03-19_18-00-06.png)  
 ![](/uploads/snipaste_2021-03-19_18-04-04.png)
@@ -70,6 +70,8 @@ There are 4 sets of 2-block caches, so 12 % 4 = 0 -> Set 0 will be used
 * `2` -> Block size is 4 byte = 2^2
 * `3` -> 64 byte cache / (2 * 4 byte blocks) = 8 sets of 2 blocks; 8 = 2^3
 
+![](/uploads/snipaste_2021-04-06_00-21-52.png)
+
 ### Fully Associative Cache
 
 A memory block can be mapped to any location in the cache; however this increases the cache search time, as the full cache needs to be searched for a memory block
@@ -84,14 +86,85 @@ A memory block can be mapped to any location in the cache; however this increase
 
 Block Placement Strategy
 
+* Direct mapped - only one location
+* Fully associative - Anywhere
+* Set associative - Any location in a set
+
 ### How to find a memory block in cache?
 
 Block Identification
+
+![](/uploads/snipaste_2021-04-06_00-22-27.png)
+
+![](/uploads/snipaste_2021-04-06_00-27-08.png)  
+( 2^(n-2) )
 
 ### If there are no free spaces, which block will be replaced?
 
 Block Replacement
 
+* For a direct mapped cache - as only one location can be used, the contents at that location must be replaced
+* For set associative / fully associative
+  * Random - random location \[of the set\] chosen
+  * Least Recently Used
+  * "optimal"
+
+![](/uploads/snipaste_2021-04-06_00-31-03.png)
+
+* The larger the cache size, the lower the cache miss rate (more data can be cached)
+* The higher the associativity (2 way -> 4 way -> 8 way -> etc) the lower the cache miss rate
+* The cache miss rate for LRU is less than the miss rate for random replacement
+
 ### When memory data is updated, how is the cache involved?
 
 Write Strategy
+
+* Cache hit -> Write through
+  * Written to both cache and memory
+  * (+) Read misses don't result in writes
+  * (-) Potentially high memory traffic
+* Cache hit -> Write back
+  * Written **only** to cache
+  * The modified cache block is written to memory only when it is replaced
+  * Dirty bit is required to facilitate this functionality
+  * (+) memory accesses
+  * (-) cache coherence issue
+* Cache miss -> Write allocate
+  * Fetch-on-write
+    * Fetch data from memory
+    * Write to the cache
+  * Not-fetch-on-write
+    * Do not write to the memory
+    * Write to cache
+    * The cache block is invalid, except for the data word that is written
+* Cache miss -> Write not allocate
+  * Skip the cache
+
+***
+
+## Cold Start Miss
+
+Compulsory miss that occurs when a block is first accessed (hence has never been cached)
+
+## Conflict Miss (Collision Miss)
+
+For associative caches, occurs when blocks must evict another block in a set
+
+## Capacity Miss
+
+Fully associative cache is filled completely
+
+# Write Buffer
+
+To reduce the impact of slow memory access, a write buffer (FIFO) can be used.
+
+* Processor writes data to the write buffer
+* Memory controller writes contents of the buffer to the memory
+* Typically has 4 entries
+* Works if `write frequency << 1 / DRAM write cycle`
+
+## Buffer Overflow
+
+If `write frequency > 1 / DRAM write cycle` then a buffer overflow may occur (the write buffer is filled up and more data comes in)
+
+A solution is to implement a second cache (L2)
