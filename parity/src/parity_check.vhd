@@ -10,7 +10,7 @@ entity parity_check is
     port (
         data:   in std_logic_vector(7 downto 0);
         parity: in std_logic;
-        not_ok: out std_logic
+        error:  out std_logic
     );
 end parity_check;
 
@@ -31,5 +31,5 @@ begin
     );
 
     -- For a data byte with odd values, this should be 1 ^ 1 = 0
-    not_ok <= parity xor ODD;
+    error <= parity xor ODD;
 end behaviour;

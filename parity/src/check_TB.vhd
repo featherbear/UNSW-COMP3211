@@ -20,14 +20,14 @@ architecture behaviour of check_tb is
     component parity_check PORT (
         data:   in std_logic_vector(7 downto 0);
         parity: in std_logic;
-        not_ok: out std_logic
+        error:  out std_logic
     );
     end component;
     
     -- Signals that we'll need
     signal DATA     : std_logic_vector(7 downto 0); -- To the parity
     signal PARITY   : std_logic;    -- Output from the parity
-    signal NOT_OK   : std_logic;
+    signal ERROR    : std_logic;
     signal CLK      : std_logic;
 
     constant clk_period : time := 10ns;
@@ -39,7 +39,7 @@ begin
     check_UUT : parity_check port map (
         data    => DATA,
         parity  => PARITY,
-        not_ok  => NOT_OK
+        error  => ERROR
     );
 
     ---------------------------------------------------------------------------
