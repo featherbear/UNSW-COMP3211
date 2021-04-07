@@ -1,8 +1,0 @@
-# compile vhdl design source files
-vhdl xil_defaultlib  \
-"../../../../../src/parity_check.vhd" \
-"../../../../../src/parity_unit.vhd" \
-"../../../../../src/check_TB.vhd" \
-
-# Do not sort compile order
-nosort
