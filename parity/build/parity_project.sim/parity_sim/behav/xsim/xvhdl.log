@@ -1,0 +1,4 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/linds/Documents/University/COMP3211/COMP3211_Assignment/parity/src/parity_unit.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'parity_unit'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/linds/Documents/University/COMP3211/COMP3211_Assignment/parity/src/parity_TB.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'parity_tb'
