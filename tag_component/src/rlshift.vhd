@@ -13,9 +13,9 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --use UNISIM.VComponents.all;
 
 entity rlshift is
-    port ( src     : in  std_logic_vector(7 downto 0);
-           shft    : in  std_logic_vector(2 downto 0);
-           result  : out std_logic_vector(7 downto 0));
+    port ( src  : in  std_logic_vector(7 downto 0);
+           shft : in  std_logic_vector(2 downto 0);
+           res  : out std_logic_vector(7 downto 0));
 end rlshift;
 
 architecture Behavioral of rlshift is
@@ -35,7 +35,7 @@ begin
             end if;
         end loop;
         
-        result <= shft_src;
+        res <= shft_src;
     end process;
 
 end Behavioral;

@@ -20,9 +20,9 @@ end testbench;
 
 architecture Behavioral of testbench is
     COMPONENT test is     
-        port ( src     : in  std_logic_vector(7 downto 0);
-               shft    : in  std_logic_vector(2 downto 0);
-               result  : out std_logic_vector(7 downto 0));
+        port ( src  : in  std_logic_vector(7 downto 0);
+               shft : in  std_logic_vector(2 downto 0);
+               res  : out std_logic_vector(7 downto 0));
     END COMPONENT;
     
     -- INPUTS
@@ -30,7 +30,7 @@ architecture Behavioral of testbench is
     SIGNAL shft : STD_LOGIC_VECTOR(2 DOWNTO 0);
     
     -- OUTPUTS
-    SIGNAL result : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL res : STD_LOGIC_VECTOR(7 DOWNTO 0);
     
     -- CLOCK
     SIGNAL Clock: STD_LOGIC;
@@ -40,7 +40,7 @@ begin
     -- Unit Under Test (UUT)
     uut: test PORT MAP (src => src,
                         shft => shft,
-                        result => result);
+                        res => res);
 
     
     -- Clock process definitions
