@@ -43,33 +43,33 @@ d. If the memory in a shared-memory multiprocessor is very slow, it may be helpf
 >
 > and returns the index of the matched entry:
 >
-> BinarySearch(A\[0..N-1\], X) {
+>      BinarySearch(A\[0..N-1\], X) {
 >
->                              low = 0
+>                                   low = 0
 >
->                              high = N-1
+>                                   high = N-1
 >
->                              while (low <=high) {
+>                                   while (low <=high) {
 >
->                                                  mid = (low+high)/2
+>                                                       mid = (low+high)/2
 >
->                                                  If (A\[mid\]>X)
+>                                                       If (A\[mid\]>X)
 >
->                                                                       high = mid-1
+>                                                                            high = mid-1
 >
->                                                  else if (A\[mid\]< X)
+>                                                       else if (A\[mid\]< X)
 >
->                                                                       low = mid+1
+>                                                                            low = mid+1
 >
->                                                  else
+>                                                       else
 >
->                                                                       return  mid //found
+>                                                                            return  mid //found
 >
->                              }
+>                                   }
 >
->                              return -1 //not found
+>                                   return -1 //not found
 >
->          }
+>               }
 >
 > Assume that you have Y cores on a multi-core processor to run the Binary Search. 
 >
