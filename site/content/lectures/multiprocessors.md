@@ -85,3 +85,83 @@ Uses four states in the cache line
 * Exclusive - Data same, data only in the current cache
 * Shared  - Data same, data in other caches
 * Invalid - Data invalid
+
+### EG: Read Miss
+
+> Processor 1 wants to access data that is only cached in processor 2
+
+Processor 1 checks it cache (miss), then sends a read miss into the bus.  
+Processor 2 changes its state from Exclusive to Shared  
+Data is loaded from memory
+
+> Processor 1 wants to access data that is cached by multiple processors
+
+Processor 1 checks it cache (miss), then sends a read miss into the bus.  
+The processors that contain the data change their state from Exclusive to Shared  
+Data is loaded from memory
+
+> Processor 1 wants to access data that has been cached AND modified by another processor 2
+
+Processor 1 checks it cache (miss), then sends a read miss into the bus.  
+Processor 2 sends an alert  
+(Processor 1 waits)  
+Processor 2 writes the updated value into the memory  
+Data is loaded from memory
+
+### EG: Read Hit
+
+No state change, data is just read
+
+### EG: Write Miss
+
+Send RWITM signal (Read With Intent To Modify)  
+When the line is loaded, it is immediately marked as modified (even before the modification)  
+Write Policy: fetch-on-write
+
+> Some other cache has a modified copy
+
+The cache tells the processor that another processor has a copy of the modified data  
+Processor surrenders the bus and waits  
+Other processor access the bus and writes the modified data to main memory  
+The other processor marks the cache line as invalid  
+The processor then tries again
+
+> No other cache has a modified copy
+
+Other caches invalidate its own copy  
+As usual
+
+### EG: Write Hit
+
+> Shared
+
+Other caches will modify their state to invalid
+
+> Exlusive
+
+No control signal needs to be sent along the bus
+
+> Modified
+
+No control signal needs to be sent along the bus.  
+Note: Other processors will already have their cache line marked as invalid
+
+***
+
+### Issues with Snooping
+
+Scalability.  
+A single bus and shared memory prevents processors from simultaneously accessing memory. In addition, each processor block needs to be queried for every operation.
+
+### Directory Based Protocol (for NUMA)
+
+Processors send signals directly to related processors to keep caches up to date.  
+Uses a directory to keep track of the memory block status
+
+Each processor has its own directory, which contains entries.  
+Each entry contains a dirty bit, and a presence vector (length n, n is the number of processors)  
+Each address has a 'home directory', given by the value of its address
+
+![](/uploads/snipaste_2021-04-12_00-20-56.png)
+
+![](/uploads/snipaste_2021-04-12_00-24-26.png)
