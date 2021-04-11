@@ -62,6 +62,7 @@ pages:
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/multi-cycle-processors.md
+- site/content/lectures/multiprocessors.md
 - site/content/lectures/performance.md
 - site/content/lectures/performance.md
 - site/content/lectures/pipelined-processors.md
