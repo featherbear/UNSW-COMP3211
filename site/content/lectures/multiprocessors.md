@@ -46,11 +46,42 @@ Power consumption scales linearly.
 
 ![](/uploads/snipaste_2021-04-11_19-35-16.png)
 
-# UMA (Uniform Memory Access)
+## UMA (Uniform Memory Access)
 
 ![](/uploads/snipaste_2021-04-11_19-51-16.png)
 
 All processors share a **single bus** to access memory and I/O resources.  
 Allows for simple data sharing, but restricts performance (exclusive access).  
 All memory locations have similar latencies - hence the **uniform** access.  
-Each processor also has a local cache (which will be invalidated when memory updates???)
+Each processor also has a local cache (which will be invalidated when memory updates??? * cache coherence *)
+
+## NUMA (Non-Uniform Memory Access)
+
+## Memory-connected Multiprocessors
+
+![](/uploads/snipaste_2021-04-11_19-52-42.png)
+
+Each processor has their own local memory, which is accessible to other processors over a network / bus
+
+***
+
+## Cache Coherence
+
+Shared-memory multiprocessors have cache coherence problems - copies of the same data need to be updated in all locations. This can be performed in different ways
+
+* Software Implementation
+  * During compilation, the compiler identifies data items that may cause cache inconsistency, and disables the cache-ability of those items.
+* Hardware Implementation
+  * Snoop-based Protocol (for UMA)
+    * Write-update - Update other caches
+    * Write-invalidate - Mark data on other caches as invalid
+  * Directory-based Protocol (for NUMA)
+
+### MESI - Write-Invalid | Snoop
+
+Uses four states in the cache line
+
+* Modified - Data modified, data in specific cache
+* Exclusive - Data same, data only in the current cache
+* Shared  - Data same, data in other caches
+* Invalid - Data invalid
