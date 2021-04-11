@@ -13,7 +13,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --use UNISIM.VComponents.all;
 
 entity tag_generator is
-    port ( D  : in  std_logic_vector(31 downto 0);
+    port ( D  : in  std_logic_vector(31 downto 0); -- is this the data incoming?
            BF : in  std_logic_vector(3 downto 0);
            R  : in  std_logic_vector(11 downto 0); -- I'm assuming it's like this? not sure if it's
                                                  -- supposed to be R3, R2, R1, R0 separately
@@ -27,15 +27,17 @@ architecture Behavioral of tag_generator is
                shft : in  std_logic_vector(2 downto 0);
                res  : out std_logic_vector(7 downto 0));
     end component;
-
-    -- INSERT BIT FLIP COMPONENT HERE
-    -- component bit_flip is
-    --     port ();
-    -- end component;
+    
+    component bit_flip is
+        port ( data_in : in STD_LOGIC_VECTOR (7 downto 0);
+               data_out : out STD_LOGIC_VECTOR (7 downto 0);
+               flip : in STD_LOGIC);
+    end component;
 
 ------------------------------ SIGNALS -------------------------------
     -- Result from bit flip. Feel free to change the name :)
-    signal d_bf0, d_bf1, d_bf2, d_bf3,: std_logic_vector(7 downto 0); 
+    signal d0, d1, d2, d3 : std_logic_vector(7 downto 0); -- data without encryption
+    signal d_bf0, d_bf1, d_bf2, d_bf3: std_logic_vector(7 downto 0); 
     signal d_rls0, d_rls1, d_rls2, d_rls3 : std_logic_vector(7 downto 0); 
 
     -- Alternative way of having the signals
@@ -45,23 +47,38 @@ architecture Behavioral of tag_generator is
     -- signal d_xor0, d_xor2, d_xor3, d_xor4: std_logic_vector(7 downto 0);
 begin
     -- Bit Flip 
-
+    bf0: bit_flip port map (data_in => d0,
+                            data_out => d_bf0,
+                            flip => BF(0));
+                            
+    bf1: bit_flip port map (data_in => d1,
+                            data_out => d_bf1,
+                            flip => BF(1));
+                            
+                                           
+    bf2: bit_flip port map (data_in => d2,
+                            data_out => d_bf2,
+                            flip => BF(2));
+                            
+    bf3: bit_flip port map (data_in => d3,
+                            data_out => d_bf3,
+                            flip => BF(3));                    
     -- RLS 
-    rlshift0: rlshift port map (src  <= d_bf0, -- Change to d_bf(7 downto 0) if needed
-                                shft <= R(2 downto 0), -- Change to R0 if needed
-                                res  <= d_rls0);
+    rlshift0: rlshift port map (src  => d_bf0, -- Change to d_bf(7 downto 0) if needed
+                                shft => R(2 downto 0), -- Change to R0 if needed
+                                res  => d_rls0);
 
-    rlshift1: rlshift port map (src  <= d_bf1,
-                                shft <= R(5 downto 3),
-                                res  <= d_rls1);
+    rlshift1: rlshift port map (src  => d_bf1,
+                                shft => R(5 downto 3),
+                                res  => d_rls1);
 
-    rlshift2: rlshift port map (src  <= d_bf2,
-                                shft <= R(8 downto 6),
-                                res  <= d_rls2);
+    rlshift2: rlshift port map (src  => d_bf2,
+                                shft => R(8 downto 6),
+                                res  => d_rls2);
 
-    rlshift3: rlshift port map (src  <= d_bf3,
-                                shft <= R(11 downto 9),
-                                res  <= d_rls3);
+    rlshift3: rlshift port map (src  => d_bf3,
+                                shft => R(11 downto 9),
+                                res  => d_rls3);
     
     T <= d_rls3 XOR d_rls2 XOR d_rls1 XOR d_rls0;
 
