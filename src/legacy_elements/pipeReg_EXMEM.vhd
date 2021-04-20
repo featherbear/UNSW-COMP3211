@@ -9,7 +9,16 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity pipeReg_EXMEM is
     port (
         clk     : in  std_logic;
-        
+
+        ctrl_is_net_op     : in std_logic;
+        ctrl_is_net_op_out : out std_logic;
+        ctrl_mem_write     : in std_logic;
+        ctrl_mem_write_out : out std_logic;
+        ctrl_reg_write     : in std_logic;
+        ctrl_reg_write_out : out std_logic;
+        ctrl_direction     : in std_logic;
+        ctrl_direction_out : out std_logic;
+
         tag : in std_logic_vector(7 downto 0);
         tag_out : out std_logic_vector(7 downto 0);
         
@@ -32,6 +41,11 @@ begin
     tick : process(clk)
     begin
         if (rising_edge(clk)) then
+            ctrl_is_net_op_out <= ctrl_is_net_op;
+            ctrl_mem_write_out <= ctrl_mem_write;
+            ctrl_reg_write_out <= ctrl_reg_write;
+            ctrl_direction_out <= ctrl_direction;
+        
             tag_out <= tag;
             tag_err_out <= tag_err;
             p_err_out <= p_err;

@@ -17,18 +17,19 @@ entity network_coprocessor_ASIP is
         procParity : in STD_LOGIC;
            
         error : out STD_LOGIC;
-        netOut : out STD_LOGIC_VECTOR (39 downto 0)
+        netOut : out STD_LOGIC_VECTOR (39 downto 0);
+        netDataPresent : out STD_LOGIC
     );
 end network_coprocessor_ASIP;
     
 architecture behavioural of network_coprocessor_ASIP is
     signal reset : std_logic;
     
-    signal ctrl_direction : std_logic;
-    signal ctrl_mem_write : std_logic;
     signal ctrl_reg_write : std_logic;
     signal ctrl_is_net_op : std_logic;
-    
+    signal ctrl_mem_write : std_logic;
+    signal ctrl_direction : std_logic;
+
     signal sel_data : std_logic_vector(31 downto 0);
     signal sel_tag_parity : std_logic_vector(7 downto 0);
 
@@ -39,6 +40,10 @@ architecture behavioural of network_coprocessor_ASIP is
     
     signal reg_file_out : std_logic_vector(15 downto 0);
 
+    signal id_ex_ctrl_is_net_op : std_logic;
+    signal id_ex_ctrl_reg_write : std_logic;
+    signal id_ex_ctrl_mem_write : std_logic;
+    signal id_ex_ctrl_direction : std_logic;
     signal id_ex_data : std_logic_vector(31 downto 0);
     signal id_ex_tag_parity: std_logic_vector(7 downto 0);
     signal id_ex_ext_key: std_logic_vector(15 downto 0);
@@ -49,6 +54,10 @@ architecture behavioural of network_coprocessor_ASIP is
     signal parity_generator_out : std_logic;
     signal parityCheck : std_logic;
     
+    signal ex_mem_ctrl_is_net_op : std_logic;
+    signal ex_mem_ctrl_reg_write : std_logic;
+    signal ex_mem_ctrl_mem_write : std_logic;
+    signal ex_mem_ctrl_direction : std_logic;
     signal ex_mem_tag : std_logic_vector(7 downto 0);
     signal ex_mem_tag_err : std_logic;
     signal ex_mem_p_err :  std_logic;
@@ -67,10 +76,18 @@ begin
     sel_data <= procData WHEN ctrl_direction = DIRECTION_SEND ELSE netData(31 downto 0);
     sel_tag_parity <= ("0000000" & procParity) WHEN ctrl_direction = DIRECTION_SEND ELSE netData(39 downto 32);
     
-    instruction_memory: entity work.instruction_memory port map ( reset => reset, clk => clk, addr_in => pc_value, insn_out => instruction_memory_out);
-    pipeline_reg_if_id: entity work.pipeReg_IFID port map (clk => clk, insn_in => instruction_memory_out, insn_out => if_id_insn);  
+    instruction_memory: entity work.instruction_memory port map ( 
+        reset => reset,
+        clk => clk,
+        addr_in => pc_value,
+        insn_out => instruction_memory_out
+    );
+    pipeline_reg_if_id: entity work.pipeReg_IFID port map (
+        clk => clk,
+        insn_in => instruction_memory_out,
+        insn_out => if_id_insn
+    );  
     
-        
     control_unit: entity work.control_unit port map (
         opcode     => if_id_insn(15 downto 12),
         is_net_op  => ctrl_is_net_op,
@@ -90,7 +107,16 @@ begin
         read_data_a => reg_file_out
     );
     
-    pipeline_reg_id_ex: entity work.pipeReg_IDEX port map (clk => clk, 
+    pipeline_reg_id_ex: entity work.pipeReg_IDEX port map (
+        clk => clk,
+        ctrl_is_net_op  => ctrl_is_net_op,
+        ctrl_is_net_op_out  => id_ex_ctrl_is_net_op,
+        ctrl_mem_write  => ctrl_mem_write,
+        ctrl_mem_write_out  => id_ex_ctrl_mem_write,
+        ctrl_reg_write  => ctrl_reg_write,
+        ctrl_reg_write_out  => id_ex_ctrl_reg_write,
+        ctrl_direction  => ctrl_direction,
+        ctrl_direction_out  => id_ex_ctrl_direction, 
         data => sel_data,
         data_out => id_ex_data,
         tag_parity => sel_tag_parity,
@@ -124,17 +150,38 @@ begin
                                             -- When sending, the tag_parity signal should be zero, so A XOR 0 = A
     parityCheck <= parity_generator_out XOR id_ex_tag_parity(0);
     
-    pipeline_reg_ex_mem: entity work.pipeReg_EXMEM port map ( clk => clk, tag => tag_generator_out, tag_out => ex_mem_tag, tag_err => compare_tags_out, tag_err_out => ex_mem_tag_err, p_err => parityCheck, p_err_out => ex_mem_p_err, data => id_ex_data, data_out => ex_mem_data, ext_key => id_ex_ext_key, ext_key_out => ex_mem_ext_key );
+    pipeline_reg_ex_mem: entity work.pipeReg_EXMEM port map (
+        clk => clk,
+        ctrl_is_net_op  => id_ex_ctrl_is_net_op,
+        ctrl_is_net_op_out  => ex_mem_ctrl_is_net_op,
+        ctrl_mem_write  => id_ex_ctrl_mem_write,
+        ctrl_mem_write_out  => ex_mem_ctrl_mem_write,
+        ctrl_reg_write  => id_ex_ctrl_reg_write,
+        ctrl_reg_write_out  => ex_mem_ctrl_reg_write,
+        ctrl_direction  => id_ex_ctrl_direction,
+        ctrl_direction_out  => ex_mem_ctrl_direction, 
+        tag => tag_generator_out,
+        tag_out => ex_mem_tag,
+        tag_err => compare_tags_out,
+        tag_err_out => ex_mem_tag_err,
+        p_err => parityCheck,
+        p_err_out => ex_mem_p_err,
+        data => id_ex_data,
+        data_out => ex_mem_data,
+        ext_key => id_ex_ext_key,
+        ext_key_out => ex_mem_ext_key
+    );
 
-    sig_error <= '1' WHEN (ex_mem_tag_err = '1' AND ctrl_direction = DIRECTION_RECV) OR (ex_mem_p_err = '1' AND ctrl_direction = DIRECTION_SEND) else '0';
+    sig_error <= '1' WHEN (ex_mem_tag_err = '1' AND ex_mem_ctrl_direction = DIRECTION_RECV) OR (ex_mem_p_err = '1' AND ex_mem_ctrl_direction = DIRECTION_SEND) else '0';
     error <= sig_error;
     
-    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ctrl_direction = DIRECTION_SEND AND sig_error = '0') else (others => '0');
+    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_error = '0' AND ex_mem_ctrl_is_net_op = '1') else (others => '0');
+    netDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_error = '0' AND ex_mem_ctrl_is_net_op = '1') else '0';
 
     data_memory: entity work.data_memory port map (
         reset => reset,
         clk => clk,
-        write_enable => ctrl_mem_write,
+        write_enable => ex_mem_ctrl_mem_write,
         write_data => ex_mem_ext_key,
         addr_in => KEY_ADDR,
         data_out => sig_write_data
