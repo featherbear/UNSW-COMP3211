@@ -88,6 +88,13 @@ component mux_2to1_4b is
            data_out   : out std_logic_vector(3 downto 0) );
 end component;
 
+component mux_2to1_16b is
+    port ( mux_select : in  std_logic;
+           data_a     : in  std_logic_vector(15 downto 0);
+           data_b     : in  std_logic_vector(15 downto 0);
+           data_out   : out std_logic_vector(15 downto 0) );
+end component;
+
 component control_unit is
     port ( opcode     : in  std_logic_vector(3 downto 0);
            branch     : out std_logic;
@@ -294,8 +301,8 @@ signal sig_tag_comp     : std_logic;
 signal sig_parity_gen   : std_logic;
 signal sig_parity_comp  : std_logic;
 
-signal tag_err          : std_logic; -- Outputs of and gates
-signal p_err            : std_logic; 
+signal sig_tag_err          : std_logic; -- Outputs of and gates
+signal sig_p_err            : std_logic; 
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -462,8 +469,6 @@ begin
     -------------------------------------------------
     -- Parity and tagging
     ------------------------------------------------- 
-    -- Assignment components
-    
     parity_unit : parity_module
     port map (
         data    => sig_IDEX_tag(0 downto 0),
@@ -473,7 +478,7 @@ begin
     sig_parity_comp <= sig_parity_gen XOR sig_IDEX_tag(0 downto 0);
 
     
-    tag_gen tag_generator is
+    tag_gen : tag_generator is
     port map( 
         D   => sig_data2tag,
         BF  => sig_IDEX_data1(15 downto 12), -- key always first reg
@@ -487,4 +492,52 @@ begin
         T2 => sig_tag_recv,
         OK => sig_tag_ok
     );
+
+    -------------------------------------------------
+    -- Are we outputting a tag or a parity bit?
+    tag_p_mux : mux_2to1_16b is
+    port map (
+        mux_select => direction,
+        data_a     => sig_EXMEM_tag,
+        data_b     => sig_EXMEM_tag(0 downto 0),
+        data_out   => sig_tagP_ready );
+    );
+    -- Is there an error? If so, don't output
+    tag_p_out_mux : mux_2to1_16b is
+    port map (
+        mux_select => sig_error,
+        data_a     => sig_tagP_ready,
+        data_b     => 0x"0000",
+        data_out   => sig_tag_output );
+    );
+
+    -- Same for the data
+    data_out_mux1 : mux_2to1_16b is
+    port map (
+        mux_select => sig_error,
+        data_a     => sig_EXMEM_data(15 downto 0),
+        data_b     => 0x"0000",
+        data_out   => sig_data_output1 );
+    );
+    data_out_mux1 : mux_2to1_16b is
+    port map (
+        mux_select => sig_error,
+        data_a     => sig_EXMEM_data(31 downto 16),
+        data_b     => 0x"0000",
+        data_out   => sig_data_output2 );
+    );
+    sig_data_output(15 downto 0)  <= sig_data_output1;
+    sig_data_output(31 downto 16) <= sig_data_output2;
+    ------------------------------------------------- 
+
+    -------------------------------------------------
+    -- Our Processor outputs
+    ------------------------------------------------- 
+    data_output  <= sig_data_output;
+    tag_output   <= sig_tag_output;
+
+    sig_p_err    <= direction       AND sig_EXMEM_pErr;
+    sig_tag_err  <= (not direction) AND sig_EXMEM_tagErr;
+    sig_error    <= sig_p_err       OR  sig_tag_err;
+    error_output <= sig_error;
 end structural;
