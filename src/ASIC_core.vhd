@@ -160,8 +160,10 @@ component pipeReg_IFID is
     port (
         clk         : in  std_logic;
         reset       : in  std_logic;
+        --in
         pc4_in      : in  std_logic_vector(3 downto 0);
         insn_in     : in  std_logic_vector(15 downto 0);
+        -- out
         pc4_out     : out std_logic_vector(3 downto 0);
         insn_out    : out std_logic_vector(15 downto 0) 
     );
@@ -171,59 +173,53 @@ component pipeReg_IDEX is
     port (
         clk     : in  std_logic;
         reset   : in  std_logic;
-        EX_in   : in  std_logic_vector(3 downto 0);
+        --control lines
+        EX_in   : in  std_logic_vector(3 downto 0); -- FIXME: set these
         M_in    : in  std_logic_vector(2 downto 0);
-        WB_in   : in  std_logic_vector(1 downto 0);
         EX_out  : out std_logic_vector(3 downto 0);
         M_out   : out std_logic_vector(2 downto 0);
-        WB_out  : out  std_logic_vector(1 downto 0);
+        
+        --IN
+        data_in     : in  std_logic_vector(31 downto 0);
+        tag_in      : in  std_logic_vector(15 downto 0);
         pc4_in      : in  std_logic_vector(3 downto 0);
-        data1_in    : in  std_logic_vector(15 downto 0);
-        data2_in    : in  std_logic_vector(15 downto 0);
-        rs_in       : in  std_logic_vector(3 downto 0);
-        rt_in       : in  std_logic_vector(3 downto 0);
-        rd_in       : in  std_logic_vector(3 downto 0);
-        pc4_out     : out  std_logic_vector(3 downto 0);
-        data1_out   : out  std_logic_vector(15 downto 0);
-        data2_out   : out  std_logic_vector(15 downto 0);
-        rs_out      : out  std_logic_vector(3 downto 0);
-        rt_out      : out  std_logic_vector(3 downto 0);
-        rd_out      : out  std_logic_vector(3 downto 0)
+        rd_in       : in  std_logic_vector(3 downto 0); --FIXME: think is is off
+        key_in      : in  std_logic_vector(15 downto 0); -- secret key in reg
+        dataReg_in  : in  std_logic_vector(15 downto 0);
+        --OUT
+        data_out    : out std_logic_vector(31 downto 0);
+        tag_out     : out std_logic_vector(15 downto 0);
+        pc4_out     : out std_logic_vector(3 downto 0);
+        rd_out      : out std_logic_vector(3 downto 0);
+        key_out     : out std_logic_vector(15 downto 0);
+        dataReg_out : out std_logic_vector(15 downto 0)
     );
 end component;
 
 component pipeReg_EXMEM is
     port (
         clk     : in  std_logic;
-        reset   : in  std_logic;
-        M_in    : in  std_logic_vector(2 downto 0);
-        WB_in   : in  std_logic_vector(1 downto 0);
-        M_out   : out std_logic_vector(2 downto 0);
-        WB_out  : out  std_logic_vector(1 downto 0);
-        jmpaddr_in  : in std_logic_vector(3 downto 0);
-        ALU_zero_in : in std_logic;
-        ALU_res_in  : in std_logic_vector(15 downto 0);
-        data_in     : in std_logic_vector(15 downto 0);
-        rd_in       : in std_logic_vector(3 downto 0);
-        jmpaddr_out : out std_logic_vector(3 downto 0);
-        ALU_zero_out: out std_logic;
-        ALU_res_out : out std_logic_vector(15 downto 0);
-        data_out    : out std_logic_vector(15 downto 0);
-        rd_out      : out std_logic_vector(3 downto 0)
-    );
-end component;
+        --control
+        M_in   : in  std_logic_vector(1 downto 0);
+        M_out  : out  std_logic_vector(1 downto 0);
 
-component pipeReg_MEMWB is
-    port (
-        clk     : in  std_logic;
-        WB_in   : in  std_logic_vector(1 downto 0);
-        WB_out  : out  std_logic_vector(1 downto 0);
-        read_data_in    : in std_logic_vector(15 downto 0);
-        alu_result_in   : in std_logic_vector(15 downto 0);
-        rd_in           : in std_logic_vector(3 downto 0);
-        read_data_out   : out std_logic_vector(15 downto 0);
-        alu_result_out  : out std_logic_vector(15 downto 0);
-        rd_out          : out std_logic_vector(3 downto 0)
+        -- IN
+        tag_in      : in  std_logic_vector(15 downto 0);
+        tag_err_in  : in  std_logic;
+        p_err_in    : in  std_logic;
+        p_in        : in  std_logic;
+        data_in     : in  std_logic_vector(31 downto 0);
+        jmpAddr_in  : in  std_logic_vector(31 downto 0);
+        rd_in       : in  std_logic_vector(3 downto 0);
+
+        --OUT
+        tag_out     : out std_logic_vector(15 downto 0);
+        tag_err_out : out std_logic;
+        p_err_out   : out std_logic;
+        p_out       : out std_logic
+        data_out    : out std_logic_vector(31 downto 0);
+        jmpAddr_out : out std_logic_vector(31 downto 0);
+        rd_out      : out std_logic_vector(3 downto 0)
     );
 end component;
 
@@ -291,42 +287,36 @@ signal sig_calculated_branch    : std_logic_vector(3 downto 0);
 
 signal sig_alu_zero     : std_logic;
 -------------------------------------------------
--- Pipeline register signals
+-- Pipeline register signals, these are outputs
 -------------------------------------------------
---IFID
+--IFID -------------------------------------------------
 signal sig_IFID_pc4     : std_logic_vector(3 downto 0);
 signal sig_IFID_insn    : std_logic_vector(15 downto 0);
---IDEX
+--IDEX -------------------------------------------------
 signal sig_IDEX_EX      : std_logic_vector(3 downto 0);
 signal sig_IDEX_M       : std_logic_vector(2 downto 0);
-signal sig_IDEX_WB      : std_logic_vector(1 downto 0);
+signal sig_IDEX_data    : std_logic_vector(31 downto 0);
+signal sig_IDEX_tag     : std_logic_vector(15 downto 0);
 signal sig_IDEX_pc4     : std_logic_vector(3 downto 0);
-signal sig_IDEX_data1   : std_logic_vector(15 downto 0);
-signal sig_IDEX_data2   : std_logic_vector(15 downto 0);
-signal sig_IDEX_rs      : std_logic_vector(3 downto 0);
-signal sig_IDEX_rt      : std_logic_vector(3 downto 0);
-signal sig_IDEX_rd      : std_logic_vector(3 downto 0);
-signal sig_chosen_reg   : std_logic_vector(3 downto 0);
+signal sig_IDEX_sig_ex  : std_logic_vector(3 downto 0);
+signal sig_IDEX_key     : std_logic_vector(15 downto 0);
+signal sig_IDEX_dataReg : std_logic_vector(15 downto 0);
 
---EXMEM
+--EXMEM -------------------------------------------------
 signal sig_EXMEM_M      : std_logic_vector(2 downto 0);
-signal sig_EXMEM_WB     : std_logic_vector(1 downto 0);
-signal sig_EXMEM_jmpbr  : std_logic_vector(3 downto 0);
-signal sig_EXMEM_zero   : std_logic;
-signal sig_EXMEM_ALUres : std_logic_vector(15 downto 0);
-signal sig_EXMEM_data   : std_logic_vector(15 downto 0);
-signal sig_EXMEM_write_reg : std_logic_vector(3 downto 0);
+signal sig_EXMEM_tag    : std_logic_vector(15 downto 0);
+signal sig_EXMEM_tagErr : std_logic;
+signal sig_EXMEM_pErr   : std_logic;
+signal sig_EXMEM_parity : std_logic;
+signal sig_EXMEM_data   : std_logic_vector(31 downto 0);
+signal sig_EXMEM_tagErr : std_logic;
+signal sig_EXMEM_jmpbr  : std_logic_vector(31 downto 0);
 signal sig_EXMEM_rd     : std_logic_vector(3 downto 0);
---MEMWB
-signal sig_MEMWB_WB  : std_logic_vector(1 downto 0);
-signal sig_MEMWB_data   : std_logic_vector(15 downto 0);
-signal sig_MEMWB_ALUres : std_logic_vector(15 downto 0);
-signal sig_MEMWB_rd     : std_logic_vector(3 downto 0);
 
 -------------------------------------------------
 -- Parity, tag signals
 -------------------------------------------------
-signal sig_tag_gen      : std_logic_vector(7 downto 0);
+signal sig_tag_gen      : std_logic_vector(15 downto 0);
 signal sig_tag_comp     : std_logic;
 signal sig_parity_gen   : std_logic;
 signal sig_parity_comp  : std_logic;
@@ -487,26 +477,24 @@ begin
         clk         => clk,
         reset       => reset,
         --Control Signals
-        EX_in       => sig_haz_EX_out,
+        EX_in       => sig_EX,
         EX_out      => sig_IDEX_EX,
-        M_in        => sig_haz_M_out,
+        M_in        => sig_M,
         M_out       => sig_IDEX_M,
-        WB_in       => sig_haz_WB_out,
-        WB_out      => sig_IDEX_WB,
         -- Actual data
+        data_in     => sig_incoming_data,
+        tag_in      => sig_incoming_tag,
         pc4_in      => sig_IFID_pc4,
-        data1_in    => sig_read_data_a,
-        data2_in    => sig_alu_src_b,
-        rs_in       => sig_IFID_insn(11 downto 8),
-        rt_in       => sig_IFID_insn(7 downto 4),
         rd_in       => sig_IFID_insn(3 downto 0),
+        key_in      => sig_read_data_a,
+        dataReg_in  => sig_read_data_b,
 
+        data_out    => sig_IDEX_data,
+        tag_out     => sig_IDEX_tag,
         pc4_out     => sig_IDEX_pc4,
-        data1_out   => sig_IDEX_data1,
-        data2_out   => sig_IDEX_data2,
-        rs_out      => sig_IDEX_rs,
-        rt_out      => sig_IDEX_rt,
-        rd_out      => sig_IDEX_rd
+        rd_out      => sig_IDEX_rd,
+        key_out     => sig_IDEX_key,
+        dataReg_out => sig_IDEX_dataReg
     );
     -------------------------------------------------
     EXMEM : pipeReg_EXMEM
@@ -519,45 +507,37 @@ begin
         M_out       => sig_EXMEM_M,
         WB_out      => sig_EXMEM_WB,
         -- Actual data
+        tag_in          => sig_tag_gen,
+        tag_err_in      => sig_tag_comp,
+        p_err_in        => sig_parity_comp,
+        p_in            => sig_parity_gen,
+        data_in         => sig_IDEX_data,
         jmpaddr_in      => sig_calculated_branch,
-        ALU_zero_in     => sig_alu_zero,
-        ALU_res_in      => sig_ALU_result,
-        data_in         => sig_IDEX_data2,
-        rd_in           => sig_chosen_reg,
-
-        jmpaddr_out     => sig_EXMEM_jmpbr,
-        ALU_zero_out    => sig_EXMEM_zero,
-        ALU_res_out     => sig_EXMEM_ALUres,
+        rd_in           => sig_IDEX_rd,
+        
+        tag_out         => sig_EXMEM_tag,
+        tag_err_out     => sig_EXMEM_tagErr,
+        p_err_out       => sig_EXMEM_pErr,
+        p_out           => sig_EXMEM_parity
         data_out        => sig_EXMEM_data,
+        jmpaddr_out     => sig_EXMEM_jmpbr,
         rd_out          => sig_EXMEM_rd
     );
-    -------------------------------------------------
-    MEMWB : pipeReg_MEMWB
-    port map (
-        clk         => clk,
-        -- Control Signals
-        WB_in       => sig_EXMEM_WB,
-        WB_out      => sig_MEMWB_WB,
-        -- Actual data
-        read_data_in    => sig_data_mem_out,
-        alu_result_in   => sig_EXMEM_ALUres,
-        rd_in           => sig_EXMEM_rd,
-
-        read_data_out   => sig_MEMWB_data,
-        alu_result_out  => sig_MEMWB_ALUres,
-        rd_out          => sig_MEMWB_rd
-    );
 
     -------------------------------------------------
-    -- Parity and taggign
+    -- Parity and tagging
     ------------------------------------------------- 
     -- Assignment components
-    parity : parity_unit
+    
+    parity_unit : parity_module
     port map (
-        data    => sig_data2check,
-        parity  => sig_parity2check
+        data    => sig_IDEX_tag(0 downto 0),
+        parity  => sig_parity_gen
     );
+    -- XOR to check the received parity_bit
+    sig_parity_comp <= sig_parity_gen XOR sig_IDEX_tag(0 downto 0);
 
+    
     tag_gen tag_generator is
     port map( 
         D   => sig_data2tag,
