@@ -27,7 +27,7 @@ architecture behavioural of network_coprocessor_ASIP is
     signal ctrl_direction : std_logic;
     signal ctrl_mem_write : std_logic;
     signal ctrl_reg_write : std_logic;
-    signal ctrl_is_network_operation : std_logic;
+    signal ctrl_is_net_op : std_logic;
     
     signal sel_data : std_logic_vector(31 downto 0);
     signal sel_tag_parity : std_logic_vector(7 downto 0);
@@ -62,20 +62,22 @@ architecture behavioural of network_coprocessor_ASIP is
     constant DIRECTION_SEND : std_logic := '0';
     constant DIRECTION_RECV : std_logic := '1';
 begin    
-    reset <= '0';
-    
-    -- TODO
---    control_unit: entity work.control_unit port map (
-    
---    );
-    
-    
+    reset <= '0'; 
     
     sel_data <= procData WHEN ctrl_direction = DIRECTION_SEND ELSE netData(31 downto 0);
     sel_tag_parity <= ("0000000" & procParity) WHEN ctrl_direction = DIRECTION_SEND ELSE netData(39 downto 32);
     
     instruction_memory: entity work.instruction_memory port map ( reset => reset, clk => clk, addr_in => pc_value, insn_out => instruction_memory_out);
     pipeline_reg_if_id: entity work.pipeReg_IFID port map (clk => clk, insn_in => instruction_memory_out, insn_out => if_id_insn);  
+    
+        
+    control_unit: entity work.control_unit port map (
+        opcode     => if_id_insn(15 downto 12),
+        is_net_op  => ctrl_is_net_op,
+        mem_write  => ctrl_mem_write,
+        reg_write  => ctrl_reg_write,
+        direction  => ctrl_direction
+    );
     
     reg_file: entity work.register_file port map (
         clk => clk,

@@ -43,7 +43,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity control_unit is
     port ( opcode     : in  std_logic_vector(3 downto 0);
-           is_network_operation : out std_logic;
+           is_net_op : out std_logic;
            mem_write  : out std_logic;
            reg_write  : out std_logic;
            direction  : out std_logic
@@ -63,7 +63,7 @@ constant DIRECTION_RECV : std_logic := '1';
 begin
     mem_write  <= '1' when opcode = OP_LOADEXT else '0';
     reg_write  <= '1' when opcode = OP_LOADKEY else '0';
-    is_network_operation <= '1' when opcode = OP_SEND or opcode = OP_RECEIVE else '0';
+    is_net_op  <= '1' when opcode = OP_SEND or opcode = OP_RECEIVE else '0';
     direction  <=  DIRECTION_SEND when opcode = OP_SEND else DIRECTION_RECV;
 
 end behavioural;
