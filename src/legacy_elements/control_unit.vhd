@@ -43,43 +43,27 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity control_unit is
     port ( opcode     : in  std_logic_vector(3 downto 0);
-           branch     : out std_logic;
-           reg_dst    : out std_logic;
-           reg_write  : out std_logic;
-           alu_src    : out std_logic;
-           alu_op     : out std_logic_vector(1 downto 0);
-           mem_read   : out std_logic;
+           is_network_operation : out std_logic;
            mem_write  : out std_logic;
-           mem_to_reg : out std_logic );
+           reg_write  : out std_logic;
+           direction  : out std_logic
+    );
 end control_unit;
 
 architecture behavioural of control_unit is
 
-constant OP_LOAD  : std_logic_vector(3 downto 0) := "0001";
-constant OP_STORE : std_logic_vector(3 downto 0) := "0011";
-constant OP_ADD   : std_logic_vector(3 downto 0) := "1000";
+constant OP_SEND    : std_logic_vector(3 downto 0) := "0001";
+constant OP_RECEIVE : std_logic_vector(3 downto 0) := "0010";
+constant OP_LOADKEY : std_logic_vector(3 downto 0) := "0100";
+constant OP_LOADEXT : std_logic_vector(3 downto 0) := "1000";
+
+constant DIRECTION_SEND : std_logic := '0';
+constant DIRECTION_RECV : std_logic := '1';
 
 begin
-    branch     <= '0';
-    
-    reg_dst    <= '1' when opcode = OP_ADD else
-                  '0';
-
-    reg_write  <= '1' when (opcode = OP_ADD 
-                            or opcode = OP_LOAD) else
-                  '0';
-    
-    alu_src    <= '1' when (opcode = OP_LOAD 
-                           or opcode = OP_STORE) else
-                  '0';
-    
-    mem_read  <= '1' when opcode = OP_LOAD else
-                  '0';             
-    
-    mem_write  <= '1' when opcode = OP_STORE else
-                  '0';
-                 
-    mem_to_reg <= '1' when opcode = OP_LOAD else
-                  '0';
+    mem_write  <= '1' when opcode = OP_LOADEXT else '0';
+    reg_write  <= '1' when opcode = OP_LOADKEY else '0';
+    is_network_operation <= '1' when opcode = OP_SEND or opcode = OP_RECEIVE else '0';
+    direction  <=  DIRECTION_SEND when opcode = OP_SEND else DIRECTION_RECV;
 
 end behavioural;
