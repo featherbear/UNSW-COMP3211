@@ -81,23 +81,11 @@ component instruction_memory is
            insn_out : out std_logic_vector(15 downto 0) );
 end component;
 
-component sign_extend_4to16 is
-    port ( data_in  : in  std_logic_vector(3 downto 0);
-           data_out : out std_logic_vector(15 downto 0) );
-end component;
-
 component mux_2to1_4b is
     port ( mux_select : in  std_logic;
            data_a     : in  std_logic_vector(3 downto 0);
            data_b     : in  std_logic_vector(3 downto 0);
            data_out   : out std_logic_vector(3 downto 0) );
-end component;
-
-component mux_2to1_16b is
-    port ( mux_select : in  std_logic;
-           data_a     : in  std_logic_vector(15 downto 0);
-           data_b     : in  std_logic_vector(15 downto 0);
-           data_out   : out std_logic_vector(15 downto 0) );
 end component;
 
 component control_unit is
@@ -128,13 +116,6 @@ component adder_4b is
     port ( src_a     : in  std_logic_vector(3 downto 0);
            src_b     : in  std_logic_vector(3 downto 0);
            sum       : out std_logic_vector(3 downto 0);
-           carry_out : out std_logic );
-end component;
-
-component adder_16b is
-    port ( src_a     : in  std_logic_vector(15 downto 0);
-           src_b     : in  std_logic_vector(15 downto 0);
-           sum       : out std_logic_vector(15 downto 0);
            carry_out : out std_logic );
 end component;
 
@@ -257,15 +238,11 @@ signal sig_insn                 : std_logic_vector(15 downto 0);
 signal sig_sign_extended_offset : std_logic_vector(15 downto 0);
 signal sig_reg_dst              : std_logic;
 signal sig_reg_write            : std_logic;
-signal sig_alu_src              : std_logic;
 signal sig_mem_write            : std_logic;
 signal sig_mem_to_reg           : std_logic;
 signal sig_write_data           : std_logic_vector(15 downto 0);
 signal sig_read_data_a          : std_logic_vector(15 downto 0);
 signal sig_read_data_b          : std_logic_vector(15 downto 0);
-signal sig_alu_src_b            : std_logic_vector(15 downto 0);
-signal sig_alu_result           : std_logic_vector(15 downto 0); 
-signal sig_alu_carry_out        : std_logic;
 signal sig_data_mem_out         : std_logic_vector(15 downto 0);
 -------------------------------------------------
 -- Extra control signals
@@ -281,11 +258,8 @@ signal sig_WB_ctrl  : std_logic_vector(1 downto 0);
 -- Branch jumping signals
 -------------------------------------------------
 signal sig_PC4                  : std_logic_vector(3 downto 0);
-signal EXMEM_zero               : std_logic;
 signal sig_PCSrc                : std_logic;
 signal sig_calculated_branch    : std_logic_vector(3 downto 0);
-
-signal sig_alu_zero     : std_logic;
 -------------------------------------------------
 -- Pipeline register signals, these are outputs
 -------------------------------------------------
@@ -352,16 +326,13 @@ begin
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
                sum       => sig_PC4,   
-               carry_out => sig_pc_carry_out );
+               carry_out => sig_pc_carry_out ); -- FIXME: can this be removed?
     -------------------------------------------------
     -- Now for the branch address
     branch_calc : adder_4b
     port map (  src_a     => sig_IDEX_pc4, 
                 src_b     => sig_IDEX_rd,   --Ignoring extension for now
                 sum       => sig_calculated_branch);
-    -------------------------------------------------
-    -- AND gate to decide if we need to branch
-    sig_PCSrc <= sig_EXMEM_M(0) AND not sig_EXMEM_zero;
     -------------------------------------------------
     -- And now to decide which calculated number to use
     PC_mux  : mux_2to1_4b
@@ -377,17 +348,13 @@ begin
                clk      => clk,
                addr_in  => sig_curr_pc,
                insn_out => sig_insn );
+    
     -- DECODE, reg read -------------------------------------------------------
-    sign_extend : sign_extend_4to16 
-    port map ( data_in  => sig_IFID_insn(3 downto 0),
-               data_out => sig_sign_extended_offset );
-
     ctrl_unit : control_unit 
     port map ( opcode     => sig_IFID_insn(15 downto 12),
                branch     => sig_branch,
                reg_dst    => sig_reg_dst,
                reg_write  => sig_reg_write,
-               alu_src    => sig_alu_src,
                alu_op     => sig_ALUop,
                mem_read   => sig_mem_read,
                mem_write  => sig_mem_write,
@@ -403,25 +370,6 @@ begin
                write_data      => sig_write_data,
                read_data_a     => sig_read_data_a,
                read_data_b     => sig_read_data_b );
-    
-    mux_alu_src : mux_2to1_16b 
-    port map ( mux_select => sig_alu_src,
-               data_a     => sig_read_data_b,
-               data_b     => sig_sign_extended_offset,
-               data_out   => sig_alu_src_b );
-
-    -- EXECUTE, ADDR calculation ----------------------------------------------
-    mux_reg_dst : mux_2to1_4b   --Which register are we writing to?
-    port map ( mux_select => sig_IDEX_EX(0), --regdst
-               data_a     => sig_IDEX_rt,
-               data_b     => sig_IDEX_rd,
-               data_out   => sig_chosen_reg );
-
-    alu : adder_16b 
-    port map ( src_a     => sig_formux1,
-               src_b     => sig_formux2,
-               sum       => sig_alu_result,
-               carry_out => sig_alu_carry_out );
 
     -- Memory Access ----------------------------------------------------------
     data_mem : data_memory 
@@ -432,31 +380,11 @@ begin
                addr_in      => sig_EXMEM_ALUres(3 downto 0),
                data_out     => sig_data_mem_out );
 
-    -- Write back -------------------------------------------------------------
-    mux_mem_to_reg : mux_2to1_16b 
-    port map ( mux_select => sig_MEMWB_WB(0),
-               data_a     => sig_MEMWB_ALUres,
-               data_b     => sig_MEMWB_data,
-               data_out   => sig_write_data );
-
     ---------------------------------------------------------------------------
     ---------------------------------------------------------------------------
     ---------------------------------------------------------------------------
     ---------------------------------------------------------------------------
     ---------------------------------------------------------------------------
-
-    -------------------------------------------------
-    --************** ALU_ZERO_CALCULATION************
-    -------------------------------------------------
-    process(sig_alu_result, sig_alu_carry_out)
-    begin
-        -- Boolean if sum = 0 AND carry = 1
-        if (sig_alu_result = 0 and sig_alu_carry_out = '1') then
-            sig_alu_zero <= '1';
-        else
-            sig_alu_zero <= '0';
-        end if;
-    end process;
     
     -------------------------------------------------
     --************** PIPELINE REGISTERS**************
