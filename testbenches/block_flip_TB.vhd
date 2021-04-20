@@ -23,23 +23,23 @@ uut: entity work.bit_flip port map (
 checks: entity work.nBitComparator generic map ( n => 8 ) port map (inA => result, inB => expected, isEqual => check);
                             
 process begin
-    data <= "00000000"; flip <= '0'; check <= "00000000"; wait for 50ns;
-    data <= "00000000"; flip <= '1'; check <= "11111111"; wait for 50ns;
+    data <= "00000000"; flip <= '0'; expected <= "00000000"; wait for 50ns;
+    data <= "00000000"; flip <= '1'; expected <= "11111111"; wait for 50ns;
     
-    data <= "11111111"; flip <= '0'; check <= "11111111"; wait for 50ns;
-    data <= "11111111"; flip <= '1'; check <= "00000000"; wait for 50ns;
+    data <= "11111111"; flip <= '0'; expected <= "11111111"; wait for 50ns;
+    data <= "11111111"; flip <= '1'; expected <= "00000000"; wait for 50ns;
     
-    data <= "10101010"; flip <= '0'; check <= "10101010"; wait for 50ns;
-    data <= "10101010"; flip <= '1'; check <= "01010101"; wait for 50ns;
+    data <= "10101010"; flip <= '0'; expected <= "10101010"; wait for 50ns;
+    data <= "10101010"; flip <= '1'; expected <= "01010101"; wait for 50ns;
     
-    data <= "01010101"; flip <= '0'; check <= "01010101"; wait for 50ns;
-    data <= "01010101"; flip <= '1'; check <= "10101010"; wait for 50ns;
+    data <= "01010101"; flip <= '0'; expected <= "01010101"; wait for 50ns;
+    data <= "01010101"; flip <= '1'; expected <= "10101010"; wait for 50ns;
     
-    data <= "11110000"; flip <= '0'; check <= "11110000"; wait for 50ns;
-    data <= "11110000"; flip <= '1'; check <= "00001111"; wait for 50ns;
+    data <= "11110000"; flip <= '0'; expected <= "11110000"; wait for 50ns;
+    data <= "11110000"; flip <= '1'; expected <= "00001111"; wait for 50ns;
     
-    data <= "00001111"; flip <= '0'; check <= "00001111"; wait for 50ns;
-    data <= "00001111"; flip <= '1'; check <= "11110000"; wait for 50ns;
+    data <= "00001111"; flip <= '0'; expected <= "00001111"; wait for 50ns;
+    data <= "00001111"; flip <= '1'; expected <= "11110000"; wait for 50ns;
 end process;
 
 end Behavioral;
