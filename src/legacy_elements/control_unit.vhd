@@ -52,6 +52,7 @@ end control_unit;
 
 architecture behavioural of control_unit is
 
+constant OP_NOP     : std_logic_vector(3 downto 0) := "0000";
 constant OP_SEND    : std_logic_vector(3 downto 0) := "0001";
 constant OP_RECEIVE : std_logic_vector(3 downto 0) := "0010";
 constant OP_LOADKEY : std_logic_vector(3 downto 0) := "0100";

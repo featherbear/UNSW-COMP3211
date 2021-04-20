@@ -10,11 +10,15 @@ entity network_coprocessor_ASIP is
     port (
         clk : in std_logic;
         
-        networkReady : in STD_LOGIC;
+        CTRL : in STD_LOGIC_VECTOR(4 DOWNTO 0);
+        
         extPort : in STD_LOGIC_VECTOR (15 downto 0);
+        
         procData : in STD_LOGIC_VECTOR (31 downto 0);
-        netData : in STD_LOGIC_VECTOR (39 downto 0);
         procParity : in STD_LOGIC;
+        
+        networkReady : in STD_LOGIC;
+        netData : in STD_LOGIC_VECTOR (39 downto 0);
            
         error : out STD_LOGIC;
         netOut : out STD_LOGIC_VECTOR (39 downto 0);
@@ -81,6 +85,16 @@ architecture behavioural of network_coprocessor_ASIP is
     constant DIRECTION_RECV : std_logic := '1';
 begin    
     reset <= '0'; 
+    
+    pc_controller: entity work.PCController port map (
+        network_ready => networkReady,
+        ASIP_ready => CTRL(4),
+        receive_request => CTRL(3),
+        send_request => CTRL(2),
+        loadkey_request => CTRL(1),
+        loadext_request => CTRL(0),
+        PC => pc_value
+    );
     
     netbuffer: entity work.networkBuffer port map (
         clk => clk,
