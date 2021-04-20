@@ -1,85 +1,63 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 21.04.2021 03:12:58
--- Design Name: 
--- Module Name: TB_taggen - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
+entity tag_gen_TB is
+end tag_gen_TB;
 
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
-entity TB_taggen is
---  Port ( );
-end TB_taggen;
-
-architecture Behavioral of TB_taggen is
+architecture Behavioral of tag_gen_TB is
     signal Rotate : std_logic_vector(11 downto 0); 
     signal BitFlip : std_logic_vector(3 downto 0);
-    signal T : std_logic_vector(7 downto 0); 
-    signal Data : std_logic_vector(31 downto 0); -- is this the data incoming?
+    signal result : std_logic_vector(7 downto 0); 
+    signal Data : std_logic_vector(31 downto 0);
     
-
-
+    signal expected : std_logic_vector(7 downto 0);
+    signal check    : std_logic;
 begin
 
 uut : entity work.tag_generator port map(  R => Rotate,
                                            BF => BitFlip,
-                                           T => T,
+                                           T => result,
                                            D => Data);
+
+checks: entity work.nBitComparator generic map ( n => 8 ) port map (inA => result, inB => expected, isEqual => check);
+    
 
 process begin
 
 Data <= "00000000000000000000000000000000";
 BitFlip <= "0000";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0000";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "1000";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0100";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0010";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0001";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 -------------------------------------------------
 
@@ -87,31 +65,37 @@ wait for 50ns;
 Data <= "00000000111111110000000011111111";
 BitFlip <= "1111";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "1010";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0101";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "1100";
 Rotate <= "000000000000";
+Expected <= "00000000";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "1110";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 
 Data <= "00000000111111110000000011111111";
 BitFlip <= "0111";
 Rotate <= "000000000000";
+Expected <= "11111111";
 wait for 50ns;
 
 ---------------------------------------------------
@@ -121,41 +105,68 @@ wait for 50ns;
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000000000000";
+Expected <= "01011010";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000001000000";
+Expected <= "01001011";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000010000000";
+Expected <= "01101001";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000011000000";
+Expected <= "00101101";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000100000000";
+Expected <= "10100101";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000101000000";
+Expected <= "10110100";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000110000000";
+Expected <= "10010110";
 wait for 50ns;
 
 Data <= "00000000000011110000000001010101";
 BitFlip <= "0000";
 Rotate <= "000111000000";
+Expected <= "11010010";
+wait for 50ns;
+
+
+Data <= "00000000000011110000000001010101";
+BitFlip <= "0000";
+Rotate <= "000000000001";
+Expected <= "10100101";
+wait for 50ns;
+
+Data <= "00000000000011110000000001010101";
+BitFlip <= "0000";
+Rotate <= "000000000010";
+Expected <= "01011010";
+wait for 50ns;
+
+Data <= "00000000000011110000000001010101";
+BitFlip <= "0000";
+Rotate <= "000001000001";
+Expected <= "10110100";
 wait for 50ns;
 
 end process;
