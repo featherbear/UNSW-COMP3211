@@ -36,7 +36,7 @@ architecture Behavioral of tag_generator is
 
 ------------------------------ SIGNALS -------------------------------
     -- Result from bit flip. Feel free to change the name :)
-    signal d0, d1, d2, d3 : std_logic_vector(7 downto 0); -- data without encryption
+--    signal d0, d1, d2, d3 : std_logic_vector(7 downto 0); -- data without encryption
     signal d_bf0, d_bf1, d_bf2, d_bf3: std_logic_vector(7 downto 0); 
     signal d_rls0, d_rls1, d_rls2, d_rls3 : std_logic_vector(7 downto 0); 
 
@@ -47,20 +47,20 @@ architecture Behavioral of tag_generator is
     -- signal d_xor0, d_xor2, d_xor3, d_xor4: std_logic_vector(7 downto 0);
 begin
     -- Bit Flip 
-    bf0: bit_flip port map (data_in => d0,
+    bf0: bit_flip port map (data_in => D(7 downto 0),
                             data_out => d_bf0,
                             flip => BF(0));
                             
-    bf1: bit_flip port map (data_in => d1,
+    bf1: bit_flip port map (data_in => D(15 downto 8),
                             data_out => d_bf1,
                             flip => BF(1));
                             
                                            
-    bf2: bit_flip port map (data_in => d2,
+    bf2: bit_flip port map (data_in => D(23 downto 16),
                             data_out => d_bf2,
                             flip => BF(2));
                             
-    bf3: bit_flip port map (data_in => d3,
+    bf3: bit_flip port map (data_in => D(31 downto 24),
                             data_out => d_bf3,
                             flip => BF(3));                    
     -- RLS 
@@ -79,8 +79,8 @@ begin
     rlshift3: rlshift port map (src  => d_bf3,
                                 shft => R(11 downto 9),
                                 res  => d_rls3);
-    
-    T <= d_rls3 XOR d_rls2 XOR d_rls1 XOR d_rls0;
+                                
+    T <= (d_rls3) XOR (d_rls2) XOR (d_rls1) XOR (d_rls0);
 
     -- Another way to do this (alternative method):
     -- Tbh I don't know if the multiplying works HAHAHHAHA. But it saves
