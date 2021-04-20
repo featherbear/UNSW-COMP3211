@@ -253,7 +253,6 @@ signal sig_ALUop    : std_logic_vector(1 downto 0);
 
 signal sig_EX_ctrl  : std_logic_vector(3 downto 0);
 signal sig_M_ctrl   : std_logic_vector(2 downto 0);
-signal sig_WB_ctrl  : std_logic_vector(1 downto 0);
 -------------------------------------------------
 -- Branch jumping signals
 -------------------------------------------------
@@ -309,6 +308,14 @@ begin
     sig_incoming_data <= incoming_signal(15 downto 8);
     sig_incoming_tag  <= incoming_signal(7 downto 0); -- this includes the parity
     sig_incoming_key  <= incoming_key;
+
+    -- Our control unit signals
+    sig_EX_ctrl(0)          <= sig_reg_dst;
+    sig_EX_ctrl(2 downto 1) <= sig_ALUOp;
+    sig_EX_ctrl(3)          <= sig_alu_src;
+    sig_M_ctrl(0)           <= sig_branch;
+    sig_M_ctrl(1)           <= sig_mem_write;
+    sig_M_ctrl(2)           <= sig_mem_read;
 
     sig_one_4b <= "0001";
     pc : program_counter
@@ -375,7 +382,7 @@ begin
     data_mem : data_memory 
     port map ( reset        => reset,
                clk          => clk,
-               write_enable => sig_mem_write,
+               write_enable => sig_EXMEM_M(1),
                write_data   => sig_EXMEM_data,
                addr_in      => sig_EXMEM_ALUres(3 downto 0),
                data_out     => sig_data_mem_out );
@@ -405,9 +412,9 @@ begin
         clk         => clk,
         reset       => reset,
         --Control Signals
-        EX_in       => sig_EX,
+        EX_in       => sig_EX_ctrl,
         EX_out      => sig_IDEX_EX,
-        M_in        => sig_M,
+        M_in        => sig_M_ctrl,
         M_out       => sig_IDEX_M,
         -- Actual data
         data_in     => sig_incoming_data,
