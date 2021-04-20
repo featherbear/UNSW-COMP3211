@@ -1,0 +1,25 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity test_parity_error is
+end test_parity_error;
+
+architecture Behavioural of test_parity_error is
+    constant c_CLOCK_PERIOD : time := 2 ns; -- 1 GHz = 2 nanoseconds period
+    signal r_CLOCK : std_logic := '0';
+    signal r_reset : std_logic := '0';
+begin
+
+    -- .... Define components here
+
+    process begin
+        r_reset <= '0'; wait for 2*c_CLOCK_PERIOD; r_reset <= '1'; wait for 2*c_CLOCK_PERIOD; r_reset <= '0'; wait for 2 sec;
+        -- ... Test code here
+    end process;
+
+    p_CLK_GEN : process is begin
+        wait for c_CLOCK_PERIOD/2;
+        r_CLOCK <= not r_CLOCK;
+    end process p_CLK_GEN; 
+
+end Behavioural;
