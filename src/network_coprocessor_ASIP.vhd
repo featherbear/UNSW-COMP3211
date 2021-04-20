@@ -187,7 +187,7 @@ begin
     );
     
     -- XOR each bit, then XOR with parity - should equal 0
-    parity_generator: entity work.parity_unit port map (
+    parity_generator: entity work.parity_unit generic map (n => 32) port map (
         data => id_ex_data,
         parity => parity_generator_out
     );
