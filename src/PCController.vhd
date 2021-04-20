@@ -26,7 +26,7 @@ begin
         PC <= PC_NOP;
         
         if ASIP_ready = '1' then
-            if receive_request = '1' then
+            if receive_request = '1' AND network_ready = '1' then
                 PC <= PC_RECEIVE;
             elsif send_request = '1' then
                 PC <= PC_SEND;
