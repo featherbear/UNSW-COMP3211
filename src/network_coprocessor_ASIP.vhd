@@ -25,6 +25,11 @@ end network_coprocessor_ASIP;
 architecture behavioural of network_coprocessor_ASIP is
     signal reset : std_logic;
     
+    signal buffer_extPort : std_logic_vector(15 downto 0);
+    signal buffer_netData : std_logic_vector(39 downto 0);
+    signal buffer_procData : std_logic_vector(31 downto 0);
+    signal buffer_procParity : std_logic;
+    
     signal ctrl_reg_write : std_logic;
     signal ctrl_is_net_op : std_logic;
     signal ctrl_mem_write : std_logic;
@@ -36,6 +41,10 @@ architecture behavioural of network_coprocessor_ASIP is
     signal pc_value : std_logic_vector(3 downto 0);
     signal instruction_memory_out : std_logic_vector(15 downto 0);
     
+    signal if_id_extPort : std_logic_vector (15 downto 0);
+    signal if_id_procData : std_logic_vector (31 downto 0);
+    signal if_id_netData : std_logic_vector (39 downto 0);
+    signal if_id_procParity : std_logic;
     signal if_id_insn : std_logic_vector(15 downto 0);
     
     signal reg_file_out : std_logic_vector(15 downto 0);
@@ -73,8 +82,17 @@ architecture behavioural of network_coprocessor_ASIP is
 begin    
     reset <= '0'; 
     
-    sel_data <= procData WHEN ctrl_direction = DIRECTION_SEND ELSE netData(31 downto 0);
-    sel_tag_parity <= ("0000000" & procParity) WHEN ctrl_direction = DIRECTION_SEND ELSE netData(39 downto 32);
+    netbuffer: entity work.networkBuffer port map (
+        clk => clk,
+        extPort => extPort,
+        extPort_out => buffer_extPort,
+        procData => procData,
+        procData_out => buffer_procData,
+        netData => netData,
+        netData_out => buffer_netData,
+        procParity => procParity,
+        procParity_out => buffer_procParity
+    );
     
     instruction_memory: entity work.instruction_memory port map ( 
         reset => reset,
@@ -82,11 +100,23 @@ begin
         addr_in => pc_value,
         insn_out => instruction_memory_out
     );
+
     pipeline_reg_if_id: entity work.pipeReg_IFID port map (
         clk => clk,
+        extPort => buffer_extPort,
+        extPort_out => if_id_extPort,
+        procData => buffer_procData,
+        procData_out => if_id_procData,
+        netData => buffer_netData,
+        netData_out => if_id_netData,
+        procParity => buffer_procParity,
+        procParity_out => if_id_procParity,
         insn_in => instruction_memory_out,
         insn_out => if_id_insn
     );  
+
+    sel_data <= if_id_procData WHEN ctrl_direction = DIRECTION_SEND ELSE if_id_netData(31 downto 0);
+    sel_tag_parity <= ("0000000" & if_id_procParity) WHEN ctrl_direction = DIRECTION_SEND ELSE if_id_netData(39 downto 32);
     
     control_unit: entity work.control_unit port map (
         opcode     => if_id_insn(15 downto 12),
@@ -121,7 +151,7 @@ begin
         data_out => id_ex_data,
         tag_parity => sel_tag_parity,
         tag_parity_out => id_ex_tag_parity,
-        ext_key => extPort,
+        ext_key => if_id_extPort,
         ext_key_out => id_ex_ext_key,
         key => reg_file_out,
         key_out => id_ex_key
