@@ -54,6 +54,8 @@ entity single_cycle_core is
            -- 8 bits of incoming data, plus 8 bits for tag
            incoming_data    : in  std_logic_vector(15 downto 0);
            incoming_key     : in  std_logic_vector(15 downto 0);
+           incoming_ready   : in  std_logic;
+           key_ready        : in  std_logic;
 
            data_output      : out std_logic_vector(7 downto 0);
            tag_output       : out std_logic_vector(7 downto 0);
@@ -64,6 +66,9 @@ end single_cycle_core;
 
 architecture structural of single_cycle_core is
 
+-- ############################################################################
+-- THE OLD COMPONENTS**********************************************************
+-- ############################################################################
 component program_counter is
     port ( reset    : in  std_logic;
            clk      : in  std_logic;
@@ -97,14 +102,13 @@ end component;
 
 component control_unit is
     port ( opcode     : in  std_logic_vector(3 downto 0);
-           branch     : out std_logic;
-           reg_dst    : out std_logic;
-           reg_write  : out std_logic;
-           alu_src    : out std_logic;
-           alu_op     : out std_logic_vector(1 downto 0);
-           mem_read   : out std_logic;
+           networkKey : in  std_logic;
+           ready      : in  std_logic;
            mem_write  : out std_logic;
-           mem_to_reg : out std_logic );
+           reg_write  : out std_logic;
+           branch     : out std_logic;
+           key_select : out std_logic;
+           direction  : out std_logic );
 end component;
 
 component register_file is
@@ -136,14 +140,7 @@ component data_memory is
 end component;
 
 -------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
--------------------------------------------------
--- Our new components
--- Firstly the pipeline registers
+-- Pipeline Registers
 component pipeReg_IFID is
     port (
         clk         : in  std_logic;
@@ -211,13 +208,9 @@ component pipeReg_EXMEM is
     );
 end component;
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------
--- Assignment components
+-- ############################################################################
+-- OUR NEW ASSIGNMENT COMONENTS ***********************************************
+-- ############################################################################
 component parity_unit is
     port (
         data:   in std_logic_vector(7 downto 0);
@@ -231,48 +224,43 @@ component tag_generator is
            T  : out std_logic_vector(7 downto 0));
 end component;
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
+-- ############################################################################
+-- SIGNALS ********************************************************************
+-- ############################################################################
 signal sig_next_pc              : std_logic_vector(3 downto 0);
 signal sig_curr_pc              : std_logic_vector(3 downto 0);
 signal sig_one_4b               : std_logic_vector(3 downto 0);
 signal sig_pc_carry_out         : std_logic;
 signal sig_insn                 : std_logic_vector(15 downto 0);
 signal sig_sign_extended_offset : std_logic_vector(15 downto 0);
-signal sig_reg_dst              : std_logic;
-signal sig_reg_write            : std_logic;
-signal sig_mem_write            : std_logic;
-signal sig_mem_to_reg           : std_logic;
 signal sig_write_data           : std_logic_vector(15 downto 0);
 signal sig_read_data_a          : std_logic_vector(15 downto 0);
 signal sig_read_data_b          : std_logic_vector(15 downto 0);
 signal sig_data_mem_out         : std_logic_vector(15 downto 0);
--------------------------------------------------
--- Extra control signals
--------------------------------------------------
-signal sig_mem_read : std_logic;
-signal sig_branch   : std_logic;
-signal sig_ALUop    : std_logic_vector(1 downto 0);
+-------------------------------------------------------------------------------
+-- Control ********************************************************************
+-------------------------------------------------------------------------------
+signal sig_mem_write : std_logic;
+signal sig_reg_write : std_logic;
+signal sig_branch    : std_logic;
+signal sig_key_sel   : std_logic;
+signal sig_direction : std_logic;
 
-signal sig_EX_ctrl  : std_logic_vector(3 downto 0);
-signal sig_M_ctrl   : std_logic_vector(2 downto 0);
--------------------------------------------------
--- Branch jumping signals
--------------------------------------------------
+signal sig_EX_ctrl   : std_logic_vector(3 downto 0);
+signal sig_M_ctrl    : std_logic_vector(2 downto 0);
+-------------------------------------------------------------------------------
+-- Branch jumping *************************************************************
+-------------------------------------------------------------------------------
 signal sig_PC4                  : std_logic_vector(3 downto 0);
-signal sig_PCSrc                : std_logic;
 signal sig_calculated_branch    : std_logic_vector(3 downto 0);
--------------------------------------------------
--- Pipeline register signals, these are outputs
--------------------------------------------------
---IFID -------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- Pipeline registers, all outputs ********************************************
+-------------------------------------------------------------------------------
+--IFID 
 signal sig_IFID_pc4     : std_logic_vector(3 downto 0);
 signal sig_IFID_insn    : std_logic_vector(15 downto 0);
---IDEX -------------------------------------------------
+--IDEX
 signal sig_IDEX_EX      : std_logic_vector(3 downto 0);
 signal sig_IDEX_M       : std_logic_vector(2 downto 0);
 signal sig_IDEX_data    : std_logic_vector(31 downto 0);
@@ -281,8 +269,7 @@ signal sig_IDEX_pc4     : std_logic_vector(3 downto 0);
 signal sig_IDEX_sig_ex  : std_logic_vector(3 downto 0);
 signal sig_IDEX_key     : std_logic_vector(15 downto 0);
 signal sig_IDEX_dataReg : std_logic_vector(15 downto 0);
-
---EXMEM -------------------------------------------------
+--EXMEM
 signal sig_EXMEM_M      : std_logic_vector(2 downto 0);
 signal sig_EXMEM_tag    : std_logic_vector(15 downto 0);
 signal sig_EXMEM_tagErr : std_logic;
@@ -293,16 +280,16 @@ signal sig_EXMEM_tagErr : std_logic;
 signal sig_EXMEM_jmpbr  : std_logic_vector(31 downto 0);
 signal sig_EXMEM_rd     : std_logic_vector(3 downto 0);
 
--------------------------------------------------
--- Parity, tag signals
--------------------------------------------------
+-------------------------------------------------------------------------------
+-- Parity, tag ****************************************************************
+-------------------------------------------------------------------------------
 signal sig_tag_gen      : std_logic_vector(15 downto 0);
 signal sig_tag_comp     : std_logic;
 signal sig_parity_gen   : std_logic;
 signal sig_parity_comp  : std_logic;
 
-signal sig_tag_err          : std_logic; -- Outputs of and gates
-signal sig_p_err            : std_logic; 
+signal sig_tag_err      : std_logic; -- Outputs of and gates
+signal sig_p_err        : std_logic; 
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -317,53 +304,55 @@ begin
     sig_incoming_key  <= incoming_key;
 
     -- Our control unit signals
-    sig_EX_ctrl(0)          <= sig_reg_dst;
-    sig_EX_ctrl(2 downto 1) <= sig_ALUOp;
-    sig_EX_ctrl(3)          <= sig_alu_src;
-    sig_M_ctrl(0)           <= sig_branch;
-    sig_M_ctrl(1)           <= sig_mem_write;
-    sig_M_ctrl(2)           <= sig_mem_read;
+    sig_EX_ctrl(0)  <= '0';
+    sig_EX_ctrl(1)  <= '0';
+    sig_EX_ctrl(3)  <= '0';
 
-    sig_one_4b <= "0001";
+    sig_M_ctrl(0)   <= sig_branch;
+    sig_M_ctrl(1)   <= sig_direction;
+    sig_M_ctrl(2)   <= sig_mem_write;
+
+    ---------------------------------------------------------------------------
+    -- Program Counter ********************************************************
+    ---------------------------------------------------------------------------
     pc : program_counter
     port map ( reset    => reset,
-               clk      => clk,
-               addr_in  => sig_next_pc,
-               addr_out => sig_curr_pc,
-               stall    => sig_haz_stall,
-               prev_addr => sig_lagged_pc
-               ); 
+        clk      => clk,
+        addr_in  => sig_next_pc,
+        addr_out => sig_curr_pc,
+        stall    => sig_haz_stall,
+        prev_addr => sig_lagged_pc );
 
-    -------------------------------------------------
     -- First the simple PC = PC + 4 at fetch stage
+    sig_one_4b <= "0001";
     next_pc : adder_4b 
     port map ( src_a     => sig_curr_pc, 
                src_b     => sig_one_4b,
                sum       => sig_PC4,   
                carry_out => sig_pc_carry_out ); -- FIXME: can this be removed?
-    -------------------------------------------------
+    
     -- Now for the branch address
     branch_calc : adder_4b
     port map (  src_a     => sig_IDEX_pc4, 
                 src_b     => sig_IDEX_rd,   --Ignoring extension for now
                 sum       => sig_calculated_branch);
-    -------------------------------------------------
+
     -- And now to decide which calculated number to use
     PC_mux  : mux_2to1_4b
-    port map (  mux_select  => sig_PCSrc,
+    port map (  mux_select  => sig_EXMEM_M(0),
                 data_a      => sig_PC4,
                 data_b      => sig_EXMEM_jmpbr,
                 data_out    => sig_next_pc);
-    -------------------------------------------------
-    
-    -- FETCH CYCLE ------------------------------------------------------------
+
+    ---------------------------------------------------------------------------
+    -- Some boring modules ****************************************************
+    ---------------------------------------------------------------------------
     insn_mem : instruction_memory 
     port map ( reset    => reset,
                clk      => clk,
                addr_in  => sig_curr_pc,
                insn_out => sig_insn );
-    
-    -- DECODE, reg read -------------------------------------------------------
+
     ctrl_unit : control_unit 
     port map ( opcode     => sig_IFID_insn(15 downto 12),
                branch     => sig_branch,
@@ -385,24 +374,17 @@ begin
                read_data_a     => sig_read_data_a,
                read_data_b     => sig_read_data_b );
 
-    -- Memory Access ----------------------------------------------------------
     data_mem : data_memory 
     port map ( reset        => reset,
                clk          => clk,
-               write_enable => sig_EXMEM_M(1),
+               write_enable => sig_EXMEM_M(2),
                write_data   => sig_EXMEM_data,
                addr_in      => sig_EXMEM_ALUres(3 downto 0),
                data_out     => sig_data_mem_out );
-
-    ---------------------------------------------------------------------------
-    ---------------------------------------------------------------------------
-    ---------------------------------------------------------------------------
-    ---------------------------------------------------------------------------
-    ---------------------------------------------------------------------------
     
-    -------------------------------------------------
-    --************** PIPELINE REGISTERS**************
-    -------------------------------------------------
+    ---------------------------------------------------------------------------
+    -- Pipeline Registers *****************************************************
+    ---------------------------------------------------------------------------
     IFID : pipeReg_IFID
     port map (
         clk     => clk,
@@ -466,9 +448,9 @@ begin
         rd_out          => sig_EXMEM_rd
     );
 
-    -------------------------------------------------
-    -- Parity and tagging
-    ------------------------------------------------- 
+    ---------------------------------------------------------------------------
+    -- Parity and Tagging *****************************************************
+    --------------------------------------------------------------------------- 
     parity_unit : parity_module
     port map (
         data    => sig_IDEX_tag(0 downto 0),
@@ -476,7 +458,6 @@ begin
     );
     -- XOR to check the received parity_bit
     sig_parity_comp <= sig_parity_gen XOR sig_IDEX_tag(0 downto 0);
-
     
     tag_gen : tag_generator is
     port map( 
@@ -493,7 +474,6 @@ begin
         OK => sig_tag_ok
     );
 
-    -------------------------------------------------
     -- Are we outputting a tag or a parity bit?
     tag_p_mux : mux_2to1_16b is
     port map (
@@ -502,6 +482,10 @@ begin
         data_b     => sig_EXMEM_tag(0 downto 0),
         data_out   => sig_tagP_ready );
     );
+
+    ---------------------------------------------------------------------------
+    -- Muxing for the outputs *************************************************
+    ---------------------------------------------------------------------------
     -- Is there an error? If so, don't output
     tag_p_out_mux : mux_2to1_16b is
     port map (
@@ -511,7 +495,7 @@ begin
         data_out   => sig_tag_output );
     );
 
-    -- Same for the data
+    -- Same for the data, being cheap just use two 16b muxes
     data_out_mux1 : mux_2to1_16b is
     port map (
         mux_select => sig_error,
@@ -530,14 +514,14 @@ begin
     sig_data_output(31 downto 16) <= sig_data_output2;
     ------------------------------------------------- 
 
-    -------------------------------------------------
-    -- Our Processor outputs
-    ------------------------------------------------- 
+    ---------------------------------------------------------------------------
+    -- Processor Outputs ******************************************************
+    ---------------------------------------------------------------------------
     data_output  <= sig_data_output;
     tag_output   <= sig_tag_output;
 
-    sig_p_err    <= direction       AND sig_EXMEM_pErr;
-    sig_tag_err  <= (not direction) AND sig_EXMEM_tagErr;
-    sig_error    <= sig_p_err       OR  sig_tag_err;
+    sig_p_err    <= sig_EXMEM_M(1)        AND sig_EXMEM_pErr;
+    sig_tag_err  <= (not sig_EXMEM_M(1) ) AND sig_EXMEM_tagErr;
+    sig_error    <= sig_p_err             OR  sig_tag_err;
     error_output <= sig_error;
 end structural;
