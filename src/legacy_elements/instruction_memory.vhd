@@ -46,20 +46,15 @@ begin
     begin
         if (reset = '1') then
             -- initial values of the instruction memory :
-            --  insn_0 : load  $1, $0, 0   - load data 0($0) into $1
-            --  insn_1 : load  $2, $0, 1   - load data 1($0) into $2
-            --  insn_2 : add   $3, $0, $1  - $3 <- $0 + $1
-            --  insn_3 : add   $4, $1, $2  - $4 <- $1 + $2
-            --  insn_4 : store $3, $0, 2   - store data $3 into 2($0)
-            --  insn_5 : store $4, $0, 3   - store data $4 into 3($0)
-            --  insn_6 - insn_15 : noop    - end of program
+            --  insn_0 : Check the tag of an incoming packet
+            --  insn_1 : Process a processor->network, includes parity
 
-            var_insn_mem(0)  := X"1010";
-            var_insn_mem(1)  := X"1021";
-            var_insn_mem(2)  := X"8023";
-            var_insn_mem(3)  := X"8124";
-            var_insn_mem(4)  := X"3032";
-            var_insn_mem(5)  := X"3043";
+            var_insn_mem(0)  := X"0000";
+            var_insn_mem(1)  := X"0000";
+            var_insn_mem(2)  := X"0000";
+            var_insn_mem(3)  := X"0000";
+            var_insn_mem(4)  := X"0000";
+            var_insn_mem(5)  := X"0000";
             var_insn_mem(6)  := X"0000";
             var_insn_mem(7)  := X"0000";
             var_insn_mem(8)  := X"0000";
@@ -70,23 +65,6 @@ begin
             var_insn_mem(13) := X"0000";
             var_insn_mem(14) := X"0000";
             var_insn_mem(15) := X"0000";
-
-            -- var_insn_mem(0)  := X"1010";
-            -- var_insn_mem(1)  := X"1021";
-            -- var_insn_mem(2)  := X"0000";
-            -- var_insn_mem(3)  := X"0000";
-            -- var_insn_mem(4)  := X"8013";
-            -- var_insn_mem(5)  := X"8124";
-            -- var_insn_mem(6)  := X"8415"; -- add 5 and 13, will need forwarding
-            -- var_insn_mem(7)  := X"0000";
-            -- var_insn_mem(8)  := X"0000";
-            -- var_insn_mem(9)  := X"0000";
-            -- var_insn_mem(10) := X"0000";
-            -- var_insn_mem(11) := X"0000";
-            -- var_insn_mem(12) := X"0000";
-            -- var_insn_mem(13) := X"0000";
-            -- var_insn_mem(14) := X"0000";
-            -- var_insn_mem(15) := X"0000";
         
         elsif (rising_edge(clk)) then
             -- read instructions on the rising clock edge

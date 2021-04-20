@@ -50,7 +50,15 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity single_cycle_core is
     port ( reset  : in  std_logic;
            clk    : in  std_logic;
-           sig_output : out std_logic_vector(15 downto 0) 
+
+           -- 8 bits of incoming data, plus 8 bits for tag
+           incoming_data    : in  std_logic_vector(15 downto 0);
+           incoming_key     : in  std_logic_vector(15 downto 0);
+
+           data_output      : out std_logic_vector(7 downto 0);
+           tag_output       : out std_logic_vector(7 downto 0);
+           
+           error_output     : out std_logic
            );
 end single_cycle_core;
 
@@ -137,7 +145,7 @@ component data_memory is
            write_data   : in  std_logic_vector(15 downto 0);
            addr_in      : in  std_logic_vector(3 downto 0);
            data_out     : out std_logic_vector(15 downto 0) );
-           end component;
+end component;
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -264,6 +272,26 @@ end component;
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
+-------------------------------------------------
+-- Assignment components
+component parity_unit is
+    port (
+        data:   in std_logic_vector(7 downto 0);
+        parity: out std_logic );
+end component;
+
+component tag_generator is
+    port ( D  : in  std_logic_vector(31 downto 0);
+           BF : in  std_logic_vector(3 downto 0);
+           R  : in  std_logic_vector(11 downto 0);
+           T  : out std_logic_vector(7 downto 0));
+end component;
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 signal sig_next_pc              : std_logic_vector(3 downto 0);
 signal sig_curr_pc              : std_logic_vector(3 downto 0);
@@ -358,6 +386,17 @@ signal sig_IFID_pc4_write   : std_logic_vector(3 downto 0);
 
 signal sig_lagged_pc    : std_logic_vector(3 downto 0);
 
+-------------------------------------------------
+-- Parity, tag signals
+-------------------------------------------------
+signal sig_tag_gen      : std_logic_vector(7 downto 0);
+signal sig_tag_comp     : std_logic;
+signal sig_parity_gen   : std_logic;
+signal sig_parity_comp  : std_logic;
+
+signal tag_err          : std_logic; -- Outputs of and gates
+signal p_err            : std_logic; 
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -365,9 +404,12 @@ signal sig_lagged_pc    : std_logic_vector(3 downto 0);
 -------------------------------------------------------------------------------
 
 begin
-    sig_output <= sig_write_data;
-    sig_one_4b <= "0001";
+    -- Split the incoming signal to data and tag/parity
+    sig_incoming_data <= incoming_signal(15 downto 8);
+    sig_incoming_tag  <= incoming_signal(7 downto 0); -- this includes the parity
+    sig_incoming_key  <= incoming_key;
 
+    sig_one_4b <= "0001";
     pc : program_counter
     port map ( reset    => reset,
                clk      => clk,
@@ -659,4 +701,29 @@ begin
             sig_lagged_pc   <= sig_curr_pc;
         end if;
     end process;
+
+    -------------------------------------------------
+    -- Parity and taggign
+    ------------------------------------------------- 
+    -- Assignment components
+    parity : parity_unit
+    port map (
+        data    => sig_data2check,
+        parity  => sig_parity2check
+    );
+
+    tag_gen tag_generator is
+    port map( 
+        D   => sig_data2tag,
+        BF  => sig_IDEX_data1(15 downto 12), -- key always first reg
+        R   => sig_IDEX_data1(11 downto 0),
+        T   => sig_generated_tag
+    );
+
+    tag_ok : tag_comparator is 
+    port map (
+        T1 => sig_data2tag,
+        T2 => sig_tag_recv,
+        OK => sig_tag_ok
+    );
 end structural;
