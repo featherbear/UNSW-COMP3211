@@ -116,13 +116,11 @@ begin
         isNotEqual => compare_tags_out
     );
     
-    -- Used for both generation (XOR each bit)
-    -- As well for checking (XOR each bit, then XOR with parity - should equal 0)
+    -- XOR each bit, then XOR with parity - should equal 0
     parity_generator: entity work.parity_unit port map (
         data => id_ex_data,
         parity => parity_generator_out
     );
-    
                                             -- When sending, the tag_parity signal should be zero, so A XOR 0 = A
     parityCheck <= parity_generator_out XOR id_ex_tag_parity(0);
     
