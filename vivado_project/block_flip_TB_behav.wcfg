@@ -10,13 +10,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="21930fs"></ZoomStartTime>
-      <ZoomEndTime time="986931fs"></ZoomEndTime>
-      <Cursor1Time time="272930fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="1250fs"></ZoomEndTime>
+      <Cursor1Time time="272fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="232"></NameColumnWidth>
-      <ValueColumnWidth column_width="101"></ValueColumnWidth>
+      <ValueColumnWidth column_width="97"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="6" />
    <wvobject fp_name="/block_flip_TB/data" type="array">
@@ -33,14 +33,14 @@
       <obj_property name="ObjectShortName">result[7:0]</obj_property>
       <obj_property name="Radix">BINARYRADIX</obj_property>
    </wvobject>
+   <wvobject type="divider" fp_name="divider6">
+      <obj_property name="label">----------------------</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
    <wvobject fp_name="/block_flip_TB/expected" type="array">
       <obj_property name="ElementShortName">expected[7:0]</obj_property>
       <obj_property name="ObjectShortName">expected[7:0]</obj_property>
       <obj_property name="Radix">BINARYRADIX</obj_property>
-   </wvobject>
-   <wvobject type="divider" fp_name="divider6">
-      <obj_property name="label">----------------------</obj_property>
-      <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject fp_name="/block_flip_TB/check" type="logic">
       <obj_property name="ElementShortName">check</obj_property>
