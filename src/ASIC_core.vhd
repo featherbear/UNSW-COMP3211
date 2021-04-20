@@ -268,6 +268,7 @@ begin
     sig_M_ctrl(0)   <= sig_branch;
     sig_M_ctrl(1)   <= sig_direction;
     sig_M_ctrl(2)   <= sig_mem_write;
+    sig_M_ctrl(3)   <= sig_reg_write;
 
     ---------------------------------------------------------------------------
     -- Program Counter Functions **********************************************
@@ -302,6 +303,16 @@ begin
                 data_out    => sig_next_pc);
 
     ---------------------------------------------------------------------------
+    -- Loading key to register ************************************************
+    ---------------------------------------------------------------------------
+    -- Are we loading key from memory or externally?
+    key_load_mux  : mux_2to1_16b
+    port map (  mux_select  => sig_key_sel
+                data_a      => sig_data_mem_out,
+                data_b      => incoming_key,
+                data_out    => sig_write_data);
+
+    ---------------------------------------------------------------------------
     -- Some boring modules ****************************************************
     ---------------------------------------------------------------------------
     insn_mem : instruction_memory 
@@ -311,24 +322,23 @@ begin
                insn_out => sig_insn );
 
     ctrl_unit : control_unit 
-    port map (  -- Inputs first
-                opcode     => sig_IFID_insn(15 downto 12),
-                networkKey => key_load,
-                ready      => net_ready,
-                -- And now the outputs
-                mem_write  => sig_mem_write,
-                reg_write  => sig_reg_write,
-                branch     => sig_branch,
-                key_select => sig_key_select,
-                direction  => sig_direction );
+    port map ( opcode     => sig_IFID_insn(15 downto 12),
+               networkKey => key_load,
+               ready      => net_ready,
+               -- output
+               mem_write  => sig_mem_write,
+               reg_write  => sig_reg_write,
+               branch     => sig_branch,
+               key_select => sig_key_select,
+               direction  => sig_direction );
 
     reg_file : register_file 
     port map ( reset           => reset, 
                clk             => clk,
                read_register_a => sig_IFID_insn(11 downto 8),
                read_register_b => sig_IFID_insn(7 downto 4),
-               write_enable    => sig_MEMWB_WB(1),
-               write_register  => sig_MEMWB_rd,
+               write_enable    => sig_EXMEM_M(3),
+               write_register  => sig_EXMEM_rd,
                write_data      => sig_write_data,
                read_data_a     => sig_read_data_a,
                read_data_b     => sig_read_data_b );
@@ -385,9 +395,7 @@ begin
         reset       => reset,
         -- Control Signals
         M_in        => sig_IDEX_M,
-        WB_in       => sig_IDEX_WB,
         M_out       => sig_EXMEM_M,
-        WB_out      => sig_EXMEM_WB,
         -- Actual data
         tag_in      => sig_tag_gen,
         tag_err_in  => sig_tag_comp,
