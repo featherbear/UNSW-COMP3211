@@ -65,7 +65,7 @@ begin
     reset <= '0';
     
     sel_data <= procData WHEN ctrl_direction = DIRECTION_SEND ELSE netData(31 downto 0);
-    sel_tag_parity <= (others => '0') WHEN ctrl_direction = DIRECTION_SEND ELSE netData(39 downto 32);
+    sel_tag_parity <= ("0000000" & procParity) WHEN ctrl_direction = DIRECTION_SEND ELSE netData(39 downto 32);
     
     instruction_memory: entity work.instruction_memory port map ( reset => reset, clk => clk, addr_in => pc_value, insn_out => instruction_memory_out);
     pipeline_reg_if_id: entity work.pipeReg_IFID port map (clk => clk, insn_in => instruction_memory_out, insn_out => if_id_insn);  
