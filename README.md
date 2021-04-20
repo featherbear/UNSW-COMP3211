@@ -15,7 +15,7 @@ The ASIP sits between a processor system and the network to make sure that
 1) the data sent out to the network is soft-error free, and 
 2) the data received from the network and to be used by the destination processor is not tampered.
 
-![figure1](./readme_images/Figure1.jpg)
+![figure1](./.outline/readme_images/Figure1.jpg)
 
 ## Layer 1: Software Error detection
 Since soft error is not induced by malicious action and the probability of multi-bit error is
@@ -28,13 +28,13 @@ data is deemed as error free and will be passed to the next protection layer; Ot
 the data is considered to have software error and an alert to the processor system is
 generated for resubmission.
 
-![figure2](./readme_images/Figure2.jpg)
+![figure2](./.outline/readme_images/Figure2.jpg)
 
 ## Layer 2: Integrity Attack Detection
 For the integrity attack, because it is often skillfully crafted by the attacker, we need to
 use a relatively sophisticated approach to counter the attack.
 
-![figure22](./readme_images/Figure2_2.jpg)
+![figure22](./.outline/readme_images/Figure2_2.jpg)
 
 Our design for this layer uses a tag-based approach. It consists of two operational
 components: 1) Tagging, to attach a tag to the data to be sent to the network, and 2)
@@ -51,7 +51,7 @@ on the received data and then is compared with the received tag, T. If they are 
 the received data is accepted; otherwise, the data is dropped, and an alert is recorded
 and can be used later for security analysis.
 
-![figure3](./readme_images/Figure3.jpg)
+![figure3](./.outline/readme_images/Figure3.jpg)
 
 Both the sender and the receiver use the same tag generation scheme, which is detailed
 in Figure 3(a). The scheme consists of three operations: block flip (BF), rotate-left-shift
