@@ -26,7 +26,7 @@ begin
     END GENERATE;                           
            
     gen_rls_shift: FOR i IN 0 TO 3 GENERATE
-       dev_rls_shift: ENTITY work.rlshift
+       dev_rls_shift: ENTITY work.rlsshift
            PORT MAP (
                src  => d_BF_RLS((i*8 + 7) downto (i*8)),
                shft => R((i*3 + 2) downto (i*3)),
