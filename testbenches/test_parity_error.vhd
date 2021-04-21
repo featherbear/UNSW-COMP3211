@@ -7,7 +7,7 @@ entity test_parity_error is
 end test_parity_error;
 
 architecture Behavioural of test_parity_error is
-    constant c_CLOCK_PERIOD : time := 2 ns; -- 1 GHz = 2 nanoseconds period
+    constant c_CLOCK_PERIOD : time := 5 ns;
     signal r_CLOCK : std_logic := '0';
     signal r_reset : std_logic := '0';
     
