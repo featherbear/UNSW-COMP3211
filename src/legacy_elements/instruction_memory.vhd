@@ -50,10 +50,10 @@ begin
             --  insn_1 : Process a processor->network, includes parity
 
             var_insn_mem(0)  := X"0000";
-            var_insn_mem(1)  := X"0000";
-            var_insn_mem(2)  := X"0000";
-            var_insn_mem(3)  := X"0000";
-            var_insn_mem(4)  := X"0000";
+            var_insn_mem(1)  := "0001000000000000";
+            var_insn_mem(2)  := "0010000000000000";
+            var_insn_mem(3)  := "0011000000000000";
+            var_insn_mem(4)  := "0100000000000000";
             var_insn_mem(5)  := X"0000";
             var_insn_mem(6)  := X"0000";
             var_insn_mem(7)  := X"0000";
