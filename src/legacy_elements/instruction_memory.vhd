@@ -49,7 +49,7 @@ begin
             --  insn_0 : Check the tag of an incoming packet
             --  insn_1 : Process a processor->network, includes parity
 
-            var_insn_mem(0)  := X"0";
+            var_insn_mem(0)  := X"0000";
             var_insn_mem(1)  := "0001000000000000";
             var_insn_mem(2)  := "0010000000000000";
             var_insn_mem(3)  := "0011000000000000";

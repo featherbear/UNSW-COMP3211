@@ -9,6 +9,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity network_coprocessor_ASIP is
     port (
         clk : in std_logic;
+        reset : in std_logic;
         
         CTRL : in STD_LOGIC_VECTOR(4 DOWNTO 0);
         
@@ -26,9 +27,7 @@ entity network_coprocessor_ASIP is
     );
 end network_coprocessor_ASIP;
     
-architecture behavioural of network_coprocessor_ASIP is
-    signal reset : std_logic;
-    
+architecture behavioural of network_coprocessor_ASIP is   
     signal buffer_extPort : std_logic_vector(15 downto 0);
     signal buffer_netData : std_logic_vector(39 downto 0);
     signal buffer_procData : std_logic_vector(31 downto 0);
@@ -84,9 +83,9 @@ architecture behavioural of network_coprocessor_ASIP is
     constant DIRECTION_SEND : std_logic := '0';
     constant DIRECTION_RECV : std_logic := '1';
 begin    
-    reset <= '0'; 
     
     pc_controller: entity work.PCController port map (
+        clk => clk,
         network_ready => networkReady,
         ASIP_ready => CTRL(4),
         receive_request => CTRL(3),
