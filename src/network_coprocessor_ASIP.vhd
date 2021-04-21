@@ -24,10 +24,10 @@ entity network_coprocessor_ASIP is
         error : out STD_LOGIC;
 
         netOut : out STD_LOGIC_VECTOR (39 downto 0);
-        netDataPresent : out STD_LOGIC
+        netDataPresent : out STD_LOGIC;
 
         procOut : out STD_LOGIC_VECTOR (31 downto 0);
-        procDataPresent : out STD_LOGIC;
+        procDataPresent : out STD_LOGIC
     );
 end network_coprocessor_ASIP;
     
@@ -225,11 +225,11 @@ begin
     
     sig_data_out_en <= not(sig_error) AND ex_mem_ctrl_is_net_op;
 
-    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en) else (others => '0');
-    procOut <= (ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en) else (others => '0');
+    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en = '1') else (others => '0');
+    procOut <= (ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en = '1') else (others => '0');
 
-    netDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en) else '0';
-    procDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en) else '0';
+    netDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en = '1') else '0';
+    procDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en = '1') else '0';
 
     data_memory: entity work.data_memory port map (
         reset => reset,
