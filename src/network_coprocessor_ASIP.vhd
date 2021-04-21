@@ -9,6 +9,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity network_coprocessor_ASIP is
     port (
         clk : in std_logic;
+        reset : in std_logic;
         
         CTRL : in STD_LOGIC_VECTOR(4 DOWNTO 0);
         
@@ -23,16 +24,14 @@ entity network_coprocessor_ASIP is
         error : out STD_LOGIC;
 
         netOut : out STD_LOGIC_VECTOR (39 downto 0);
-        netDataPresent : out STD_LOGIC
+        netDataPresent : out STD_LOGIC;
 
         procOut : out STD_LOGIC_VECTOR (31 downto 0);
-        procDataPresent : out STD_LOGIC;
+        procDataPresent : out STD_LOGIC
     );
 end network_coprocessor_ASIP;
     
-architecture behavioural of network_coprocessor_ASIP is
-    signal reset : std_logic;
-    
+architecture behavioural of network_coprocessor_ASIP is   
     signal buffer_extPort : std_logic_vector(15 downto 0);
     signal buffer_netData : std_logic_vector(39 downto 0);
     signal buffer_procData : std_logic_vector(31 downto 0);
@@ -89,9 +88,9 @@ architecture behavioural of network_coprocessor_ASIP is
     constant DIRECTION_SEND : std_logic := '0';
     constant DIRECTION_RECV : std_logic := '1';
 begin    
-    reset <= '0'; 
     
     pc_controller: entity work.PCController port map (
+        clk => clk,
         network_ready => networkReady,
         ASIP_ready => CTRL(4),
         receive_request => CTRL(3),
@@ -187,7 +186,6 @@ begin
     compare_tags: entity work.nBitComparator generic map (n => 8) port map (
         inA => tag_generator_out,
         inB => id_ex_tag_parity,
-        -- TODO: Confirm right logic
         isNotEqual => compare_tags_out
     );
     
@@ -226,11 +224,11 @@ begin
     
     sig_data_out_en <= not(sig_error) AND ex_mem_ctrl_is_net_op;
 
-    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en) else (others => '0');
-    procOut <= (ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en) else (others => '0');
+    netOut <= (ex_mem_tag & ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en = '1') else (others => '0');
+    procOut <= (ex_mem_data) WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en = '1') else (others => '0');
 
-    netDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en) else '0';
-    procDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en) else '0';
+    netDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_SEND AND sig_data_out_en = '1') else '0';
+    procDataPresent <= '1' WHEN (ex_mem_ctrl_direction = DIRECTION_RECV AND sig_data_out_en = '1') else '0';
 
     data_memory: entity work.data_memory port map (
         reset => reset,

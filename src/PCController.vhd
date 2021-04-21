@@ -3,6 +3,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity PCController is
     Port (
+        clk : in std_logic;
+        
         network_ready : in std_logic;
 
         ASIP_ready : in std_logic;
@@ -22,19 +24,21 @@ architecture Behavioral of PCController is
     constant PC_LOADKEY : std_logic_vector(3 downto 0) := "0011";
     constant PC_LOADEXT : std_logic_vector(3 downto 0) := "0100";
 begin
-    func: process begin
-        PC <= PC_NOP;
-        
-        if ASIP_ready = '1' then
-            if receive_request = '1' AND network_ready = '1' then
-                PC <= PC_RECEIVE;
-            elsif send_request = '1' then
-                PC <= PC_SEND;
-            elsif loadkey_request = '1' then
-                PC <= PC_LOADKEY;
-            elsif loadext_request = '1' then
-                PC <= PC_LOADEXT;
-            end if;                                         
+    func: process(clk) is begin
+        if (rising_edge(clk)) then
+            PC <= PC_NOP;
+            
+            if ASIP_ready = '1' then
+                if receive_request = '1' AND network_ready = '1' then
+                    PC <= PC_RECEIVE;
+                elsif send_request = '1' then
+                    PC <= PC_SEND;
+                elsif loadkey_request = '1' then
+                    PC <= PC_LOADKEY;
+                elsif loadext_request = '1' then
+                    PC <= PC_LOADEXT;
+                end if;                                         
+            end if;
         end if;
     end process;
 
