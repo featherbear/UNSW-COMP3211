@@ -47,13 +47,6 @@ component instruction_memory is
            insn_out : out std_logic_vector(15 downto 0) );
 end component;
 
-component mux_2to1_4b is
-    port ( mux_select : in  std_logic;
-           data_a     : in  std_logic_vector(3 downto 0);
-           data_b     : in  std_logic_vector(3 downto 0);
-           data_out   : out std_logic_vector(3 downto 0) );
-end component;
-
 component mux_2to1_16b is
     port ( mux_select : in  std_logic;
            data_a     : in  std_logic_vector(15 downto 0);
@@ -210,7 +203,6 @@ signal sig_IDEX_EX      : std_logic_vector(3 downto 0);
 signal sig_IDEX_M       : std_logic_vector(2 downto 0);
 signal sig_IDEX_data    : std_logic_vector(31 downto 0);
 signal sig_IDEX_tag     : std_logic_vector(15 downto 0);
-signal sig_IDEX_sig_ex  : std_logic_vector(3 downto 0);
 signal sig_IDEX_key     : std_logic_vector(15 downto 0);
 signal sig_IDEX_dataReg : std_logic_vector(15 downto 0);
 --EXMEM
