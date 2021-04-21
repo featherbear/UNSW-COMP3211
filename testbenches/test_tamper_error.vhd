@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 04/12/2021 12:32:44 AM
+-- Create Date: 21.04.2021 08:52:22
 -- Design Name: 
--- Module Name: bit_flip - Behavioral
+-- Module Name: test_tamper_error - Behavioural
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -31,19 +31,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
--- feel like i'm missing something but simply inverts an 8-bit input if flip is set
+entity test_tamper_error is
+--  Port ( );
+end test_tamper_error;
 
-entity bit_flip is
-    Port ( data_in : in STD_LOGIC_VECTOR (7 downto 0);
-           data_out : out STD_LOGIC_VECTOR (7 downto 0);
-           flip : in STD_LOGIC);
-end bit_flip;
-
-architecture Behavioral of bit_flip is
+architecture Behavioural of test_tamper_error is
 
 begin
 
-    data_out <= not data_in when flip = '1' else
-                data_in;
 
-end Behavioral;
+end Behavioural;

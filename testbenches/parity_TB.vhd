@@ -4,11 +4,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
 -- Our testbench, currently no need to interface
-entity parity_tb is
-end parity_tb;
+entity parity_TB is
+end parity_TB;
 
 -- The architecture
-architecture behaviour of parity_tb is
+architecture behaviour of parity_TB is
     component parity_unit PORT (
         data:   in std_logic_vector(7 downto 0);
         parity: out std_logic
