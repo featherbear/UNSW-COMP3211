@@ -186,7 +186,6 @@ begin
     compare_tags: entity work.nBitComparator generic map (n => 8) port map (
         inA => tag_generator_out,
         inB => id_ex_tag_parity,
-        -- TODO: Confirm right logic
         isNotEqual => compare_tags_out
     );
     

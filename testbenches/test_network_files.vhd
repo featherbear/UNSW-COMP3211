@@ -1,10 +1,13 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity test_network is
-end test_network;
+use STD.textio.all;
+use ieee.std_logic_textio.all;
 
-architecture Behavioural of test_network is
+entity test_network_files is
+end test_network_files;
+
+architecture Behavioural of test_network_files is
     constant c_CLOCK_PERIOD : time := 5 ns;
     signal r_CLOCK : std_logic := '0';
     
@@ -59,6 +62,13 @@ begin
     process begin
       CPU2_ctrl <= "11000"; 
         wait for 2*c_CLOCK_PERIOD;
+--        wait for 14*c_CLOCK_PERIOD;
+
+--        CPU2_ctrl <= "11000"; 
+--        wait for 2*c_CLOCK_PERIOD;
+        
+--        CPU2_ctrl <= "00000"; 
+--        wait for 2*c_CLOCK_PERIOD;
     end process;
 
     p_CLK_GEN : process is begin

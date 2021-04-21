@@ -1,43 +1,66 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 21.04.2021 08:53:53
--- Design Name: 
--- Module Name: test_send - Behavioural
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
+-- Testing the sending of data
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 entity test_send is
---  Port ( );
 end test_send;
 
 architecture Behavioural of test_send is
-
+    constant c_CLOCK_PERIOD : time := 5 ns;
+    signal r_CLOCK : std_logic := '0';
+    signal r_reset : std_logic := '0';
+    
+    signal CPU_ctrl : std_logic_vector(4 downto 0);
+    signal CPU_data : std_logic_vector(31 downto 0);
+    signal CPU_data_parity : std_logic;
+    
+    signal network : std_logic_vector(39 downto 0);
+    signal network_activity : std_logic;
+    
 begin
 
+    uut: entity work.network_coprocessor_ASIP PORT MAP (
+        reset => r_reset,
+        clk => r_CLOCK,
+        extPort => (others => '0'),
+        CTRL => CPU_ctrl,
+        procData => CPU_data,
+        procParity => CPU_data_parity,
+        networkReady => '0',
+        netData => (others => '0'),
+        netOut => network,
+        netDataPresent => network_activity
+    );
+
+    process begin
+        r_reset <= '0'; wait for 2*c_CLOCK_PERIOD; r_reset <= '1'; wait for 2*c_CLOCK_PERIOD; r_reset <= '0'; wait for 6*c_CLOCK_PERIOD;
+
+        -- repeat1        
+        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000101010101"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "00000"; CPU_data <= "00000000000000000000000000000000"; CPU_data_parity <= '0'; wait for 2*c_CLOCK_PERIOD;
+
+        -- repeat2
+        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000101010101"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "00000"; CPU_data <= "00000000000000000000000000000000"; CPU_data_parity <= '0'; wait for 2*c_CLOCK_PERIOD;
+  
+        -- repeat3
+        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000101010101"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "00000"; CPU_data <= "00000000000000000000000000000000"; CPU_data_parity <= '0'; wait for 2*c_CLOCK_PERIOD;
+        
+        -- update?
+        CPU_ctrl <= "10010"; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "00000"; wait for 2*c_CLOCK_PERIOD;
+
+        -- tagged send
+        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000101010101"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "00000"; CPU_data <= "00000000000000000000000000000000"; CPU_data_parity <= '0'; wait for 2*c_CLOCK_PERIOD;
+        wait for 4*c_CLOCK_PERIOD;
+    end process;
+
+    p_CLK_GEN : process is begin
+        wait for c_CLOCK_PERIOD/2;
+        r_CLOCK <= not r_CLOCK;
+    end process p_CLK_GEN; 
 
 end Behavioural;
