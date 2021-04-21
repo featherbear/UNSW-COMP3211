@@ -53,7 +53,7 @@ begin
         CPU_ctrl <= "00000"; wait for 2*c_CLOCK_PERIOD;
 
         -- tagged send
-        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000000000001"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
+        CPU_ctrl <= "10100"; CPU_data <= "00000000000000000000000101010101"; CPU_data_parity <= '1'; wait for 2*c_CLOCK_PERIOD;
         CPU_ctrl <= "00000"; CPU_data <= "00000000000000000000000000000000"; CPU_data_parity <= '0'; wait for 2*c_CLOCK_PERIOD;
         wait for 4*c_CLOCK_PERIOD;
     end process;
