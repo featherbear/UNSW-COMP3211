@@ -1,4 +1,5 @@
--- Early test bench for the parity checker
+---- Early test bench for the parity checker
+-- Tests the parity generation for all 8-bit values (0-255)
 library IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;

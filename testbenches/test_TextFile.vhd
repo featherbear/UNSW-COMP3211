@@ -1,3 +1,7 @@
+---- File-based test input
+-- Inputs based from a text file
+-- Will test the parity error signal
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use std.textio.all;
@@ -38,48 +42,55 @@ begin
         netDataPresent => network_activity
     );
 
-  process
-    variable v_ILINE     : line;
-    variable v_OLINE     : line;
-    variable v_cpu_ctrl : std_logic_vector(4 downto 0);
-    variable v_cpu_data : std_logic_vector(31 downto 0);
-    variable v_cpu_data_parity : std_logic;
-    variable v_ok : boolean;
-    variable v_SPACE     : character;
-    variable out_error : std_logic;
-  begin
-    r_reset <= '0'; wait for 2*c_CLOCK_PERIOD; r_reset <= '1'; wait for 2*c_CLOCK_PERIOD; r_reset <= '0'; wait for 6*c_CLOCK_PERIOD;
-    file_open(file_input, "input_tests.txt",  read_mode);
-    file_open(file_output, "output_tests.txt",  write_mode);
- 
-    while not endfile(file_input) loop
-    
-      readline(file_input, v_ILINE);
+    process
+      -- Text buffers
+      variable v_ILINE : line;
+      variable v_OLINE : line;
+
+      -- Controls
+      variable v_cpu_ctrl        : std_logic_vector(4 downto 0);
+      variable v_cpu_data        : std_logic_vector(31 downto 0);
+      variable v_cpu_data_parity : std_logic;
+
+      variable v_ok : boolean;
       
-      read(v_ILINE, v_cpu_ctrl);
-      read(v_ILINE, v_SPACE);
+      variable v_SPACE     : character;
+      variable out_error   : std_logic;
+    begin
+      r_reset <= '0'; wait for 2*c_CLOCK_PERIOD; r_reset <= '1'; wait for 2*c_CLOCK_PERIOD; r_reset <= '0'; wait for 6*c_CLOCK_PERIOD;
+
+      file_open(file_input, "input_tests.txt",  read_mode);
+      file_open(file_output, "output_tests.txt",  write_mode);
+  
+      while not endfile(file_input) loop
       
-      read(v_ILINE, v_cpu_data);
-      read(v_ILINE, v_SPACE);
-      
-      read(v_ILINE, v_cpu_data_parity);
- 
-      -- Pass the variable
-      CPU_ctrl <= v_cpu_ctrl;
-      CPU_data <= v_cpu_data;
-      CPU_data_parity <= v_cpu_data_parity;
-      
-      wait for 2*c_CLOCK_PERIOD;
-      
-      out_error := sig_error;
-      write(v_OLINE, out_error);
-      writeline(file_output, v_OLINE);
-    end loop;
- 
-    file_close(file_input);
-    file_close(file_output);
-    wait;
-  end process;
+        -- Read line
+        readline(file_input, v_ILINE);
+
+        -- Read control data until a space in the line
+        read(v_ILINE, v_cpu_ctrl); read(v_ILINE, v_SPACE);
+        -- Read data until a space in the line
+        read(v_ILINE, v_cpu_data); read(v_ILINE, v_SPACE);
+        -- Read the parity bit until the end of the line
+        read(v_ILINE, v_cpu_data_parity);
+  
+        -- Pass the variable to the CPU
+        CPU_ctrl        <= v_cpu_ctrl;
+        CPU_data        <= v_cpu_data;
+        CPU_data_parity <= v_cpu_data_parity;
+        wait for 2*c_CLOCK_PERIOD;
+
+        -- Write the error signal outpus
+        out_error := sig_error;
+        write(v_OLINE, out_error);
+        writeline(file_output, v_OLINE);
+      end loop;
+
+      -- Bye bye
+      file_close(file_input);
+      file_close(file_output);
+      wait;
+    end process;
 
     p_CLK_GEN : process is begin
         wait for c_CLOCK_PERIOD/2;
