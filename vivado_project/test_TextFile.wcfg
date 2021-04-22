@@ -3,9 +3,9 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="TextFile_behav.wdb" id="1">
+      <db_ref path="test_TextFile_behav.wdb" id="1">
          <top_modules>
-            <top_module name="TextFile" />
+            <top_module name="test_TextFile" />
          </top_modules>
       </db_ref>
    </db_ref_list>
@@ -27,39 +27,39 @@
       <obj_property name="label">------------</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/r_CLOCK" type="logic">
+   <wvobject fp_name="/test_TextFile/r_CLOCK" type="logic">
       <obj_property name="ElementShortName">r_CLOCK</obj_property>
       <obj_property name="ObjectShortName">r_CLOCK</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/r_reset" type="logic">
+   <wvobject fp_name="/test_TextFile/r_reset" type="logic">
       <obj_property name="ElementShortName">r_reset</obj_property>
       <obj_property name="ObjectShortName">r_reset</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/CPU_ctrl" type="array">
+   <wvobject fp_name="/test_TextFile/CPU_ctrl" type="array">
       <obj_property name="ElementShortName">CPU_ctrl[4:0]</obj_property>
       <obj_property name="ObjectShortName">CPU_ctrl[4:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/CPU_data" type="array">
+   <wvobject fp_name="/test_TextFile/CPU_data" type="array">
       <obj_property name="ElementShortName">CPU_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">CPU_data[31:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/CPU_data_parity" type="logic">
+   <wvobject fp_name="/test_TextFile/CPU_data_parity" type="logic">
       <obj_property name="ElementShortName">CPU_data_parity</obj_property>
       <obj_property name="ObjectShortName">CPU_data_parity</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/sig_error" type="logic">
+   <wvobject fp_name="/test_TextFile/sig_error" type="logic">
       <obj_property name="ElementShortName">sig_error</obj_property>
       <obj_property name="ObjectShortName">sig_error</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/network" type="array">
+   <wvobject fp_name="/test_TextFile/network" type="array">
       <obj_property name="ElementShortName">network[39:0]</obj_property>
       <obj_property name="ObjectShortName">network[39:0]</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/network_activity" type="logic">
+   <wvobject fp_name="/test_TextFile/network_activity" type="logic">
       <obj_property name="ElementShortName">network_activity</obj_property>
       <obj_property name="ObjectShortName">network_activity</obj_property>
    </wvobject>
-   <wvobject fp_name="/TextFile/c_CLOCK_PERIOD" type="other">
+   <wvobject fp_name="/test_TextFile/c_CLOCK_PERIOD" type="other">
       <obj_property name="ElementShortName">c_CLOCK_PERIOD</obj_property>
       <obj_property name="ObjectShortName">c_CLOCK_PERIOD</obj_property>
    </wvobject>

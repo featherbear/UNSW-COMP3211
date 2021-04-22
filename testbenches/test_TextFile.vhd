@@ -1,34 +1,12 @@
-----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
--- 
--- Create Date: 22.04.2021 15:09:30
--- Design Name: 
--- Module Name: TextFile - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
--- 
--- Dependencies: 
--- 
--- Revision:
--- Revision 0.01 - File Created
--- Additional Comments:
--- 
-----------------------------------------------------------------------------------
-
-
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use std.textio.all;
 use ieee.std_logic_textio.all;
 
-entity TextFile is
---  Port ( );
-end TextFile;
+entity test_TextFile is
+end test_TextFile;
 
-architecture Behavioural of TextFile is
+architecture Behavioural of test_TextFile is
     constant c_CLOCK_PERIOD : time := 5 ns;
     signal r_CLOCK : std_logic := '0';
     signal r_reset : std_logic := '0';
