@@ -154,7 +154,7 @@ component pipeReg_EXMEM is
 end component;
 
 -- ############################################################################
--- OUR NEW ASSIGNMENT COMONENTS ***********************************************
+-- OUR NEW ASSIGNMENT COMPONENTS ***********************************************
 -- ############################################################################
 component parity_unit is
     port (  data:   in std_logic_vector(7 downto 0);
