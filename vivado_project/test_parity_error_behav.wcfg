@@ -3,59 +3,28 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="test_parity_error_behav.wdb" id="1">
+      <db_ref path="test_TextFile_behav.wdb" id="1">
          <top_modules>
-            <top_module name="test_parity_error" />
+            <top_module name="test_TextFile" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="19040fs"></ZoomStartTime>
-      <ZoomEndTime time="33741fs"></ZoomEndTime>
-      <Cursor1Time time="49650fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="839fs"></ZoomEndTime>
+      <Cursor1Time time="244fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="232"></NameColumnWidth>
-      <ValueColumnWidth column_width="61"></ValueColumnWidth>
+      <NameColumnWidth column_width="201"></NameColumnWidth>
+      <ValueColumnWidth column_width="68"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="9" />
-   <wvobject fp_name="/test_parity_error/r_CLOCK" type="logic">
-      <obj_property name="ElementShortName">r_CLOCK</obj_property>
-      <obj_property name="ObjectShortName">r_CLOCK</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_parity_error/r_reset" type="logic">
-      <obj_property name="ElementShortName">r_reset</obj_property>
-      <obj_property name="ObjectShortName">r_reset</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_parity_error/CPU_data" type="array">
-      <obj_property name="ElementShortName">CPU_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">CPU_data[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_parity_error/CPU_data_parity" type="logic">
-      <obj_property name="ElementShortName">CPU_data_parity</obj_property>
-      <obj_property name="ObjectShortName">CPU_data_parity</obj_property>
-   </wvobject>
+   <WVObjectSize size="2" />
    <wvobject type="divider" fp_name="divider340">
       <obj_property name="label">------------</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject fp_name="/test_parity_error/uut/sel_data" type="array">
-      <obj_property name="ElementShortName">sel_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">sel_data[31:0]</obj_property>
-      <obj_property name="Radix">BINARYRADIX</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_parity_error/uut/sel_tag_parity" type="array">
-      <obj_property name="ElementShortName">sel_tag_parity[7:0]</obj_property>
-      <obj_property name="ObjectShortName">sel_tag_parity[7:0]</obj_property>
-      <obj_property name="Radix">BINARYRADIX</obj_property>
-   </wvobject>
    <wvobject type="divider" fp_name="divider341">
       <obj_property name="label">------------</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject fp_name="/test_parity_error/sig_error" type="logic">
-      <obj_property name="ElementShortName">sig_error</obj_property>
-      <obj_property name="ObjectShortName">sig_error</obj_property>
    </wvobject>
 </wave_config>

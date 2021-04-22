@@ -1,3 +1,8 @@
+---- Rotate Left Shift Unit
+-- Performs an RLS operation on an n-bit vector
+-- Rotates bits up to 7 places
+--
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
@@ -20,6 +25,7 @@ begin
         n := conv_integer(shft);
         shft_src := src;
 
+        -- Place the MSb at the end (LSb position) up to n times
         shftloop: for i in 1 to 7 loop
             if i <= n then
                 shft_src := shft_src(6 downto 0) & shft_src(7); 
