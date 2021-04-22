@@ -1,3 +1,11 @@
+---- Network Buffer
+-- Buffers all of the input data signals (i.e. network and CPU) to compensate for
+-- the one clock cycle delay that incurs as a result of waiting for the PC to jump
+-- to the correct instruction
+--
+-- Buffers the external port, CPU data, CPU parity and network data
+-- 
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
@@ -25,6 +33,7 @@ architecture behavioral of networkBuffer is
 begin
     tick : process(clk)
     begin
+        -- Data becomes available on the next clock cycle rising edge
         if (rising_edge(clk)) then
             extPort_out <= extPort;
             procData_out <= procData;
