@@ -68,8 +68,9 @@ begin
     variable v_cpu_data_parity : std_logic;
     variable v_ok : boolean;
     variable v_SPACE     : character;
+    variable out_error : std_logic;
   begin
- 
+    r_reset <= '0'; wait for 2*c_CLOCK_PERIOD; r_reset <= '1'; wait for 2*c_CLOCK_PERIOD; r_reset <= '0'; wait for 6*c_CLOCK_PERIOD;
     file_open(file_input, "input_tests.txt",  read_mode);
     file_open(file_output, "output_tests.txt",  write_mode);
  
@@ -90,9 +91,10 @@ begin
       CPU_data <= v_cpu_data;
       CPU_data_parity <= v_cpu_data_parity;
       
-      wait for 50 ns;
+      wait for 2*c_CLOCK_PERIOD;
       
-      write(v_OLINE, sig_error);
+      out_error := sig_error;
+      write(v_OLINE, out_error);
       writeline(file_output, v_OLINE);
     end loop;
  
