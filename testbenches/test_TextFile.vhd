@@ -19,8 +19,8 @@ architecture Behavioural of test_TextFile is
     signal network : std_logic_vector(39 downto 0);
     signal network_activity : std_logic;
     
-  file file_input : text;
-  file file_output : text;
+    file file_input : text;
+    file file_output : text;
   
 begin
 
