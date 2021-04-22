@@ -149,7 +149,7 @@ begin
         reset => reset,
         read_register_a => KEY_ADDR,
         read_register_b => KEY_ADDR,
-        write_enable => ctrl_reg_write,
+        write_enable => ex_mem_ctrl_reg_write,
         write_data => sig_write_data,
         write_register => KEY_ADDR,
         read_data_a => reg_file_out
