@@ -63,12 +63,14 @@ pages:
 - site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/multiprocessors.md
+- site/content/lectures/multiprocessors.md
 - site/content/lectures/performance.md
 - site/content/lectures/performance.md
 - site/content/lectures/pipelined-processors.md
 - site/content/lectures/pipelined-processors.md
 - site/content/lectures/single-cycle-processors.md
 - site/content/lectures/single-cycle-processors.md
+- site/content/lectures/virtual-memory.md
 - site/content/lectures/virtual-memory.md
 - site/content/quiz/quiz-1.md
 - site/content/quiz/quiz-3.md
