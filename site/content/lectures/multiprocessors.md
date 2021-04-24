@@ -164,3 +164,71 @@ Each address has a 'home directory', given by the value of its address
 ![](/uploads/snipaste_2021-04-12_00-20-56.png)
 
 ![](/uploads/snipaste_2021-04-12_00-24-26.png)
+
+***
+
+# Memory Consistency
+
+The order between accesses to different memory locations is very important.  
+Memory consistency models provide rules that applications follow to work together.
+
+## Sequential Consistency (SQ)
+
+> The result of any execution is the same as if the operations of all of the processors were executed in some sequential order, and the operations of each individual processor appear in this sequence in the order specified by its program - Lamport 1979
+
+* Overall memory access is serialised
+* Each processor follows the same order as specified by its program
+* Writes should also be atomic operations
+
+***
+
+![](/uploads/snipaste_2021-04-24_14-21-40.png)
+
+*  Memory access is serialised
+  * Uses a bus, so only one memory address is accessed at a time
+  * Cache coherence is observed
+* Writes are atomic
+* Access from a single processor complete in program order
+
+***
+
+![](/uploads/snipaste_2021-04-24_14-24-53.png)
+
+* If _access_ never hits the L1 cache, then the system behaves.
+* If the L1 has a read hit, completion of accesses can be **out of order**
+  * A write operation may take longer than a subsequent request to read data that is cached.
+*  To maintain sequential consistency, access to the L1 cache needs to be delayed until there are no pending writes in the buffer
+  * Nullifies the benefits of a write buffer.
+
+***
+
+![](/uploads/snipaste_2021-04-24_14-33-02.png)
+
+* Access in issued order do not necessarily get completed in order due to the distribution of memory and varied-length paths in the network
+* Writes are inherently non-atomic as new values will be visible to certain processors whilst still been seen as the old version in others
+* To maintain sequential consistency
+  * Need to know when a write completes
+    * For providing atomicity, delay further instructions to the longest operation
+  * Require acknowledgement messages
+    * Wait for all invalidation requests to be acknowledged
+  * Ensure write atomicity
+    * Delay access to the new value until all acknowledgements are received
+  * Ensure order form a processor
+    * Delay access until the previous one completes
+
+  ***
+
+  Sequential consistency severely restricts hardware and compiler optimisations, and it does not fully guarantee the single execution result.
+
+_Instead.... do it as software!_
+
+## Programmer Model
+
+Contract between the programmer and the system
+
+* Programmer provides synchronised programs
+* System provides sequential consistency at a higher performance
+
+The programmer explicitly labels synchronised parts of the program - and data accesses are ordered through synchronisation
+
+Synchronised (parallel) programs can be generated automatically through the compiler, and can also be explicitly created through easily identified synchronisation constructs. The programmer is responsible for guaranteeing the correct order of data access
