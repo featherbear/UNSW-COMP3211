@@ -60,6 +60,7 @@ pages:
 - site/content/lectures/cache-design.md
 - site/content/lectures/introduction-to-isa.md
 - site/content/lectures/introduction-to-isa.md
+- site/content/lectures/more-hardware-designs-on-parallel-processing.md
 - site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/multi-cycle-processors.md
 - site/content/lectures/multiprocessors.md
