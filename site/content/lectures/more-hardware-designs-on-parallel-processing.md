@@ -57,7 +57,50 @@ Multiple execution components can be performed simultaneously by having parallel
   * May create more data hazards
   * Forwarding in the pipelined datapath becomes hard
   * Identifying parallel instructions is not easy
-* More aggressive scheduling is required 
+* More aggressive scheduling is required
+
+![](/uploads/snipaste_2021-04-29_00-23-40.png)  
+Above: The SUB.D instruction does not use the previous `F8` register value. To increase performance, we could change the register used for SUB.D - which allows the instructions to be run in parallel as they no longer have a data dependency.
+
+  
+![](/uploads/snipaste_2021-04-29_00-23-49.png)
+
+##### Dynamic Scheduling
+
+> TL;DR - Each execution unit has its own queue
+
+The hardware issue component in the processor schedules instructions to different parallel execution units
+
+* Track instruction dependencies to allow instruction execution as soon as all operands are available
+* Renaming registers to avoid WAR and WAW hazards
+
+**Issue**
+
+* Get next instruction from the queue
+* Issue the instruction and related available operands from the register file to a matching reservation station entry if available, else stall
+
+**Execute**
+
+* Execute ready instructions in the reservation stations
+* Monitor the CDB (Common data bus) for the operands of not-ready instructions
+* Execution unit idles until a ready instruction is available
+
+**Write Result**
+
+* Results from the EU are sent through the CDB to destinations
+  * Reservation station
+  * Memory load buffers
+  * Register file
+* The write operations to the destinations should be controlled to avoid data hazards
+
+![](/uploads/snipaste_2021-04-29_00-28-34.png)
+
+Special data structures in the register file, reservation stations and memory buffers are used to detect and eliminate hazards
+
+**Reservation Station**
+
+![](/uploads/snipaste_2021-04-29_00-55-25.png)   
+![](/uploads/snipaste_2021-04-29_01-09-38.png)
 
 #### (Hardware) Superscalar Architecture
 
