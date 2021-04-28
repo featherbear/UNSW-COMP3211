@@ -102,6 +102,8 @@ Special data structures in the register file, reservation stations and memory bu
 ![](/uploads/snipaste_2021-04-29_00-55-25.png)   
 ![](/uploads/snipaste_2021-04-29_01-09-38.png)
 
+1:03:22
+
 #### (Hardware) Superscalar Architecture
 
 ## Thread Level
