@@ -119,4 +119,89 @@ The commit step allows instructions to execute out of order, but force them to c
 
 ## Thread Level
 
-## System Level
+### Multithreaded Processors
+
+When one thread is not available due to an operation delay (i.e. memory access taking a long time), the processor can switch to another thread
+
+#### Hardware level multithreading
+
+> Thread switching has less overhead than context-switching
+
+* Fast switching between threads
+* Requires extra resources: replicated registers, PC, etc
+
+##### Fine-grained Multithreading
+
+> Round-robin approach
+
+* Switch threads after each cycle
+* If one thread stalls, another is executed
+
+##### Coarse-grained Multithreading
+
+* Only switch threads on long stalls (i.e. L2-cache miss)
+
+![](/uploads/snipaste_2021-04-30_00-43-48.png)
+
+#### Simultaneous Multithreading (SMT)
+
+* A variation of HW multithreading that uses the resources of superscalar architecture
+* Exploits both instruction-level parallelism and thread-level parallelism
+
+![](/uploads/snipaste_2021-04-30_00-59-17.png)
+
+![](/uploads/snipaste_2021-04-30_01-02-07.png)
+
+## System Level - GPUs
+
+Graphics Processing Units are processors developed for processing lots of data at once (i.e. all the pixels on a screen)
+
+### Typical Tasks
+
+* HSR - Hidden Surface Removal (Remove hidden parts of a 3D object to be shown on a \[2D\] screen)
+* Shading - Making a flat object look more 3D-like
+* Texture Mapping - Providing high frequency details, surface texture, colour information
+
+Many tasks require a huge level of parallelism, however it is common that all tasks are independent (do not rely on each other)
+
+### Example: Powerful but single threaded
+
+![](/uploads/snipaste_2021-04-30_01-10-55.png)
+
+### Example: Cheap but multiple processors
+
+![](/uploads/snipaste_2021-04-30_01-13-33.png)
+
+#### BRRRR
+
+![](/uploads/snipaste_2021-04-30_01-14-35.png)
+
+### SIMD
+
+Since multiple processors are performing the same instruction, just on different data fragments, the instructions can be shared (same fetcher/decoder).
+
+Each execution unit has its own local memory, and they all share a larger memory
+
+![](/uploads/snipaste_2021-04-30_01-16-28.png)
+
+![](/uploads/snipaste_2021-04-30_01-17-11.png)
+
+In the event that there is a stall (i.e. data not available), then the processors can thread-switch to another thread for continued execution
+
+**Remarks**
+
+* Use many cheap cores and run them in parallel
+  * Easier than improving a single core by `n` times
+* Pack cores full of ALUs and share instruction streams across groups of data sets
+  * i.e. SIMD vector
+* Avoid long stalls by interleaving execution of many threads
+
+***
+
+# Note: CUDA
+
+CUDA (Compute Unified Device Architecture) is NVIDIA's platform to use their GPUs for arbitrary operations that require parallel computation.
+
+It is executed with some C-like programming language, and unifies all forms of GPU parallelism as a CUDA thread.
+
+![](/uploads/snipaste_2021-04-30_01-24-25.png)
