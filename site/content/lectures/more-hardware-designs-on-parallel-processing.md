@@ -1,7 +1,6 @@
 +++
 categories = ["Lectures"]
 date = 2021-04-27T15:03:44Z
-draft = true
 hiddenFromHomePage = false
 postMetaInFooter = false
 title = "More Hardware Designs on Parallel Processing"
@@ -62,8 +61,9 @@ Multiple execution components can be performed simultaneously by having parallel
 ![](/uploads/snipaste_2021-04-29_00-23-40.png)  
 Above: The SUB.D instruction does not use the previous `F8` register value. To increase performance, we could change the register used for SUB.D - which allows the instructions to be run in parallel as they no longer have a data dependency.
 
-  
 ![](/uploads/snipaste_2021-04-29_00-23-49.png)
+
+#### (Hardware) Superscalar Architecture
 
 ##### Dynamic Scheduling
 
@@ -99,12 +99,23 @@ Special data structures in the register file, reservation stations and memory bu
 
 **Reservation Station**
 
-![](/uploads/snipaste_2021-04-29_00-55-25.png)   
+![](/uploads/snipaste_2021-04-29_00-55-25.png)  
 ![](/uploads/snipaste_2021-04-29_01-09-38.png)
 
-1:03:22
+![](/uploads/snipaste_2021-04-29_17-22-10.png)  
+The state table holds the a link to the execution unit index that is using the register
 
-#### (Hardware) Superscalar Architecture
+![](/uploads/snipaste_2021-04-29_17-31-46.png)
+
+##### Dynamic Execution with Speculation
+
+* Issue, Execute, Write Result, and COMMIT
+
+The commit step allows instructions to execute out of order, but force them to commit in the correct execution order
+
+![](/uploads/snipaste_2021-04-29_17-38-23.png)
+
+![](/uploads/snipaste_2021-04-29_17-38-47.png)
 
 ## Thread Level
 
