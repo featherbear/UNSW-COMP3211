@@ -1,0 +1,108 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><title>Lab 2 - COMP3211 Musings</title><meta name=renderer content="webkit"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><meta name=theme-color content="#f8f5ec"><meta name=msapplication-navbutton-color content="#f8f5ec"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="#f8f5ec"><meta name=author content="z5206677"><meta name=description content="Task 1 Implementation Overview    Original SLL BNE            Added a bit-shifter and comparator into the ALU."><meta name=keywords content="featherbear,COMP3211,UNSW"><meta name=generator content="Hugo 0.68.3 with theme even"><link rel=canonical href=../../labs/lab-2/><link rel=apple-touch-icon sizes=180x180 href=../../apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=../../favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=../../favicon-16x16.png><link rel=manifest href=../../manifest.json><link rel=mask-icon href=../../safari-pinned-tab.svg color=#5bbad5><link href=../../sass/main.min.46877d277c22ebe08dcb937692b8b1d6e40ef958752120243d0f48fdfabcb35a.css rel=stylesheet><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin=anonymous><link rel=stylesheet href=../../css/typedjs.shortcode.css><link rel=stylesheet href=../../css/fixDetails.css><link rel=stylesheet href=../../css/fancyBox.css><meta property="og:title" content="Lab 2"><meta property="og:description" content="Task 1 Implementation Overview    Original SLL BNE            Added a bit-shifter and comparator into the ALU."><meta property="og:type" content="article"><meta property="og:url" content="/labs/lab-2/"><meta property="article:published_time" content="2021-03-09T18:15:50+00:00"><meta property="article:modified_time" content="2021-11-02T12:26:48+11:00"><meta itemprop=name content="Lab 2"><meta itemprop=description content="Task 1 Implementation Overview    Original SLL BNE            Added a bit-shifter and comparator into the ALU."><meta itemprop=datePublished content="2021-03-09T18:15:50+00:00"><meta itemprop=dateModified content="2021-11-02T12:26:48+11:00"><meta itemprop=wordCount content="1121"><meta itemprop=keywords content><meta name=twitter:card content="summary"><meta name=twitter:title content="Lab 2"><meta name=twitter:description content="Task 1 Implementation Overview    Original SLL BNE            Added a bit-shifter and comparator into the ALU."><!--[if lte IE 9]><script src=https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js></script><![endif]--><!--[if lt IE 9]><script src=https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js></script><script src=https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js></script><![endif]--></head><body><div id=mobile-navbar class=mobile-navbar><div class=mobile-header-logo><a href=../../ class=logo>COMP3211 Musings</a></div><div class=mobile-navbar-icon><span></span><span></span><span></span></div></div><nav id=mobile-menu class="mobile-menu slideout-menu"><ul class=mobile-menu-list><a href=../../><li class=mobile-menu-item>Home</li></a><a href=https://github.com/featherbear/UNSW-COMP3211><li class=mobile-menu-item>GitHub</li></a><a href=../../categories/><li class=mobile-menu-item>Categories</li></a></ul></nav><div class=container id=mobile-panel><header id=header class=header><div class=logo-wrapper><a href=../../ class=logo>COMP3211 Musings</a></div><nav class=site-navbar><ul id=menu class=menu><li class=menu-item><a class=menu-item-link href=../../>Home</a></li><li class=menu-item><a class=menu-item-link href=https://github.com/featherbear/UNSW-COMP3211>GitHub</a></li><li class=menu-item><a class=menu-item-link href=../../categories/>Categories</a></li></ul></nav></header><main id=main class=main><div class=content-wrapper><div id=content class=content><article class=post><header class=post-header><h1 class=post-title>Lab 2</h1><div class=post-meta><span class=post-time>2021-03-09</span><div class=post-category><a href=../../categories/labs/>Labs</a></div></div></header><div class=post-toc id=post-toc><h2 class=post-toc-title>Contents</h2><div class="post-toc-content always-active"><nav id=TableOfContents><ul><li><a href=#task-1>Task 1</a><ul><li><a href=#implementation-overview>Implementation Overview</a></li><li><a href=#step-0-original>Step 0 (Original)</a></li><li><a href=#implement-sll>Implement SLL</a></li><li><a href=#implement-bne>Implement BNE</a></li><li><a href=#simulation>Simulation</a></li></ul></li><li><a href=#task-2>Task 2</a><ul><li><a href=#stack-management>Stack Management</a></li><li><a href=#instructions>Instructions</a></li></ul></li></ul></nav></div></div><div class=post-content><h1 id=task-1>Task 1</h1><h2 id=implementation-overview>Implementation Overview</h2><table><thead><tr><th align=center>Original</th><th align=center>SLL</th><th align=center>BNE</th></tr></thead><tbody><tr><td align=center><img src=../../uploads/base.png alt></td><td align=center><img src=../../uploads/sll.png alt></td><td align=center><img src=../../uploads/beq.png alt></td></tr></tbody></table><ul><li>Added a bit-shifter and comparator into the ALU. The ALU switches the result and miscellaneous flag bit depending on an introduced <strong>ALUOperation</strong> control signal.</li><li>Added a multiplexer that switches between the next "standard" PC address, and the 4-bit address in the instruction, controlled by an introduced <strong>EnableJumpPC</strong> control signal that is AND gated with the ALU output flag</li><li>Highly opinionated design (i.e. ALU flag defaults to comparator output for all instructions except for ADD)</li></ul><h3 id=introduced-instructions>Introduced Instructions</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-vhdl data-lang=vhdl><span class=c1>--     sll   rd, rs, rt</span>
+<span class=c1>--        # rd &lt;- rs &lt;&lt; rt</span>
+<span class=c1>--        # format:  | opcode = 12 |  rs  |  rt  |  rd  | </span>
+<span class=c1>--</span>
+<span class=c1>--     bne   rs, rt, imm</span>
+<span class=c1>--        # if rs != rt, PC &lt;- imm</span>
+<span class=c1>--        # format:  | opcode = 13 |  rs  |  rt  |  imm  | </span>
+</code></pre></td></tr></table></div></div><h3 id=introduced-control-signals>Introduced Control Signals</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-vhdl data-lang=vhdl><span class=c1>--     alu_operation : asserted for SLL instructions, so that the ALU will use</span>
+<span class=c1>--                     the results of the SLL unit instead of the ADD unit</span>
+<span class=c1>--     enable_jump_pc : asserted for BEQ instructions, allows possible PC rewrite    </span>
+</code></pre></td></tr></table></div></div><h2 id=step-0-original>Step 0 (Original)</h2><p><img src=../../uploads/base.png alt></p><h2 id=implement-sll>Implement SLL</h2><p><img src=../../uploads/sll.png alt></p><h2 id=implement-bne>Implement BNE</h2><p><img src=../../uploads/beq.png alt></p><h2 id=simulation>Simulation</h2><p><img src=../../uploads/signal.png alt></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-vhdl data-lang=vhdl><span class=c1>-- :: python3 ::</span>
+<span class=c1>-- toBin = lambda x: re.findall(&#39;....&#39;, bin(x)[2:].zfill(16))</span>
+<span class=c1>-- toHex = lambda x: hex(int(&#34;&#34;.join(x), 2))</span>
+<span class=c1>-- :::::::::::::</span>
+
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;1010&#34;</span><span class=p>;</span> <span class=c1>--  insn_0 : load  $1, $0, 0   - load data 0($0) into $1</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;1021&#34;</span><span class=p>;</span> <span class=c1>--  insn_1 : load  $2, $0, 1   - load data 1($0) into $2</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;8013&#34;</span><span class=p>;</span> <span class=c1>--  insn_2 : add   $3, $0, $1  - $3 &lt;- $0 + $1</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>3</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;8124&#34;</span><span class=p>;</span> <span class=c1>--  insn_3 : add   $4, $1, $2  - $4 &lt;- $1 + $2</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>4</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;3032&#34;</span><span class=p>;</span> <span class=c1>--  insn_4 : store $3, $0, 2   - store data $3 into 2($0)</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>5</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;3043&#34;</span><span class=p>;</span> <span class=c1>--  insn_5 : store $4, $0, 3   - store data $4 into 3($0)</span>
+
+<span class=c1>-- sll $5, $1, $3 ($5 = 5 &lt;&lt; 5)</span>
+<span class=c1>---- toHex([&#39;1100&#39;, &#39;0001&#39;, &#39;0011&#39;, &#39;0101&#39;])</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>6</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;C135&#34;</span><span class=p>;</span>
+
+<span class=c1>-- sll $6, $1, $2 ($6 = 5 &lt;&lt; 8)</span>
+<span class=c1>---- toHex([&#39;1100&#39;, &#39;0001&#39;, &#39;0010&#39;, &#39;0110&#39;])    </span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>7</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;C126&#34;</span><span class=p>;</span>
+
+<span class=c1>-- bne $2, $2, 0</span>
+<span class=c1>---- toHex([&#39;1101&#39;, &#39;0010&#39;, &#39;0010&#39;, &#39;0000&#39;])</span>
+<span class=c1>---- shouldn&#39;t jump</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>8</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;D22E&#34;</span><span class=p>;</span>
+
+<span class=c1>-- bne $1, $3, 0</span>
+<span class=c1>---- toHex([&#39;1101&#39;, &#39;0001&#39;, &#39;0011&#39;, &#39;0000&#39;])</span>
+<span class=c1>---- shouldn&#39;t jump</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>9</span><span class=p>)</span>  <span class=o>:=</span> <span class=mh>X&#34;D13E&#34;</span><span class=p>;</span>
+
+<span class=c1>-- bne $2, $3, 0</span>
+<span class=c1>---- toHex([&#39;1101&#39;, &#39;0010&#39;, &#39;0011&#39;, &#39;0000&#39;])</span>
+<span class=c1>---- should jump to instruction 0</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>10</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;D23E&#34;</span><span class=p>;</span>
+
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>11</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;0000&#34;</span><span class=p>;</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>12</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;0000&#34;</span><span class=p>;</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>13</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;0000&#34;</span><span class=p>;</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>14</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;0000&#34;</span><span class=p>;</span>
+<span class=n>var_insn_mem</span><span class=p>(</span><span class=mi>15</span><span class=p>)</span> <span class=o>:=</span> <span class=mh>X&#34;0000&#34;</span><span class=p>;</span>
+</code></pre></td></tr></table></div></div><hr><h1 id=task-2>Task 2</h1><p>Hi Kenny / Brian :)</p><p>I don't have time to actually implement and test it, but I reckon explaining what I <em>would</em> do to the design would suffice some marks :)</p><p>This design incorporates a stack entity that co-exists with the RegFile since the task spec said to port ALL of the operations - inclusive of the write and store operations.</p><h2 id=stack-management>Stack Management</h2><ul><li>We could create an entity that internally keeps track of its stack pointer (<code>INTEGER RANGE 0 TO 15</code>).</li><li>When the <code>enable</code> bit is asserted and <code>direction</code> is set to <code>0</code> (for POP), the 16-bit <code>value</code> bus is set to the internal stack memory array at position SP, and SP is increased by 1 (towards the bottom of the stack, <code>15</code>).</li><li>When the <code>enable</code> bit is asserted and <code>direction</code> is set to <code>1</code> (for PUSH), the internal stack memory at position SP is set to the <code>value</code> bus, and SP is decreased by 1</li><li>When the <code>reset</code> bit is asserted, the stack will be reset</li></ul><h3 id=design-choices>Design Choices</h3><ul><li>When resetting the stack, the data will not be cleared; only the pointer will be reset</li><li>No protections against stack overflows/underflows will be implemented</li><li>Stack direction: 15 (bottom) -> 0 (top)</li></ul><h3 id=considerations>Considerations</h3><p>In the previous single cycle core design, the value of two registers were read simultaneously. While unconventional, the stack design could return the value at SP, <strong>as well as SP+1 (value before the top)</strong> - which would allow for two values to be read during the same cycle</p><p>For the writeback (i.e. a <code>push</code> instruction, or the result of <code>add</code> / <code>sll</code> / etc), this can occur during the falling edge of the clock signal, similar to the other memory entities.</p><h2 id=instructions>Instructions</h2><p>By migrating to stack-based operation, the instructions no longer need their <code>rs</code> and <code>rd</code> fields (with the exception of <code>pop $rd</code>) - which allows the ISA set to have 8-bit wide instructions instead of 16-bits</p><h3 id=isa-8-bit-wide>ISA (8-bit wide)</h3><ul><li><code>noop</code></li><li><code>add</code> - pop, pop, exec, push</li><li><code>sll [imm]</code> - pop, exec, push</li><li><code>bne [imm]</code> - pop, pop, exec</li><li><code>load [imm]</code> - pop, exec</li><li><code>store [imm]</code> - pop, exec</li><li><code>push [imm]</code> - push</li><li><code>pop [reg]</code> - pop</li></ul><h3 id=isa-multi-width-instructions>ISA (Multi-width instructions)</h3><ul><li>(4) <code>noop</code></li><li>(4) <code>add</code> - pop, pop, exec, push</li><li>(4) <code>sll</code> - pop, pop, exec, push</li><li>(4) <code>bne</code> - pop, pop, pop, exec</li><li>(4) <code>load</code> - pop, pop, exec</li><li>(4) <code>store</code> - pop, pop, exec</li><li>(8) <code>push [imm]</code> - push</li><li>(8) <code>pop [reg]</code> - pop</li></ul><p>When using multi-width instructions, the opcodes should be specifically crafted in a way that allows the control unit to know to advance 4 or 8 bytes for the next instruction. In our case where we have 8 instructions, the opcodes for all the 4-bit wide instructions can all start with <code>0</code>; and the opcodes for the two 8-bit wide instructions can both start with <code>1</code></p><hr><p>When implementing this reduced width instruction set, all references to 16-bit instructions (<code>15 downto 0</code>) can be changed to <code>7 downto 0</code>. As registers still exist within the system, the stack entity should be placed between the instruction memory and the RegFile entity. This way, if the <code>load</code> or <code>store</code> operations are executed, the stack can retrieve the register addresses from the stack - which can then be passed into the RegFile.</p><p>The writeback stage also needs to be modified to push the result to the stack, rather than to the RegFile. For reasons aforementioned, a mux should be used to route the result either to the stack, or to the RegFile for <code>load</code> and <code>store</code> operations.</p><p>For the <code>bne</code> instruction, if the 4-bit wide variant is used; the jump address should <strong>always</strong> be popped off the stack, regardless if the processor will perform the jump or not. For the 8-bit wide variant, this is not an issue. In addition, the implementation of the 8-bit wide variant will be simpler as the address in the instruction can be routed directly into the PC mux. (Tradeoffs between instruction size, operation speed, and circuit complexity, yada yada..)</p></div><footer class=post-footer><nav class=post-nav><a class=prev href=../../labs/lab-1/><i class="iconfont icon-left"></i><span class="prev-text nav-default">Lab 1</span>
+<span class="prev-text nav-mobile">Prev</span></a></nav></footer></article><script>(function(f,a,t,h,o,m){a[h]=a[h]||function(){(a[h].q=a[h].q||[]).push(arguments)};o=f.createElement('script'),m=f.getElementsByTagName('script')[0];o.async=1;o.src=t;o.id='fathom-script';m.parentNode.insertBefore(o,m)})(document,window,'//ss.featherbear.cc/tracker.js','fathom');fathom('set','siteId','NEQTU');fathom('trackPageview');</script></div></div></main><footer id=footer class=footer><div class=social-links><a href=mailto:z5206677@student.unsw.edu.au class="iconfont icon-email" title=email></a><a href=https://www.linkedin.com/in/andrewjinmengwong/ class="iconfont icon-linkedin" title=linkedin></a><a href=https://github.com/featherbear class="iconfont icon-github" title=github></a><a href=https://www.instagram.com/_andrewjwong/ class="iconfont icon-instagram" title=instagram></a><a href=../../index.xml type=application/rss+xml class="iconfont icon-rss" title=rss></a></div><div class=copyright><span class=power-by>Powered by <a class=hexo-link href=https://gohugo.io>Hugo</a></span>
+<span class=division>|</span>
+<span class=theme-info>Theme -
+<a class=theme-link href=https://github.com/olOwOlo/hugo-theme-even>Even</a></span>
+<span class=copyright-year>&copy;
+2021
+<span class=heart><i class="iconfont icon-heart"></i></span><span class=author>Andrew Wong (z5206677)</span></span></div></footer><div class=back-to-top id=back-to-top><i class="iconfont icon-up"></i></div></div><script src=https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin=anonymous></script><script src=https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin=anonymous></script><script type=text/javascript src=../../js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js></script><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','UA-107434487-2','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script><script src=../../js/typed.js@2.0.9></script><script src=../../js/typedjs.shortcode.js></script></body></html>
