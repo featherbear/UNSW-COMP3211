@@ -25,8 +25,8 @@ jobs:
       run: hugo --gc --minify --cleanDestinationDir -s site -d public
 
     - name: Deploy
-      uses: peaceiris/actions-gh-pages@v2.3.1
-      env:
-        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./site/public
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site/public
+        force_orphan: true

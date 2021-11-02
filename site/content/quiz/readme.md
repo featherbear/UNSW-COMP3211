@@ -1,0 +1,1 @@
+Public access to quiz files has been removed
